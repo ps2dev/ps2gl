@@ -1,0 +1,1059 @@
+; flowMon::Emit() vcl 1.28 produced this code:
+                .vu
+                .align 4
+                .global vsmGeneralQuad_CodeStart
+                .global vsmGeneralQuad_CodeEnd
+vsmGeneralQuad_CodeStart:
+__vcl__MMobjs_cross_linux_general_quad2_vcl_3:
+; [0,4) size=4 nU=0 nL=4 ic=4 [lin=4 lp=0]
+              nop lq VF03,(((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1)+2(VI00)
+              nop lq VF02,(((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1)+1(VI00)
+              nop lq VF01,(((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1)+0(VI00)
+              nop lq VF04,(((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1)+3(VI00)
+              nop[E] nop
+              nop nop
+main_loop_lid:
+; [0,26) size=26 nU=4 nL=26 ic=30 [lin=26 lp=0]
+              nop xtop VI04
+              nop lq VF07,(((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4)(VI00)
+              nop ilw.x VI05,0(VI04)
+              nop iaddiu VI03,VI04,((0 + 1) + 4)
+              nop lq.xyz VF05,((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1)(VI00)
+              nop mtir VI08,VF07x
+              nop iadd VI06,VI03,VI05
+              nop lq.xyz VF06,((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6)(VI00)
+              nop iadd VI06,VI06,VI05
+              nop ior VI08,VI08,VI05
+              nop mfir.x VF07,VI08
+              mul.xyz VF06,VF06,VF05 lq.xyz VF05,(((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1)(VI00)
+              nop iaddiu VI04,VI04,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))+1
+              nop loi 2048.0
+              maxi.w VF05,VF00,I sq VF07,-1(VI04)
+              add.xyz VF07,VF05,VF06 lq.w VF06,((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6)(VI00)
+              nop iadd VI06,VI06,VI05
+              nop iaddiu VI08,VI00,0x7fff
+              nop loi 2047.5
+              nop mr32.z VF05,VF06
+              addi.xy VF05,VF00,I lq.w VF06,(0)(VI00)
+              nop ilw.w VI07,(0)(VI00)
+              nop ilw.w VI02,((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1)(VI00)
+              nop lq.xyz VF06,((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1)(VI00)
+              nop fcset 0x000
+              nop iaddiu VI08,VI08,1
+; [0,46) size=46 nU=38 nL=18 ic=56 [lin=38 lp=0]
+              nop lq.xyz VF21,3(VI03)
+              nop nop
+              nop nop
+              nop nop
+              mulax ACC,VF01,VF21x lq.xyz VF23,0(VI03)
+              madday ACC,VF02,VF21y nop
+              maddaz ACC,VF03,VF21z nop
+              maddw VF24,VF04,VF00w nop
+              mulax ACC,VF01,VF23x lq.xyz VF21,3+3(VI03)
+              madday ACC,VF02,VF23y lq.xyz VF17,2+3(VI03)
+              maddaz ACC,VF03,VF23z lq.xyz VF22,2+0(VI03)
+              maddw VF23,VF04,VF00w div Q,VF00w,VF24w
+              mulax ACC,VF01,VF21x lq.xyz VF25,3+3+3(VI03)
+              madday ACC,VF02,VF21y nop
+              maddaz ACC,VF03,VF21z nop
+              maddw VF21,VF04,VF00w nop
+              mulax ACC,VF01,VF25x nop
+              madday ACC,VF02,VF25y nop
+              mulq.xyz VF20,VF24,Q div Q,VF00w,VF23w
+              maddaz ACC,VF03,VF25z nop
+              maddw VF18,VF04,VF00w nop
+              mulq.xyz VF14,VF17,Q nop
+              nop nop
+              mul.xyz VF17,VF20,VF06 nop
+              add.xyz VF16,VF20,VF05 nop
+              mulq.xyz VF19,VF23,Q div Q,VF00w,VF21w
+              mulq.xyz VF09,VF22,Q nop
+              nop nop
+              nop nop
+              sub.xyz VF12,VF19,VF20 nop
+              mul.xyz VF10,VF19,VF06 iaddiu VI11,VI03,3
+              add.xyz VF19,VF19,VF05 nop
+              mulq.xyz VF11,VF21,Q iaddiu VI11,VI11,3
+              mulw.xyz VF21,VF12,VF06w lq.xyz VF23,2+3+3(VI03)
+              clipw.xyz VF10xyz,VF05w lq.xyz VF15,2+3+3+3(VI03)
+              addx.xyz VF12,VF14,VF00x div Q,VF00w,VF18w
+              sub.xyz VF20,VF11,VF20 nop
+              mul.xyz VF10,VF11,VF06 nop
+              mulq.xyz VF14,VF23,Q nop
+              add.xyz VF11,VF11,VF05 nop
+              opmula.xyz ACCxyz,VF21xyz,VF20xyz nop
+              opmsub.xyz VF00xyz,VF20xyz,VF21xyz iaddiu VI10,VI11,3
+              mulq.xyz VF23,VF18,Q iaddiu VI03,VI10,3
+              mulq.xyz VF15,VF15,Q nop
+              nop ibeq VI03,VI06,EXPL_objs_cross_linux_general_quad2_vcl_xform_loop_lid__EPI1
+              ftoi4.xyz VF18,VF19 fmand VI10,VI07
+; [0,46) size=46 nU=46 nL=41 ic=87 [lin=46 lp=0]
+              mul.xyz VF19,VF23,VF06 lq.xyz VF21,3(VI03)
+              clipw.xyz VF17xyz,VF05w nop
+              add.xyz VF08,VF23,VF05 iaddiu VI01,VI04,3
+              ftoi4.xyz VF16,VF16 iaddiu VI01,VI01,3
+              mulax ACC,VF01,VF21x lq.xyz VF23,0(VI03)
+              madday ACC,VF02,VF21y nop
+              maddaz ACC,VF03,VF21z mfir.w VF16,VI08
+              maddw VF24,VF04,VF00w mfir.w VF18,VI08
+              mulax ACC,VF01,VF23x lq.xyz VF21,3+3(VI03)
+              madday ACC,VF02,VF23y lq.xyz VF17,2+3(VI03)
+              maddaz ACC,VF03,VF23z lq.xyz VF22,2+0(VI03)
+              maddw VF23,VF04,VF00w div Q,VF00w,VF24w
+              mulax ACC,VF01,VF21x lq.xyz VF25,3+3+3(VI03)
+              madday ACC,VF02,VF21y nop
+              maddaz ACC,VF03,VF21z iaddiu VI01,VI01,3
+              maddw VF21,VF04,VF00w nop
+              mulax ACC,VF01,VF25x iaddi VI09,VI04,0
+              madday ACC,VF02,VF25y sq VF16,2+3(VI09)
+              mulq.xyz VF20,VF24,Q div Q,VF00w,VF23w
+              maddaz ACC,VF03,VF25z sq VF18,2+0(VI09)
+              maddw VF18,VF04,VF00w sq.xyz VF09,0+0(VI09)
+              mulq.xyz VF14,VF17,Q sq.xyz VF14,0+3+3+3(VI09)
+              clipw.xyz VF19xyz,VF05w sq.xyz VF15,0+3+3(VI09)
+              mul.xyz VF17,VF20,VF06 sq.xyz VF12,0+3(VI09)
+              add.xyz VF16,VF20,VF05 sq.xyz VF07,1+0(VI09)
+              mulq.xyz VF19,VF23,Q div Q,VF00w,VF21w
+              mulq.xyz VF09,VF22,Q sq.xyz VF07,1+3+3+3(VI09)
+              clipw.xyz VF10xyz,VF05w sq.xyz VF07,1+3+3(VI09)
+              ftoi4.xyz VF13,VF11 sq.xyz VF07,1+3(VI09)
+              sub.xyz VF12,VF19,VF20 iaddiu VI04,VI01,3
+              mul.xyz VF10,VF19,VF06 iaddiu VI11,VI03,3
+              add.xyz VF19,VF19,VF05 fcand VI01,0x0ffffff
+              mulq.xyz VF11,VF21,Q iaddiu VI11,VI11,3
+              mulw.xyz VF21,VF12,VF06w lq.xyz VF23,2+3+3(VI03)
+              clipw.xyz VF10xyz,VF05w lq.xyz VF15,2+3+3+3(VI03)
+              addx.xyz VF12,VF14,VF00x div Q,VF00w,VF18w
+              sub.xyz VF20,VF11,VF20 iand VI01,VI01,VI02
+              mul.xyz VF10,VF11,VF06 ior VI10,VI01,VI10
+              mulq.xyz VF14,VF23,Q iaddiu VI10,VI10,0x7fff
+              add.xyz VF11,VF11,VF05 mfir.w VF20,VI10
+              opmula.xyz ACCxyz,VF21xyz,VF20xyz mfir.w VF13,VI10
+              opmsub.xyz VF00xyz,VF20xyz,VF21xyz iaddiu VI10,VI11,3
+              mulq.xyz VF23,VF18,Q iaddiu VI03,VI10,3
+              mulq.xyz VF15,VF15,Q nop
+              ftoi4.xyz VF20,VF08 ibeq VI03,VI06,EXPL_objs_cross_linux_general_quad2_vcl_xform_loop_lid__EPI0
+              ftoi4.xyz VF18,VF19 fmand VI10,VI07
+EXPL_objs_cross_linux_general_quad2_vcl_xform_loop_lid__MAIN_LOOP:
+; [0,46) size=46 nU=46 nL=43 ic=89 [lin=46 lp=46]
+              mul.xyz VF19,VF23,VF06 lq.xyz VF21,3(VI03)
+              clipw.xyz VF17xyz,VF05w nop
+              add.xyz VF08,VF23,VF05 iaddiu VI01,VI04,3
+              ftoi4.xyz VF16,VF16 iaddiu VI01,VI01,3
+              mulax ACC,VF01,VF21x lq.xyz VF23,0(VI03)
+              madday ACC,VF02,VF21y nop
+              maddaz ACC,VF03,VF21z mfir.w VF16,VI08
+              maddw VF24,VF04,VF00w mfir.w VF18,VI08
+              mulax ACC,VF01,VF23x lq.xyz VF21,3+3(VI03)
+              madday ACC,VF02,VF23y lq.xyz VF17,2+3(VI03)
+              maddaz ACC,VF03,VF23z lq.xyz VF22,2+0(VI03)
+              maddw VF23,VF04,VF00w div Q,VF00w,VF24w
+              mulax ACC,VF01,VF21x lq.xyz VF25,3+3+3(VI03)
+              madday ACC,VF02,VF21y sq VF20,2+3+3(VI09)
+              maddaz ACC,VF03,VF21z iaddiu VI01,VI01,3
+              maddw VF21,VF04,VF00w sq VF13,2+3+3+3(VI09)
+              mulax ACC,VF01,VF25x iaddi VI09,VI04,0
+              madday ACC,VF02,VF25y sq VF16,2+3(VI09)
+              mulq.xyz VF20,VF24,Q div Q,VF00w,VF23w
+              maddaz ACC,VF03,VF25z sq VF18,2+0(VI09)
+              maddw VF18,VF04,VF00w sq.xyz VF09,0+0(VI09)
+              mulq.xyz VF14,VF17,Q sq.xyz VF14,0+3+3+3(VI09)
+              clipw.xyz VF19xyz,VF05w sq.xyz VF15,0+3+3(VI09)
+              mul.xyz VF17,VF20,VF06 sq.xyz VF12,0+3(VI09)
+              add.xyz VF16,VF20,VF05 sq.xyz VF07,1+0(VI09)
+              mulq.xyz VF19,VF23,Q div Q,VF00w,VF21w
+              mulq.xyz VF09,VF22,Q sq.xyz VF07,1+3+3+3(VI09)
+              clipw.xyz VF10xyz,VF05w sq.xyz VF07,1+3+3(VI09)
+              ftoi4.xyz VF13,VF11 sq.xyz VF07,1+3(VI09)
+              sub.xyz VF12,VF19,VF20 iaddiu VI04,VI01,3
+              mul.xyz VF10,VF19,VF06 iaddiu VI11,VI03,3
+              add.xyz VF19,VF19,VF05 fcand VI01,0x0ffffff
+              mulq.xyz VF11,VF21,Q iaddiu VI11,VI11,3
+              mulw.xyz VF21,VF12,VF06w lq.xyz VF23,2+3+3(VI03)
+              clipw.xyz VF10xyz,VF05w lq.xyz VF15,2+3+3+3(VI03)
+              addx.xyz VF12,VF14,VF00x div Q,VF00w,VF18w
+              sub.xyz VF20,VF11,VF20 iand VI01,VI01,VI02
+              mul.xyz VF10,VF11,VF06 ior VI10,VI01,VI10
+              mulq.xyz VF14,VF23,Q iaddiu VI10,VI10,0x7fff
+              add.xyz VF11,VF11,VF05 mfir.w VF20,VI10
+              opmula.xyz ACCxyz,VF21xyz,VF20xyz mfir.w VF13,VI10
+              opmsub.xyz VF00xyz,VF20xyz,VF21xyz iaddiu VI10,VI11,3
+              mulq.xyz VF23,VF18,Q iaddiu VI03,VI10,3
+              mulq.xyz VF15,VF15,Q nop
+              ftoi4.xyz VF20,VF08 ibne VI03,VI06,EXPL_objs_cross_linux_general_quad2_vcl_xform_loop_lid__MAIN_LOOP
+              ftoi4.xyz VF18,VF19 fmand VI10,VI07
+; n>=1 .. t = 123 + 46*(n-2) cycles, so .. t=31+(46*n) :
+EXPL_objs_cross_linux_general_quad2_vcl_xform_loop_lid__EPI0:
+; [0,31) size=31 nU=8 nL=28 ic=36 [lin=28 lp=0]
+              mul.xyz VF19,VF23,VF06 iaddiu VI01,VI04,3
+              clipw.xyz VF17xyz,VF05w iaddiu VI01,VI01,3
+              add.xyz VF08,VF23,VF05 mfir.w VF16,VI08
+              ftoi4.xyz VF16,VF16 mfir.w VF18,VI08
+              clipw.xyz VF19xyz,VF05w sq VF20,2+3+3(VI09)
+              clipw.xyz VF10xyz,VF05w iaddiu VI01,VI01,3
+              ftoi4.xyz VF13,VF11 sq VF13,2+3+3+3(VI09)
+              ftoi4.xyz VF20,VF08 iaddi VI09,VI04,0
+              nop sq VF16,2+3(VI09)
+              nop sq VF18,2+0(VI09)
+              nop sq.xyz VF09,0+0(VI09)
+              nop sq.xyz VF14,0+3+3+3(VI09)
+              nop sq.xyz VF15,0+3+3(VI09)
+              nop sq.xyz VF12,0+3(VI09)
+              nop sq.xyz VF07,1+0(VI09)
+              nop sq.xyz VF07,1+3+3+3(VI09)
+              nop sq.xyz VF07,1+3+3(VI09)
+              nop sq.xyz VF07,1+3(VI09)
+              nop iaddiu VI04,VI01,3
+              nop fcand VI01,0x0ffffff
+              nop iand VI01,VI01,VI02
+              nop ior VI10,VI01,VI10
+              nop iaddiu VI10,VI10,0x7fff
+              nop mfir.w VF20,VI10
+              nop mfir.w VF13,VI10
+              nop nop
+              nop nop
+              nop sq VF20,2+3+3(VI09)
+              nop sq VF13,2+3+3+3(VI09)
+              nop b EXPL_objs_cross_linux_general_quad2_vcl_xform_loop_lid__EXIT_POINT
+              nop nop
+; n==1 .. t = 73 cycles = 73.00 per vertex
+EXPL_objs_cross_linux_general_quad2_vcl_xform_loop_lid__EPI1:
+; [0,27) size=27 nU=8 nL=25 ic=33 [lin=25 lp=0]
+              mul.xyz VF19,VF23,VF06 iaddiu VI01,VI04,3
+              clipw.xyz VF17xyz,VF05w iaddiu VI01,VI01,3
+              add.xyz VF08,VF23,VF05 mfir.w VF16,VI08
+              ftoi4.xyz VF16,VF16 mfir.w VF18,VI08
+              clipw.xyz VF19xyz,VF05w iaddiu VI01,VI01,3
+              clipw.xyz VF10xyz,VF05w iaddi VI09,VI04,0
+              ftoi4.xyz VF13,VF11 sq.xyz VF09,0+0(VI09)
+              ftoi4.xyz VF20,VF08 sq VF16,2+3(VI09)
+              nop sq VF18,2+0(VI09)
+              nop sq.xyz VF14,0+3+3+3(VI09)
+              nop sq.xyz VF15,0+3+3(VI09)
+              nop sq.xyz VF12,0+3(VI09)
+              nop sq.xyz VF07,1+0(VI09)
+              nop sq.xyz VF07,1+3+3+3(VI09)
+              nop sq.xyz VF07,1+3+3(VI09)
+              nop sq.xyz VF07,1+3(VI09)
+              nop iaddiu VI04,VI01,3
+              nop fcand VI01,0x0ffffff
+              nop iand VI01,VI01,VI02
+              nop ior VI10,VI01,VI10
+              nop iaddiu VI10,VI10,0x7fff
+              nop mfir.w VF20,VI10
+              nop mfir.w VF13,VI10
+              nop nop
+              nop nop
+              nop sq VF20,2+3+3(VI09)
+              nop sq VF13,2+3+3+3(VI09)
+EXPL_objs_cross_linux_general_quad2_vcl_xform_loop_lid__EXIT_POINT:
+; [0,8) size=8 nU=0 nL=8 ic=8 [lin=8 lp=0]
+              nop ilw.x VI01,(0)(VI00)
+              nop iaddiu VI02,VI00,((0) + 1)
+              nop lq.xyz VF08,((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4)(VI00)
+              nop lq.xyz VF07,((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1)(VI00)
+              nop lq.xyz VF06,(((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1)(VI00)
+              nop lq.xyz VF05,((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1)(VI00)
+              nop ibeq VI01,VI00,pt_lights_lid
+              nop ilw.x VI03,0(VI02)
+; [0,1) size=1 nU=1 nL=0 ic=1 [lin=1 lp=0]
+              maxw.z VF09,VF00,VF00w nop
+dir_light_loop_lid:
+; [0,55) size=55 nU=6 nL=18 ic=24 [lin=52 lp=0]
+              nop lq.xyz VF12,(((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1)+0(VI00)
+              nop lq.xyz VF10,(((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1)+1(VI00)
+              nop lq.xyz VF13,(((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1)+2(VI00)
+              nop lq.xyz VF11,3(VI03)
+              nop xtop VI06
+              nop ilw.x VI05,0(VI06)
+              nop iaddiu VI04,VI06,((0 + 1) + 4)
+              mulax.xyz ACC,VF12,VF11x lq.xyz VF12,2(VI03)
+              madday.xyz ACC,VF10,VF11y lq.xyz VF10,0(VI03)
+              maddz.xyz VF13,VF13,VF11z iadd VI07,VI04,VI05
+              nop iadd VI07,VI07,VI05
+              mul.xyz VF12,VF12,VF07 iadd VI07,VI07,VI05
+              nop iaddiu VI06,VI06,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))+1
+              add.xyz VF14,VF08,VF13 lq.xyz VF11,1(VI03)
+              nop nop
+              nop nop
+              nop nop
+              nop esadd P,VF14
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop mfp.w VF05,P
+              nop nop
+              nop nop
+              nop nop
+              nop ersqrt P,VF05w
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop mfp.w VF05,P
+              nop nop
+              nop nop
+              nop nop
+              mulw.xyz VF14,VF14,VF05w nop
+; [0,18) size=18 nU=7 nL=5 ic=12 [lin=18 lp=0]
+              nop lq.xyz VF15,1+0(VI04)
+              nop nop
+              nop nop
+              nop iaddiu VI06,VI06,3
+              mul.xyz VF18,VF14,VF15 nop
+              mul.xyz VF15,VF13,VF15 nop
+              nop nop
+              nop nop
+              nop mr32.xyw VF09,VF18
+              adday.z ACC,VF15,VF15y nop
+              nop nop
+              nop nop
+              addax.w ACC,VF09,VF09x nop
+              maddy.w VF05,VF00,VF09y nop
+              nop iaddiu VI04,VI04,3
+              nop nop
+              maddx.z VF18,VF09,VF15x ibeq VI04,VI07,EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EPI2
+              maxx.w VF06,VF05,VF00x nop
+; [0,18) size=18 nU=13 nL=5 ic=18 [lin=18 lp=0]
+              nop lq.xyz VF15,1+0(VI04)
+              nop nop
+              maxx.z VF17,VF18,VF00x nop
+              mul.w VF06,VF06,VF06 iaddiu VI06,VI06,3
+              mul.xyz VF18,VF14,VF15 nop
+              mul.xyz VF15,VF13,VF15 nop
+              nop nop
+              mul.w VF05,VF06,VF06 nop
+              nop mr32.xyw VF09,VF18
+              adday.z ACC,VF15,VF15y nop
+              mulz.xyz VF17,VF11,VF17z nop
+              mul.w VF06,VF05,VF05 nop
+              addax.w ACC,VF09,VF09x nop
+              maddy.w VF05,VF00,VF09y nop
+              nop iaddiu VI04,VI04,3
+              mul.w VF07,VF06,VF06 nop
+              maddx.z VF18,VF09,VF15x ibeq VI04,VI07,EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EPI1
+              maxx.w VF06,VF05,VF00x nop
+; [0,18) size=18 nU=18 nL=6 ic=24 [lin=18 lp=0]
+              mula.xyz ACC,VF17,VF06 lq.xyz VF15,1+0(VI04)
+              mul.w VF05,VF07,VF07 nop
+              maxx.z VF17,VF18,VF00x nop
+              mul.w VF06,VF06,VF06 iaddiu VI06,VI06,3
+              mul.xyz VF18,VF14,VF15 nop
+              mul.xyz VF15,VF13,VF15 lq.xyz VF16,(1)-(3*(3))(VI06)
+              maddaw.xyz ACC,VF12,VF05w nop
+              mul.w VF05,VF06,VF06 nop
+              madd.xyz VF18,VF10,VF05 mr32.xyw VF09,VF18
+              adday.z ACC,VF15,VF15y nop
+              mulz.xyz VF17,VF11,VF17z nop
+              mul.w VF06,VF05,VF05 nop
+              addax.w ACC,VF09,VF09x nop
+              maddy.w VF05,VF00,VF09y nop
+              add.xyz VF16,VF16,VF18 iaddiu VI04,VI04,3
+              mul.w VF07,VF06,VF06 nop
+              maddx.z VF18,VF09,VF15x ibeq VI04,VI07,EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EPI0
+              maxx.w VF06,VF05,VF00x nop
+EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__MAIN_LOOP:
+; [0,18) size=18 nU=18 nL=7 ic=25 [lin=18 lp=18]
+              mula.xyz ACC,VF17,VF06 lq.xyz VF15,1+0(VI04)
+              mul.w VF05,VF07,VF07 sq.xyz VF16,(1+0)-(3*(3))(VI06)
+              maxx.z VF17,VF18,VF00x nop
+              mul.w VF06,VF06,VF06 iaddiu VI06,VI06,3
+              mul.xyz VF18,VF14,VF15 nop
+              mul.xyz VF15,VF13,VF15 lq.xyz VF16,(1)-(3*(3))(VI06)
+              maddaw.xyz ACC,VF12,VF05w nop
+              mul.w VF05,VF06,VF06 nop
+              madd.xyz VF18,VF10,VF05 mr32.xyw VF09,VF18
+              adday.z ACC,VF15,VF15y nop
+              mulz.xyz VF17,VF11,VF17z nop
+              mul.w VF06,VF05,VF05 nop
+              addax.w ACC,VF09,VF09x nop
+              maddy.w VF05,VF00,VF09y nop
+              add.xyz VF16,VF16,VF18 iaddiu VI04,VI04,3
+              mul.w VF07,VF06,VF06 nop
+              maddx.z VF18,VF09,VF15x ibne VI04,VI07,EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__MAIN_LOOP
+              maxx.w VF06,VF05,VF00x nop
+; n>=1 .. t = 87 + 18*(n-3) cycles, so .. t=33+(18*n) :
+EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EPI0:
+; [0,33) size=33 nU=16 nL=6 ic=22 [lin=30 lp=0]
+              mula.xyz ACC,VF17,VF06 sq.xyz VF16,(1+0)-(3*(3))(VI06)
+              mul.w VF05,VF07,VF07 lq.xyz VF16,(1)-(2*(3))(VI06)
+              maxx.z VF17,VF18,VF00x nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF05w nop
+              madd.xyz VF18,VF10,VF05 nop
+              mul.w VF05,VF06,VF06 nop
+              mulz.xyz VF17,VF11,VF17z nop
+              nop nop
+              add.xyz VF16,VF16,VF18 nop
+              mul.w VF06,VF05,VF05 nop
+              mula.xyz ACC,VF17,VF06 nop
+              nop nop
+              nop sq.xyz VF16,(1+0)-(2*(3))(VI06)
+              mul.w VF07,VF06,VF06 lq.xyz VF16,(1)-(1*(3))(VI06)
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF05,VF07,VF07 nop
+              nop nop
+              nop nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF05w nop
+              madd.xyz VF18,VF10,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              add.xyz VF16,VF16,VF18 nop
+              nop nop
+              nop nop
+              nop b EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EXIT_POINT
+              nop sq.xyz VF16,(1+0)-(1*(3))(VI06)
+; n==2 .. t = 69 cycles = 34.50 per vertex
+EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EPI1:
+; [0,33) size=33 nU=16 nL=5 ic=21 [lin=30 lp=0]
+              mula.xyz ACC,VF17,VF06 lq.xyz VF16,(1)-(2*(3))(VI06)
+              mul.w VF05,VF07,VF07 nop
+              maxx.z VF17,VF18,VF00x nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF05w nop
+              madd.xyz VF18,VF10,VF05 nop
+              mul.w VF05,VF06,VF06 nop
+              mulz.xyz VF17,VF11,VF17z nop
+              nop nop
+              add.xyz VF16,VF16,VF18 nop
+              mul.w VF06,VF05,VF05 nop
+              mula.xyz ACC,VF17,VF06 nop
+              nop nop
+              nop sq.xyz VF16,(1+0)-(2*(3))(VI06)
+              mul.w VF07,VF06,VF06 lq.xyz VF16,(1)-(1*(3))(VI06)
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF05,VF07,VF07 nop
+              nop nop
+              nop nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF05w nop
+              madd.xyz VF18,VF10,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              add.xyz VF16,VF16,VF18 nop
+              nop nop
+              nop nop
+              nop b EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EXIT_POINT
+              nop sq.xyz VF16,(1+0)-(1*(3))(VI06)
+; n==1 .. t = 51 cycles = 51.00 per vertex
+EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EPI2:
+; [0,33) size=33 nU=11 nL=2 ic=13 [lin=30 lp=0]
+              nop lq.xyz VF16,(1)-(1*(3))(VI06)
+              nop nop
+              maxx.z VF17,VF18,VF00x nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop nop
+              mulz.xyz VF17,VF11,VF17z nop
+              mul.w VF05,VF06,VF06 nop
+              nop nop
+              nop nop
+              mula.xyz ACC,VF17,VF06 nop
+              mul.w VF06,VF05,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF07,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF05,VF07,VF07 nop
+              nop nop
+              nop nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF05w nop
+              madd.xyz VF18,VF10,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              add.xyz VF16,VF16,VF18 nop
+              nop nop
+              nop nop
+              nop nop
+              nop sq.xyz VF16,(1+0)-(1*(3))(VI06)
+EXPL_objs_cross_linux_general_quad2_vcl_dir_light_vert_loop_lid__EXIT_POINT:
+; [0,4) size=4 nU=0 nL=4 ic=4 [lin=4 lp=0]
+              nop isubiu VI01,VI01,1
+              nop iaddiu VI02,VI02,1
+              nop ibne VI01,VI00,dir_light_loop_lid
+              nop ilw.x VI03,0(VI02)
+pt_lights_lid:
+; [0,6) size=6 nU=0 nL=4 ic=4 [lin=7 lp=0]
+              nop ilw.y VI01,(0)(VI00)
+              nop iaddiu VI02,VI00,((0) + 1)
+              nop ilw.y VI03,0(VI02)
+              nop nop
+              nop ibeq VI01,VI00,done_lid
+              nop nop
+; [0,1) size=1 nU=1 nL=0 ic=1 [lin=1 lp=0]
+              maxw.z VF09,VF00,VF00w nop
+pt_light_loop_lid:
+; [0,16) size=16 nU=5 nL=16 ic=21 [lin=16 lp=0]
+              nop xtop VI06
+              nop lq.xyz VF10,((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4)+0(VI00)
+              nop ilw.x VI05,0(VI06)
+              nop lq.xyz VF11,3(VI03)
+              nop iaddiu VI04,VI06,((0 + 1) + 4)
+              nop lq.xyz VF13,((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4)+1(VI00)
+              nop iadd VI07,VI04,VI05
+              nop iadd VI07,VI07,VI05
+              mulax.xyz ACC,VF10,VF11x lq.xyz VF12,((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4)+2(VI00)
+              madday.xyz ACC,VF13,VF11y lq.xyz VF10,2(VI03)
+              nop iadd VI07,VI07,VI05
+              nop lq.xyz VF13,((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4)+3(VI00)
+              maddaz.xyz ACC,VF12,VF11z lq.xyz VF11,1(VI03)
+              mul.xyz VF12,VF10,VF07 lq.xyz VF10,0(VI03)
+              nop iaddiu VI06,VI06,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))+1
+              maddw.xyz VF14,VF13,VF00w lq.xyz VF13,5(VI03)
+; [0,39) size=39 nU=8 nL=6 ic=14 [lin=36 lp=0]
+              nop lq.xyz VF21,0(VI04)
+              nop nop
+              nop iaddiu VI06,VI06,3
+              nop nop
+              sub.xyz VF19,VF14,VF21 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.xyz VF21,VF19,VF19 nop
+              nop nop
+              nop nop
+              nop nop
+              adday.z ACC,VF21,VF21y nop
+              maddx.z VF21,VF09,VF21x nop
+              nop nop
+              nop nop
+              nop nop
+              nop sqrt Q,VF21z
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              addw.x VF21,VF00,VF00w nop
+              nop nop
+              addq.y VF21,VF00,Q nop
+              nop nop
+              nop nop
+              nop nop
+              mul.xyz VF15,VF21,VF13 div Q,VF00w,VF21y
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop iaddiu VI04,VI04,3
+              mulq.xyz VF16,VF19,Q nop
+              nop nop
+              nop ibeq VI04,VI07,EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EPI2
+              nop nop
+; [0,39) size=39 nU=12 nL=13 ic=25 [lin=38 lp=0]
+              add.xyz VF17,VF08,VF16 lq.xyz VF21,0(VI04)
+              nop nop
+              nop iaddiu VI06,VI06,3
+              nop nop
+              sub.xyz VF19,VF14,VF21 esadd P,VF17
+              nop nop
+              nop nop
+              nop nop
+              mul.xyz VF21,VF19,VF19 nop
+              nop nop
+              nop nop
+              nop nop
+              adday.z ACC,VF21,VF21y nop
+              maddx.z VF21,VF09,VF21x nop
+              nop nop
+              nop mfp.w VF06,P
+              nop nop
+              nop sqrt Q,VF21z
+              nop nop
+              nop ersqrt P,VF06w
+              nop nop
+              nop nop
+              addw.x VF21,VF00,VF00w nop
+              nop nop
+              addq.y VF21,VF00,Q nop
+              nop nop
+              nop move.xyz VF18,VF15
+              nop lq.xyz VF20,(1+0)-(1*(3))(VI04)
+              mul.xyz VF15,VF21,VF13 div Q,VF00w,VF21y
+              nop nop
+              nop nop
+              nop nop
+              mul.xyz VF22,VF16,VF20 nop
+              nop nop
+              nop iaddiu VI04,VI04,3
+              mulq.xyz VF16,VF19,Q nop
+              nop move.xyz VF19,VF17
+              mulax.w ACC,VF00,VF22x ibeq VI04,VI07,EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EPI1
+              madday.w ACC,VF00,VF22y mfp.w VF06,P
+; [0,39) size=39 nU=29 nL=14 ic=43 [lin=38 lp=0]
+              add.xyz VF17,VF08,VF16 lq.xyz VF21,0(VI04)
+              nop nop
+              maddz.w VF05,VF00,VF22z iaddiu VI06,VI06,3
+              mulw.xyz VF22,VF19,VF06w nop
+              sub.xyz VF19,VF14,VF21 esadd P,VF17
+              nop nop
+              maxx.w VF06,VF05,VF00x nop
+              mul.xyz VF24,VF22,VF20 nop
+              mul.xyz VF21,VF19,VF19 nop
+              nop nop
+              mulw.xyz VF22,VF11,VF06w nop
+              mulax.w ACC,VF00,VF24x nop
+              adday.z ACC,VF21,VF21y nop
+              maddx.z VF21,VF09,VF21x nop
+              madday.w ACC,VF00,VF24y nop
+              maddz.w VF05,VF00,VF24z mfp.w VF06,P
+              nop nop
+              mulax.w ACC,VF00,VF18x sqrt Q,VF21z
+              madday.w ACC,VF00,VF18y nop
+              maxx.w VF06,VF05,VF00x ersqrt P,VF06w
+              maddz.w VF05,VF00,VF18z nop
+              nop nop
+              addw.x VF21,VF00,VF00w nop
+              mul.w VF06,VF06,VF06 nop
+              addq.y VF21,VF00,Q nop
+              mula.xyz ACC,VF22,VF06 nop
+              nop move.xyz VF18,VF15
+              mul.w VF06,VF06,VF06 lq.xyz VF20,(1+0)-(1*(3))(VI04)
+              mul.xyz VF15,VF21,VF13 div Q,VF00w,VF21y
+              nop nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              mul.xyz VF22,VF16,VF20 nop
+              nop nop
+              nop iaddiu VI04,VI04,3
+              mulq.xyz VF16,VF19,Q div Q,VF00w,VF05w
+              mul.w VF05,VF06,VF06 move.xyz VF19,VF17
+              mulax.w ACC,VF00,VF22x ibeq VI04,VI07,EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EPI0
+              madday.w ACC,VF00,VF22y mfp.w VF06,P
+EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__MAIN_LOOP:
+; [0,39) size=39 nU=34 nL=16 ic=50 [lin=38 lp=34]
+              add.xyz VF17,VF08,VF16 lq.xyz VF21,0(VI04)
+              mul.w VF07,VF05,VF05 nop
+              maddz.w VF05,VF00,VF22z iaddiu VI06,VI06,3
+              mulw.xyz VF22,VF19,VF06w nop
+              sub.xyz VF19,VF14,VF21 esadd P,VF17
+              maddaw.xyz ACC,VF12,VF07w nop
+              maxx.w VF06,VF05,VF00x nop
+              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(4*(3))(VI06)
+              mul.xyz VF21,VF19,VF19 nop
+              madd.xyz VF23,VF10,VF05 nop
+              mulw.xyz VF22,VF11,VF06w nop
+              mulax.w ACC,VF00,VF24x nop
+              adday.z ACC,VF21,VF21y nop
+              maddx.z VF21,VF09,VF21x nop
+              madday.w ACC,VF00,VF24y nop
+              maddz.w VF05,VF00,VF24z mfp.w VF06,P
+              nop nop
+              mulax.w ACC,VF00,VF18x sqrt Q,VF21z
+              madday.w ACC,VF00,VF18y nop
+              maxx.w VF06,VF05,VF00x ersqrt P,VF06w
+              maddz.w VF05,VF00,VF18z nop
+              mulq.xyz VF18,VF23,Q nop
+              addw.x VF21,VF00,VF00w nop
+              mul.w VF06,VF06,VF06 nop
+              addq.y VF21,VF00,Q nop
+              mula.xyz ACC,VF22,VF06 nop
+              add.xyz VF22,VF20,VF18 move.xyz VF18,VF15
+              mul.w VF06,VF06,VF06 lq.xyz VF20,(1+0)-(1*(3))(VI04)
+              mul.xyz VF15,VF21,VF13 div Q,VF00w,VF21y
+              nop nop
+              nop sq.xyz VF22,(1+0)-(4*(3))(VI06)
+              mul.w VF06,VF06,VF06 nop
+              mul.xyz VF22,VF16,VF20 nop
+              nop nop
+              nop iaddiu VI04,VI04,3
+              mulq.xyz VF16,VF19,Q div Q,VF00w,VF05w
+              mul.w VF05,VF06,VF06 move.xyz VF19,VF17
+              mulax.w ACC,VF00,VF22x ibne VI04,VI07,EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__MAIN_LOOP
+              madday.w ACC,VF00,VF22y mfp.w VF06,P
+; n>=1 .. t = 210 + 39*(n-3) cycles, so .. t=93+(39*n) :
+EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EPI0:
+; [0,93) size=93 nU=53 nL=16 ic=69 [lin=93 lp=0]
+              add.xyz VF17,VF08,VF16 nop
+              mul.w VF07,VF05,VF05 nop
+              maddz.w VF05,VF00,VF22z nop
+              mulw.xyz VF22,VF19,VF06w nop
+              nop esadd P,VF17
+              maddaw.xyz ACC,VF12,VF07w move.xyz VF19,VF17
+              maxx.w VF06,VF05,VF00x nop
+              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(3*(3))(VI06)
+              madd.xyz VF23,VF10,VF05 nop
+              nop nop
+              mulw.xyz VF22,VF11,VF06w nop
+              mulax.w ACC,VF00,VF24x nop
+              madday.w ACC,VF00,VF24y nop
+              maddz.w VF05,VF00,VF24z nop
+              mulax.w ACC,VF00,VF18x nop
+              madday.w ACC,VF00,VF18y mfp.w VF06,P
+              mula.xyz ACC,VF22,VF06 nop
+              nop nop
+              nop nop
+              maxx.w VF06,VF05,VF00x ersqrt P,VF06w
+              maddz.w VF05,VF00,VF18z nop
+              mulq.xyz VF18,VF23,Q nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop div Q,VF00w,VF05w
+              add.xyz VF22,VF20,VF18 move.xyz VF18,VF15
+              nop lq.xyz VF20,(1+0)-(1*(3))(VI04)
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop sq.xyz VF22,(1+0)-(3*(3))(VI06)
+              mul.xyz VF22,VF16,VF20 nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop nop
+              mulax.w ACC,VF00,VF22x nop
+              mul.w VF05,VF06,VF06 nop
+              madday.w ACC,VF00,VF22y nop
+              nop mfp.w VF06,P
+              nop nop
+              mul.w VF07,VF05,VF05 nop
+              maddz.w VF05,VF00,VF22z nop
+              mulw.xyz VF22,VF19,VF06w nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF07w nop
+              maxx.w VF06,VF05,VF00x nop
+              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(2*(3))(VI06)
+              madd.xyz VF23,VF10,VF05 nop
+              nop nop
+              mulw.xyz VF22,VF11,VF06w nop
+              mulax.w ACC,VF00,VF24x nop
+              madday.w ACC,VF00,VF24y nop
+              maddz.w VF05,VF00,VF24z nop
+              mulax.w ACC,VF00,VF18x nop
+              madday.w ACC,VF00,VF18y nop
+              mula.xyz ACC,VF22,VF06 nop
+              maxx.w VF06,VF05,VF00x nop
+              maddz.w VF05,VF00,VF18z nop
+              mulq.xyz VF18,VF23,Q nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop div Q,VF00w,VF05w
+              add.xyz VF22,VF20,VF18 lq.xyz VF20,(1)-(1*(3))(VI06)
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop sq.xyz VF22,(1+0)-(2*(3))(VI06)
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF05,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF07,VF05,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF07w nop
+              madd.xyz VF23,VF10,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              mulq.xyz VF18,VF23,Q nop
+              nop nop
+              nop nop
+              nop nop
+              add.xyz VF22,VF20,VF18 nop
+              nop nop
+              nop nop
+              nop b EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EXIT_POINT
+              nop sq.xyz VF22,(1+0)-(1*(3))(VI06)
+; n==2 .. t = 171 cycles = 85.50 per vertex
+EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EPI1:
+; [0,93) size=93 nU=48 nL=14 ic=62 [lin=93 lp=0]
+              add.xyz VF17,VF08,VF16 nop
+              maddz.w VF05,VF00,VF22z nop
+              nop nop
+              mulw.xyz VF22,VF19,VF06w nop
+              nop esadd P,VF17
+              maxx.w VF06,VF05,VF00x move.xyz VF19,VF17
+              nop nop
+              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1+0)-(1*(3))(VI04)
+              nop nop
+              mulw.xyz VF22,VF11,VF06w nop
+              nop nop
+              mulax.w ACC,VF00,VF24x nop
+              madday.w ACC,VF00,VF24y nop
+              maddz.w VF05,VF00,VF24z nop
+              mulax.w ACC,VF00,VF18x nop
+              madday.w ACC,VF00,VF18y mfp.w VF06,P
+              mula.xyz ACC,VF22,VF06 nop
+              mul.xyz VF22,VF16,VF20 nop
+              nop nop
+              maxx.w VF06,VF05,VF00x ersqrt P,VF06w
+              maddz.w VF05,VF00,VF18z move.xyz VF18,VF15
+              mulax.w ACC,VF00,VF22x nop
+              madday.w ACC,VF00,VF22y nop
+              mul.w VF06,VF06,VF06 nop
+              nop div Q,VF00w,VF05w
+              nop nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF05,VF06,VF06 nop
+              nop nop
+              nop mfp.w VF06,P
+              nop nop
+              mul.w VF07,VF05,VF05 nop
+              maddz.w VF05,VF00,VF22z nop
+              mulw.xyz VF22,VF19,VF06w nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF07w nop
+              maxx.w VF06,VF05,VF00x nop
+              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(2*(3))(VI06)
+              madd.xyz VF23,VF10,VF05 nop
+              nop nop
+              mulw.xyz VF22,VF11,VF06w nop
+              mulax.w ACC,VF00,VF24x nop
+              madday.w ACC,VF00,VF24y nop
+              maddz.w VF05,VF00,VF24z nop
+              mulax.w ACC,VF00,VF18x nop
+              madday.w ACC,VF00,VF18y nop
+              mula.xyz ACC,VF22,VF06 nop
+              maxx.w VF06,VF05,VF00x nop
+              maddz.w VF05,VF00,VF18z nop
+              mulq.xyz VF18,VF23,Q nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop div Q,VF00w,VF05w
+              add.xyz VF22,VF20,VF18 lq.xyz VF20,(1)-(1*(3))(VI06)
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop sq.xyz VF22,(1+0)-(2*(3))(VI06)
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF05,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF07,VF05,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF07w nop
+              madd.xyz VF23,VF10,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              mulq.xyz VF18,VF23,Q nop
+              nop nop
+              nop nop
+              nop nop
+              add.xyz VF22,VF20,VF18 nop
+              nop nop
+              nop nop
+              nop b EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EXIT_POINT
+              nop sq.xyz VF22,(1+0)-(1*(3))(VI06)
+; n==1 .. t = 132 cycles = 132.00 per vertex
+EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EPI2:
+; [0,93) size=93 nU=26 nL=10 ic=36 [lin=93 lp=0]
+              add.xyz VF17,VF08,VF16 move.xyz VF18,VF15
+              nop lq.xyz VF20,(1+0)-(1*(3))(VI04)
+              nop nop
+              nop nop
+              nop esadd P,VF17
+              mul.xyz VF22,VF16,VF20 move.xyz VF19,VF17
+              nop nop
+              nop nop
+              nop nop
+              mulax.w ACC,VF00,VF22x nop
+              madday.w ACC,VF00,VF22y nop
+              maddz.w VF05,VF00,VF22z nop
+              nop nop
+              nop nop
+              nop nop
+              nop mfp.w VF06,P
+              nop nop
+              nop nop
+              nop nop
+              nop ersqrt P,VF06w
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop nop
+              nop mfp.w VF06,P
+              nop nop
+              nop nop
+              nop nop
+              mulw.xyz VF22,VF19,VF06w nop
+              maxx.w VF06,VF05,VF00x nop
+              nop nop
+              nop nop
+              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(1*(3))(VI06)
+              mulw.xyz VF22,VF11,VF06w nop
+              nop nop
+              nop nop
+              mulax.w ACC,VF00,VF24x nop
+              madday.w ACC,VF00,VF24y nop
+              maddz.w VF05,VF00,VF24z nop
+              mulax.w ACC,VF00,VF18x nop
+              madday.w ACC,VF00,VF18y nop
+              mula.xyz ACC,VF22,VF06 nop
+              maxx.w VF06,VF05,VF00x nop
+              maddz.w VF05,VF00,VF18z nop
+              nop nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop div Q,VF00w,VF05w
+              nop nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF06,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF05,VF06,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              mul.w VF07,VF05,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              maddaw.xyz ACC,VF12,VF07w nop
+              madd.xyz VF23,VF10,VF05 nop
+              nop nop
+              nop nop
+              nop nop
+              mulq.xyz VF18,VF23,Q nop
+              nop nop
+              nop nop
+              nop nop
+              add.xyz VF22,VF20,VF18 nop
+              nop nop
+              nop nop
+              nop nop
+              nop sq.xyz VF22,(1+0)-(1*(3))(VI06)
+EXPL_objs_cross_linux_general_quad2_vcl_pt_light_vert_loop_lid__EXIT_POINT:
+; [0,4) size=4 nU=0 nL=4 ic=4 [lin=4 lp=0]
+              nop isubiu VI01,VI01,1
+              nop iaddiu VI02,VI02,1
+              nop ibne VI01,VI00,pt_light_loop_lid
+              nop ilw.y VI03,0(VI02)
+done_lid:
+; [0,13) size=13 nU=3 nL=8 ic=11 [lin=13 lp=0]
+              nop lq.w VF05,(((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1)(VI00)
+              nop xtop VI01
+              nop loi 128.0
+              nop iaddiu VI02,VI01,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))+1
+              muli.w VF05,VF05,I iadd VI03,VI02,VI05
+              nop iadd VI03,VI03,VI05
+              nop iadd VI03,VI03,VI05
+              nop loi 255.0
+              minii.w VF05,VF05,I nop
+              nop nop
+              nop nop
+              nop nop
+              ftoi0.w VF05,VF05 nop
+; [0,5) size=5 nU=1 nL=3 ic=4 [lin=5 lp=0]
+              nop lq.xyz VF07,1+0(VI02)
+              nop iaddiu VI02,VI02,3
+              nop nop
+              nop ibeq VI02,VI03,EXPL_objs_cross_linux_general_quad2_vcl_final_loop_lid__EPI1
+              minii.xyz VF06,VF07,I nop
+; [0,5) size=5 nU=2 nL=3 ic=5 [lin=5 lp=0]
+              nop lq.xyz VF07,1+0(VI02)
+              nop iaddiu VI02,VI02,3
+              nop nop
+              ftoi0.xyz VF05,VF06 ibeq VI02,VI03,EXPL_objs_cross_linux_general_quad2_vcl_final_loop_lid__EPI0
+              minii.xyz VF06,VF07,I nop
+EXPL_objs_cross_linux_general_quad2_vcl_final_loop_lid__MAIN_LOOP:
+; [0,5) size=5 nU=2 nL=4 ic=6 [lin=5 lp=4]
+              nop lq.xyz VF07,1+0(VI02)
+              nop iaddiu VI02,VI02,3
+              nop sq VF05,(1+0)-(3*(3))(VI02)
+              ftoi0.xyz VF05,VF06 ibne VI02,VI03,EXPL_objs_cross_linux_general_quad2_vcl_final_loop_lid__MAIN_LOOP
+              minii.xyz VF06,VF07,I nop
+; n>=1 .. t = 18 + 5*(n-2) cycles, so .. t=8+(5*n) :
+EXPL_objs_cross_linux_general_quad2_vcl_final_loop_lid__EPI0:
+; [0,8) size=8 nU=1 nL=3 ic=4 [lin=5 lp=0]
+              nop nop
+              nop nop
+              nop sq VF05,(1+0)-(2*(3))(VI02)
+              ftoi0.xyz VF05,VF06 nop
+              nop nop
+              nop nop
+              nop b EXPL_objs_cross_linux_general_quad2_vcl_final_loop_lid__EXIT_POINT
+              nop sq VF05,(1+0)-(1*(3))(VI02)
+; n==1 .. t = 13 cycles = 13.00 per vertex
+EXPL_objs_cross_linux_general_quad2_vcl_final_loop_lid__EPI1:
+; [0,8) size=8 nU=1 nL=1 ic=2 [lin=5 lp=0]
+              nop nop
+              nop nop
+              nop nop
+              ftoi0.xyz VF05,VF06 nop
+              nop nop
+              nop nop
+              nop nop
+              nop sq VF05,(1+0)-(1*(3))(VI02)
+EXPL_objs_cross_linux_general_quad2_vcl_final_loop_lid__EXIT_POINT:
+; [0,2) size=2 nU=0 nL=2 ic=2 [lin=2 lp=0]
+              nop iaddiu VI01,VI01,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))
+              nop xgkick VI01
+              nop[E] nop
+              nop nop
+; [0,2) size=2 nU=0 nL=1 ic=1 [lin=3 lp=0]
+              nop b main_loop_lid
+              nop nop
+                .align 4
+vsmGeneralQuad_CodeEnd:
+; iCount=975

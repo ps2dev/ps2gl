@@ -1,0 +1,21 @@
+
+This sample is here to show the effect that different rendering parameters,
+particularly the lighting model, have on performance.  ps2gl has a number of
+renderers that sit on vu1 and do transform, lighting, clipping, etc. to geometry
+streamed in from main memory.  There is one set of basic renderers (split based
+on primitive type) that can handle all of the possible rendering states in
+ps2gl.  These renderers can be thought of as the "default" renderers.  There are
+also a few specialized renderers that are much faster than the default ones,
+because they have been written specially for a very limited set of conditions.
+
+Try adjusting the different parameters to see the effect they have on rendering
+time.
+
+Timing
+------
+
+The timing information displayed here is not very accurate; in addition to being
+off by a constant factor of a few percent, per-frame overhead plays affects the
+results pretty heavily because of the small number of polys.  The performance
+numbers are only intended to be used for comparing the different rendering
+contexts/primitives.

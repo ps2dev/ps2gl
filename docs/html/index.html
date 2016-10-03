@@ -1,0 +1,167 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (X11; U; Linux 2.4.2-2 i686) [Netscape]">
+   <title>ps2gl</title>
+<link href="doxygen_generated/doxygen.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor="#FFFFFF">
+&nbsp;
+<table WIDTH="600" >
+<tr>
+<td>
+<center>
+<h1>
+<a href="https://dualshock.scea.com/projects/ps2gl/">ps2gl</a></h1></center>
+
+<center>Tyler Daniel, SCEA R&amp;D
+<br>tyler_daniel@playstation.sony.com
+<br>Copyright &copy; 2002 Sony Computer Entertainment America
+<br>All Rights Reserved</center>
+
+<ul>
+<li>
+<a href="#intro">Introduction</a></li>
+
+<li>
+<a href="#latest">Latest version</a></li>
+
+<li>
+<a href="#contents">Contents</a></li>
+
+<li>
+<a href="#install">Installing</a></li>
+
+<li>
+<a href="#example">Building the example</a></li>
+
+<li>
+<a href="#doc">Documentation</a></li>
+
+<li>
+<a href="#bugs">Bugs</a></li>
+</ul>
+<a NAME="intro"></a>
+<h3>
+Introduction</h3>
+ps2gl is an OpenGL*-like API for the ps2. It is intended to be useful for
+anyone looking for a familiar API on the ps2, but its main purposes in
+life are to provide an easier way to write games and to serve as an example
+of a ps2 rendering layer. In a perfect world ps2gl would be just another
+OpenGL* implementation, but unfortunately that is not to be. The reason,
+aside from licensing issues, is that many parts of the OpenGL* API are
+not well suited to the PlayStation 2 architecture and would require software
+emulation, which is undesirable.&nbsp;
+<p>Still, all hope is not lost; many of the calls act the same as their
+OpenGL* counterparts, while the rest behave similarly.&nbsp;
+<p>Finally, ps2gl is still quite young, and developers who decide to use
+it can expect to find bugs, inconsistencies, and incomplete features. Since
+ps2gl is also an open source project, its users are<b> welcome to participate
+in its development</b>. One of ps2gl's main design requirements is that
+it be easy to understand and modify. CVS (version control) write access
+is available to frequent contributors, and read access to the working cvs
+tree is always available.&nbsp;<a NAME="latest"></a>
+<h3>
+Latest Version</h3>
+The latest version can always be found on the homepage: <a href="https://www.ps2-pro.com/projects/ps2gl/">https://www.ps2-pro.com/projects/ps2gl/</a>
+<br>for game development and now <a href="http://ps2gl.playstation2-linux.com">http://ps2gl.playstation2-linux.com</a>
+for the linux version.
+<br>The homepage also hosts bug tracking, news, cvs versions, and discussion
+groups.&nbsp;<a NAME="contents"></a>
+<h3>
+Contents</h3>
+
+<ul>
+<li>
+this documentation</li>
+
+<li>
+ps2gl static libraries (see the next section, Installing)</li>
+
+<li>
+ps2glut static libraries</li>
+</ul>
+<a NAME="install"></a>
+<h3>
+Installing</h3>
+ps2gl depends on another package called ps2stuff. You'll find it at <a href="https://www.ps2-pro.com/projects/ps2gl/">https://www.ps2-pro.com/projects/ps2gl/</a>
+or <a href="http://ps2gl.playstation2-linux.com">http://ps2gl.playstation2-linux.com.</a>&nbsp;
+ps2stuff is a collection of utilities for dealing with the ps2 hardware
+and forms the layer on top of which ps2gl is built.&nbsp;
+<p>To use ps2gl you'll want to link against the libps2stuff.a and libps2gl.a
+libraries.&nbsp; There is also a very poor imitation of glut used mainly
+for testing, but useful to get something running quickly.&nbsp; The libraries
+are found in the directories obj_buildname, where buildname is the name
+of the build you want to use.
+<p>Here are the most useful game development builds:
+<ul>
+<li>
+<b>debug</b> - No optimization, contains debug information and error checking.
+This build is useful for stepping through in a debugger.</li>
+
+<li>
+<b>optimized</b> - Optimized, but contains debug info and error checking.
+Mainly for day-to-day coding.</li>
+
+<li>
+<b>release</b> - Optimized, no debug info or error checking. For, well...
+release.</li>
+</ul>
+The linux binary packages only contain the 'linux' build, which is similar
+to the 'optimized' build described above.
+<p>You'll find ps2gl in ps2gl/objs_* and ps2glut in ps2gl/glut/objs_*.&nbsp;
+<p><a NAME="example"></a>
+<h3>
+Building the examples</h3>
+<b>linux/gcc</b>
+<p>After expanding the ps2gl and ps2stuff archives into the same directory,
+chdir to ps2gl/example/box.&nbsp; Now 'make run' should do it.
+<p>NOTE:&nbsp; there is a known bug where make sometimes tries to run the
+'vcl' program.&nbsp; If this happens, cd to ps2gl/vu1 and do a 'touch *_vcl.vsm.'
+<p><a NAME="doc"></a>
+<h3>
+Documentation</h3>
+
+<ul>
+<li>
+<a href="changelog.html">Changelog</a></li>
+
+<li>
+<a href="performance.html">Performance</a></li>
+
+<li>
+<a href="gotchas.html">Gotchas</a></li>
+
+<li>
+<a href="completeness.html">Completeness</a></li>
+
+<li>
+<a href="building.html">Building ps2gl</a></li>
+</ul>
+The api documentation for ps2gl is generated from source comments using
+a wonderful program called <a href="http://www.doxygen.org">doxygen</a>.
+The full documentation for both the external api (gl* and pgl*) and the
+internal implementation is included:&nbsp;
+<ul>
+<li>
+<a href="doxygen_generated/modules.html">public API (gl* and pgl*)</a></li>
+
+<li>
+<a href="doxygen_generated/index.html">full documentation</a></li>
+</ul>
+You'll notice that internal documentation is quite scarce at the moment...
+It will gradually get better.&nbsp;<a NAME="bugs"></a>
+<h3>
+Bugs</h3>
+Bug reports should be submitted to the appropriate homepage, which hosts
+a bug tracking system. (Be sure to check the bug tracker to see if the
+problem has already been reported and/or resolved.)&nbsp;
+<p>
+<hr><font size=-1>* OpenGL(R) is a registered trademark of Silicon Graphics,
+Inc.</font></td>
+</tr>
+</table>
+
+</body>
+</html>
