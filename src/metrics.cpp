@@ -9,7 +9,7 @@
 
 Metric_t    g_Metrics[kMetricsCount];
 
-void 
+void
 pglResetMetrics()
 {
     memset(g_Metrics, 0, sizeof(g_Metrics));

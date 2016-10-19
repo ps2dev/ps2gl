@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -235,7 +235,7 @@ CBaseRenderer::AddVu1RendererContext( CVifSCDmaPacket &packet, GLenum primType, 
 	       numSpots++;
 	    }
 	 }
-      }	 
+      }
 
       bool doLighting = glContext.GetImmLighting().GetLightingEnabled();
 
@@ -278,7 +278,7 @@ CBaseRenderer::AddVu1RendererContext( CVifSCDmaPacket &packet, GLenum primType, 
 
       // light pointers
       packet.Add( &lightPtrs[0], 8 );
-	 
+
       float maxColorValue = GetMaxColorValue( glContext.GetTexManager().GetTexEnabled() );
 
       // add light info
@@ -468,7 +468,7 @@ CBaseRenderer::XferVectors( CVifSCDmaPacket &packet, unsigned int *dataStart,
 	 packet.Nop().Nop();
 	 if ( numWordsToPrepend == 2 )
 	    packet.Nop();
-	 
+
 	 packet.OpenUnpack( unpackMode,
 			    vu1MemOffset,
 			    VifDoubleBuffered,

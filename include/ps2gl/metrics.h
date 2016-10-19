@@ -14,7 +14,7 @@ enum MetricsEnum {
     kMetricsTextureUploadBytes,
 
     /// Number of CLUTs uploaded to the GS
-    kMetricsClutUploadCount,    
+    kMetricsClutUploadCount,
 
     /// Number of VU1 renderer code uploads
     kMetricsRendererUpload,

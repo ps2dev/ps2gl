@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -90,7 +90,7 @@ void glVertexPointer( GLint size, GLenum type,
       mNotImplemented( "type must be float" );
       return;
    }
-   
+
    CVertArray &vertArray = pGLContext->GetGeomManager().GetVertArray();
    vertArray.SetVertices( (void*)ptr );
    vertArray.SetWordsPerVertex( size );
@@ -124,7 +124,7 @@ void glTexCoordPointer( GLint size, GLenum type,
       mNotImplemented( "type must be float" );
       return;
    }
-   
+
    CVertArray &vertArray = pGLContext->GetGeomManager().GetVertArray();
    vertArray.SetTexCoords( (void*)ptr );
    vertArray.SetWordsPerTexCoord( size );
@@ -147,7 +147,7 @@ void glColorPointer( GLint size, GLenum type,
       mNotImplemented( "type must be float" );
       return;
    }
-   
+
    CVertArray &vertArray = pGLContext->GetGeomManager().GetVertArray();
    vertArray.SetColors( (void*)ptr );
    vertArray.SetWordsPerColor( size );
@@ -345,7 +345,7 @@ void pglNormalPointer( GLint size, GLenum type,
       mNotImplemented( "type must be float" );
       return;
    }
-   
+
    CVertArray &vertArray = pGLContext->GetGeomManager().GetVertArray();
    vertArray.SetNormals( (void*)ptr );
    vertArray.SetWordsPerNormal(size);
@@ -367,7 +367,7 @@ void pglDrawIndexedArrays( GLenum primType,
  * Register a new primitive.  After registering a primitive with this call it can
  * be used anywhere a normal primitive can be used (glBegin, glDrawArrays, etc.).
  * Defining a new primitive usually implies writing a renderer to go along with it.
- * 
+ *
  * @param primType	    bit 31 must be set (this indicates a user prim to ps2gl).  The
  * 			    lower 31 bits should be a number from 0 to
  * 			    PGL_MAX_CUSTOM_PRIM_TYPES.

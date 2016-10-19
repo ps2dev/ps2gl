@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -11,7 +11,7 @@
 /**
  * @file gsmemory.cpp
  * pgl interface to gs memory manager
- */   
+ */
 
 static bool GsMemInitted = false;
 
@@ -97,7 +97,7 @@ pglHasGsMemBeenInitted()
  * starting addresses.  It doesn't really matter much where they begin,
  * except of course when existing code assumes to find them in certain places.
  * So let's make them contiguous starting at page 0:
- * <p>  
+ * <p>
  *    pglAddGsMemSlot( 0, 70, SCE_GS_PSMCT32 );<br>
  *    pglAddGsMemSlot( 70, 70, SCE_GS_PSMCT32 );<br>
  *    pglAddGsMemSlot( 140, 70, SCE_GS_PSMZ32 );<br>

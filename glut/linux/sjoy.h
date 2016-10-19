@@ -27,7 +27,7 @@
 //
 //     (axis 1-)         (btn 8) (btn 9)         (btn 2)
 //            ^ LUp       Select Start         ^ RUp
-//            |           [__]   [__>          | 
+//            |           [__]   [__>          |
 //   LLeft <-- --> LRight             RLeft <-- --> RRight
 //   (axis 0-)|    (axis 0+)          (btn 0)  |    (btn3)
 //            V LDown                          V RDown

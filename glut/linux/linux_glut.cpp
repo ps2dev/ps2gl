@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -96,17 +96,17 @@ int release(void)
       ps2_vpu_close(g_vpu1);
       g_vpu1 = NULL;
    }
-	
+
    if (g_vpu0) {
       ps2_vpu_close(g_vpu0);
       g_vpu0 = NULL;
    }
-	
+
    if (g_fd_gs >= 0) {
       ps2_gs_close();
       g_fd_gs = -1;
    }
-	
+
    return PS2_GS_VC_REL_SUCCESS;
 }
 
@@ -115,18 +115,18 @@ int acquire(void)
    g_fd_gs = ps2_gs_open(-1);
    g_vpu0 = ps2_vpu_open(0);
    g_vpu1 = ps2_vpu_open(1);
-	
+
    if (g_fd_gs < 0 || g_vpu0 == NULL || g_vpu1 == NULL) {
       release();
       return PS2_GS_VC_ACQ_FAILURE;
    }
-	
+
    ps2_vpu_reset(g_vpu1);
    ps2_vpu_reset(g_vpu0);
-	
+
    ps2_gs_reset(0, g_inter, g_out_mode, g_ff_mode, g_resolution,
 		g_refresh_rate);
-	
+
    return PS2_GS_VC_ACQ_SUCCESS;
 }
 
@@ -148,7 +148,7 @@ int acquire(void)
  *
  * ps2glut will also do some rough timing of the callback functions (using
  * timer0).  Press the 'start' button to display the timings on stdout.
- * 
+ *
  * @{
  */
 
@@ -194,9 +194,9 @@ void glutInit(int *argcp, char **argv)
    g_psm = PS2_GS_PSMCT32;
    g_zpsm = PS2_GS_PSMZ32;
    g_zbits = 32;
-	
+
    ps2_gs_vc_graphicsmode();
-	
+
    g_fd_gs = ps2_gs_open(-1);
    g_vpu0 = ps2_vpu_open(0); // must be opened for vpu1...
    g_vpu1 = ps2_vpu_open(1);
@@ -216,13 +216,13 @@ void glutInit(int *argcp, char **argv)
 
    ps2_gs_reset(0, g_inter, g_out_mode, g_ff_mode, g_resolution,
 		g_refresh_rate);
-	
+
    ps2_gs_start_display(1);
-	
+
    ps2_gs_vc_enablevcswitch(acquire, release);
-	
+
    ps2_gs_sync_v(0);
-	
+
    // does the ps2gl library need to be initialized?
 
    if ( ! pglHasLibraryBeenInitted() ) {

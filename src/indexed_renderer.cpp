@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -57,7 +57,7 @@ CIndexedRenderer::InitContext( GLenum primType, tU32 rcChanges, bool userRcChang
    cpu_vec_4 globalAmb;
    if (doLighting) globalAmb = lighting.GetGlobalAmbient() * maxColorValue;
    else globalAmb.set( 0, 0, 0, 0 );
-   
+
    CImmMaterial& material = glContext.GetMaterialManager().GetImmMaterial();
    cpu_vec_4 materialAmb = material.GetAmbient();
 
@@ -85,7 +85,7 @@ CIndexedRenderer::GetRenderContextDeps()
    deps.Lighting = 1;
    deps.Texture = 1;
    deps.PerVtxMaterial = 1;
-   
+
    return deps;
 }
 

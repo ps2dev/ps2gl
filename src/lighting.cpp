@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -77,7 +77,7 @@ void
 CImmLight::SetPosition( cpu_vec_xyzw position )
 {
    CImmMatrixStack &modelView = GLContext.GetModelViewStack();
-   
+
    Position = modelView.GetTop() * position;
    TellRendererLightPropChanged();
 
@@ -90,7 +90,7 @@ void
 CImmLight::SetDirection( cpu_vec_xyzw direction )
 {
    CImmMatrixStack &modelView = GLContext.GetModelViewStack();
-   
+
    Position = modelView.GetTop() * direction.normalize();
    TellRendererLightPropChanged();
 
@@ -394,7 +394,7 @@ void glLightf( GLenum lightNum, GLenum pname, GLfloat param )
 	 break;
       default:
 	 mError("Shouldn't get here." );
-   }   
+   }
 }
 
 void glLightModelfv( GLenum pname, const GLfloat *params )

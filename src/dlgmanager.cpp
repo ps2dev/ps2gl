@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -486,7 +486,7 @@ class CDrawArraysCmd : public CDListCmd {
 	    RenderContextDepMask = renderer.GetRenderContextDeps();
 	    RenderContextDependencies = RenderContextDepMask & curRenderContext;
 
-	    if ( cachePacket ) {	
+	    if ( cachePacket ) {
 	       // allocate memory for the new packet
 
 	       // ask the renderer how much memory to allocate for the packet

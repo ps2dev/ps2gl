@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -117,7 +117,7 @@ CPad::Read( void )
 {
    t32 padState = scePadGetState( kPort0, kSlot0 );
    if ( padState != scePadStateStable ) return;
-	
+
    if ( !bPadModeSet ) {
       // who knows what the 1 parameter is..  a return val of 1 indicates that the request is
       // being processed

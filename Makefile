@@ -1,19 +1,19 @@
 ##########################################################################
 ### Copyright (c) 1999, 2000, 2001 Sony Computer Entertainment America Inc.
 ###	All rights reserved.
-### 
+###
 ### Boilerplate Makefile by Bret Mogilefsky (mogul@playstation.sony.com)
 ### 	and Tyler Daniel (tyler_daniel@playstation.sony.com)
 ###
 ###	Use this makefile as a template for new projects!
-### 
+###
 ### General Features:
 ###
 ###	Just specify SRCS and go!
 ###	Automatic and minimal (fast!) dependency generation (for vu microcode as well)
 ###	Allows keeping source and headers from src and include dirs, or elsewhere.
 ###	Builds in a subdirectory.
-###	Allows additional defines, include dirs, and lib dirs without 
+###	Allows additional defines, include dirs, and lib dirs without
 ###		specifying -D, -I, and -L
 ###   Easy to specify parallel builds (debug, optimized, release, etc)
 ###   Easy to add flags on a per-file, per-build, or per-file-build basis
@@ -82,16 +82,16 @@ SRCS		+= $(foreach DIR,$(SRCDIRS),$(subst $(DIR)/,,$(wildcard $(DIR)/*.c)))
 SRCS		+= vu1renderers.vsm
 
 # Additional objects to link. Only add things that aren't built from SRCS!
-OBJS		= 
+OBJS		=
 
 # Additional libs to link with. (sce libs are listed in the section below)
-LIBS		= 
+LIBS		=
 
 # Additional locations for header files
 INCDIRS		= include ../ps2stuff/include vu1
 
 # Additional locations for library files
-LIBDIRS		= 
+LIBDIRS		=
 
 # Additional locations for source files
 SRCDIRS		= src vu1
@@ -120,7 +120,7 @@ PS2STUFF	= ../ps2stuff
 ##########################################################################
 
 # Additional preprocessor definitions
-DEFINES		= 
+DEFINES		=
 
 # Compiler optimization options
 OPTFLAGS	= -fno-rtti -G 0
@@ -139,7 +139,7 @@ DEBUGFLAGS	+= -fno-strict-aliasing
 DEBUGFLAGS	+= -fno-common
 
 # Command-line arguments to be passed to the target when we run it
-RUNARGS		= 
+RUNARGS		=
 
 
 ##########################################################################
@@ -158,8 +158,8 @@ include $(PS2STUFF)/Makefile.builds
 
 # Additional defines and include dirs can be specified on a per-file basis
 # by prefixing with the stem of the filename.  For example, if I wanted special flags
-# for building mucilage.cpp, I could add any of the following 
-# mucilage_INCDIRS	= someincdirs 
+# for building mucilage.cpp, I could add any of the following
+# mucilage_INCDIRS	= someincdirs
 # mucilage_LIBDIRS	= somelibdirs
 # mucilage_DEFINES	= somedefs
 # mucilage_OPTFLAGS	= someoptflags
@@ -173,7 +173,7 @@ include $(PS2STUFF)/Makefile.builds
 
 # Similar to above.. To apply special flags for building mucilage.cpp for
 # the debug build, I could add any of the following
-# mucilage_debug_INCDIRS	= someincdirs 
+# mucilage_debug_INCDIRS	= someincdirs
 # mucilage_debug_LIBDIRS	= somelibdirs
 # mucilage_debug_DEFINES	= somedefs
 # mucilage_debug_OPTFLAGS	= someoptflags

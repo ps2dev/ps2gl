@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -533,7 +533,7 @@ CRendererManager::SpecularEnabledChanged( bool enabled )
 
    if (enabled) newState.Specular = 1;
    else newState.Specular = 0;
-   
+
    if (RendererRequirements != newState) {
       RendererRequirements = newState;
       RendererReqsHaveChanged = true;
@@ -617,7 +617,7 @@ CRendererManager::UpdateNewRenderer()
 
 	 if (CurrentRenderer != &UserRenderers[i]) {
 	    rendererChanged = true;
-	 }	 
+	 }
       }
 
       // now the default renderers
@@ -686,7 +686,7 @@ CRendererManager::LoadRenderer( CVifSCDmaPacket &packet )
  *
  * API to define custom primitive types, state chagnes, renderers, or override
  * the default renderers.
- * 
+ *
  * The ps2gl code that runs on the ee core is just a large, ugly state machine --
  * all of the "real" work is done in the renderers.  There are currently a dozen or
  * so internal renderers which handle different types of geometry, lighting,
@@ -695,7 +695,7 @@ CRendererManager::LoadRenderer( CVifSCDmaPacket &packet )
  * implement a commonly encountered case more efficiently that the general renderer
  * can.  Using the functions described below, an application can define custom
  * renderers or override existing ones.
- * 
+ *
  * But first, an explanation of how ps2gl chooses renderers is necessary.  ps2gl
  * keeps a bitfield of capabilities that a renderer must provide to be chosen to
  * render.  This bitfield is called the "renderer requirements" and describes
@@ -709,7 +709,7 @@ CRendererManager::LoadRenderer( CVifSCDmaPacket &packet )
  * to the current renderer requirements, and the first renderer that meets all the
  * requirements is chosen.  In this example, only a renderer that can do lit
  * geometry will be selected.
- * 
+ *
  * Renderers are searched in the order they were registered, application-defined
  * renderers first.  This means that specialized renderers should be registered
  * before general ones.  It also means that to override a default renderer, an
@@ -720,7 +720,7 @@ CRendererManager::LoadRenderer( CVifSCDmaPacket &packet )
  * renderer implies defining custom prim types and/or properties, for which
  * the upper 32 bits of the renderer capabilities/requirements are reserved.
  * See the function documentation below for more details.
- * 
+ *
  * For more information on implementing a renderer, see the file "renderer.h" which
  * defines the CRenderer interface.  (Sorry, but the renderer needs to be a cpp
  * class.)  The best examples are the default renderers, so take a look at
@@ -740,7 +740,7 @@ pglBeginRendererDefs()
 }
 
 /**
- * Register a custom renderer.  The maximum number of custom renderers is 
+ * Register a custom renderer.  The maximum number of custom renderers is
  * indicated by PGL_MAX_CUSTOM_RENDERERS.
  * @param renderer should point to a CRenderer object (passed as a void* for
  * 	  	   compatibility with C code)

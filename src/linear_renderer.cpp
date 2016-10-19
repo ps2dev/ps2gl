@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -30,7 +30,7 @@ CLinearRenderer::DrawLinearArrays( CGeometryBlock &block )
 
    CVifSCDmaPacket &packet = pGLContext->GetVif1Packet();
    InitXferBlock( packet, wordsPerVert, wordsPerNormal, wordsPerTex, wordsPerColor );
-   
+
    // get max number of vertices per vu1 buffer
 
    // let's assume separate unpacks for vertices, normals, tex uvs..
@@ -86,7 +86,7 @@ CLinearRenderer::GetRenderContextDeps()
    deps.Lighting = 1;
    deps.Texture = 1;
    deps.PerVtxMaterial = 1;
-   
+
    return deps;
 }
 
@@ -315,7 +315,7 @@ CLinearRenderer::XferBufferHeader( CVifSCDmaPacket& packet,
 	 numStripsInBuffer = 0;
       else if ( numVertsToBreakStrip == 2 )
 	 adcBits = 0x800;
-	 
+
       float adc;
       unsigned int stopBit = 0x400;
       for ( int i = 0; i < 16; i++ ) {

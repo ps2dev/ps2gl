@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -113,7 +113,7 @@ class CImmDrawContext : public CDrawContext {
 
       void SetBlendMode( GLenum source, GLenum dest );
       void SetAlphaFunc( GLenum func, GLclampf ref );
-      
+
       inline bool GetDoSmoothShading() const { return DoSmoothShading; }
       void SetDoSmoothShading( bool yesNo );
 
@@ -133,7 +133,7 @@ class CImmDrawContext : public CDrawContext {
       void SetAlphaTestEnabled( bool enabled );
 
       void SetInterlacingOffset( float yPixels );
-      
+
       void SetDepthWriteEnabled( bool enabled );
       void SetFrameBufferDrawMask(unsigned int mask);
 

@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -19,14 +19,14 @@ typedef unsigned int	GLenum;
 typedef unsigned char	GLboolean;
 typedef unsigned int	GLbitfield;
 typedef void		GLvoid;
-typedef char		GLbyte;	
+typedef char		GLbyte;
 typedef short		GLshort;
-typedef int		GLint;	
+typedef int		GLint;
 typedef unsigned char	GLubyte;
 typedef unsigned short	GLushort;
-typedef unsigned int	GLuint;	 
-typedef int		GLsizei; 
-typedef float		GLfloat; 
+typedef unsigned int	GLuint;
+typedef int		GLsizei;
+typedef float		GLfloat;
 typedef float		GLclampf;
 typedef float		GLdouble;
 typedef float		GLclampd;

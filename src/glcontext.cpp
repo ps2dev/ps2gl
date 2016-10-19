@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -128,7 +128,7 @@ CGLContext::CGLContext( int immBufferQwordSize, int immDrawBufferQwordSize )
 	     || RenderingFinishedSemaId == -1
 	     || ImmediateRenderingFinishedSemaId == -1,
 	     "Failed to create ps2gl semaphores." );
-   
+
 
    // add an interrupt handler for gs "signal" exceptions
 
@@ -324,7 +324,7 @@ CGLContext::EndVif1Packet( unsigned short signalNum )
    giftag.FLG = 0; // packed
    giftag.NREG = 1;
    giftag.REGS0 = 0xe; // a+d
-   
+
    Vif1Packet->End();
    Vif1Packet->Flush();
    Vif1Packet->OpenDirect();
@@ -393,7 +393,7 @@ CGLContext::GsIntHandler( int cause )
       // clear the exception and wait for the next
       *(volatile unsigned int*)GS::ControlRegs::csr = 8;
    }
-   
+
    // I'm not entirely sure why this is necessary, but if I don't do
    // it then framing out can cause the display thread to lock (I've
    // only verified it frozen waiting on pglFinishRenderingGeometry().)
@@ -425,7 +425,7 @@ CGLContext::FinishRenderingGeometry( bool forceImmediateStop )
 void
 CGLContext::WaitForVSync()
 {
-   // wait for beginning of v-sync 
+   // wait for beginning of v-sync
 #ifndef PS2_LINUX
    WaitSema( VsyncSemaId );
    // sometimes if we miss a frame the semaphore gets incremented
@@ -726,7 +726,7 @@ pglDisable( GLenum cap )
 void glEnable( GLenum cap )
 {
    CLighting& lighting = pGLContext->GetLighting();
-   
+
    switch (cap) {
       case GL_LIGHT0:
       case GL_LIGHT1:
@@ -768,7 +768,7 @@ void glEnable( GLenum cap )
       case GL_ALPHA_TEST:
          pGLContext->GetDrawContext().SetAlphaTestEnabled(true);
          break;
-          
+
       case GL_DEPTH_TEST:
       default:
 	 mNotImplemented( );
@@ -819,7 +819,7 @@ void glDisable( GLenum cap )
       case GL_ALPHA_TEST:
          pGLContext->GetDrawContext().SetAlphaTestEnabled(false);
          break;
-          
+
       case GL_DEPTH_TEST:
       default:
 	 mNotImplemented( );

@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -85,7 +85,7 @@ static bool printTimes = false;
  *
  * ps2glut will also do some rough timing of the callback functions (using
  * timer0).  Press the 'start' button to display the timings on stdout.
- * 
+ *
  * @{
  */
 
@@ -123,7 +123,7 @@ void glutInit(int *argcp, char **argv)
       // reset the machine
       sceDevVif0Reset();
       sceDevVu0Reset();
-      sceDmaReset(1);    
+      sceDmaReset(1);
       sceGsResetPath();
 
       sceGsResetGraph(0, SCE_GS_INTERLACE, SCE_GS_NTSC, SCE_GS_FRAME);

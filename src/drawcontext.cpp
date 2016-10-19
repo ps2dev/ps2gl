@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -187,7 +187,7 @@ CImmDrawContext::SetDoClipping( bool clip )
       GLContext.GetImmGeomManager().GetRendererManager().ClippingEnabledChanged(clip);
    }
 }
-	 
+
 void
 CImmDrawContext::SetDoCullFace( bool cull )
 {
@@ -197,7 +197,7 @@ CImmDrawContext::SetDoCullFace( bool cull )
       GLContext.GetImmGeomManager().GetRendererManager().CullFaceEnabledChanged(cull);
    }
 }
-	 
+
 void
 CImmDrawContext::SetCullFaceDir( int direction )
 {
@@ -215,7 +215,7 @@ CImmDrawContext::SetBlendEnabled( bool enabled )
       GLContext.BlendEnabledChanged();
    }
 }
-      
+
 void
 CImmDrawContext::SetRescaleNormals( bool rescale )
 {
@@ -236,7 +236,7 @@ void
 CImmDrawContext::SetFrameBufferDrawMask(unsigned int mask)
 {
    DrawEnv->SetFrameBufferDrawMask(mask);
-   GLContext.FrameBufferDrawMaskChanged(); 
+   GLContext.FrameBufferDrawMaskChanged();
 }
 
 void
@@ -248,8 +248,8 @@ CImmDrawContext::SetPolygonMode( GLenum mode )
    }
 }
 
-void 
-CImmDrawContext::SetAlphaTestEnabled( bool enabled ) 
+void
+CImmDrawContext::SetAlphaTestEnabled( bool enabled )
 {
    if ( AlphaTestIsEnabled != enabled ) {
       AlphaTestIsEnabled = enabled;
@@ -308,11 +308,11 @@ CImmDrawContext::SetBlendMode( GLenum source, GLenum dest )
 
 #undef mCombineBlendFactors
 
-void 
+void
 CImmDrawContext::SetAlphaFunc( GLenum func, GLclampf ref )
 {
    GS::tAlphaTestPassMode ePassMode;
-       
+
    switch(func) {
       case GL_NEVER:
          ePassMode = GS::ATest::kNever;
@@ -531,11 +531,11 @@ public:
     }
 };
 
-void 
+void
 CDListDrawContext::SetAlphaFunc( GLenum func, GLclampf ref )
 {
     GLContext.GetDListGeomManager().Flush();
-    
+
     GLContext.GetDListManager().GetOpenDList() += CSetAlphaFuncCmd(func, ref);
     GLContext.AlphaTestFuncChanged();
 }
@@ -613,7 +613,7 @@ CDListDrawContext::SetFrameBufferDrawMask( unsigned int mask )
    GLContext.GetDListGeomManager().Flush();
 
    GLContext.GetDListManager().GetOpenDList() += CSetFrameBufferDrawMaskCmd(mask);
-   GLContext.FrameBufferDrawMaskChanged();  
+   GLContext.FrameBufferDrawMaskChanged();
 }
 
 /********************************************
@@ -670,7 +670,7 @@ void glCullFace( GLenum mode )
    drawContext.SetCullFaceDir( (mode == GL_FRONT) ? 1 : -1 );
 }
 
-void glColorMask( GLboolean r_enabled, GLboolean g_enabled, 
+void glColorMask( GLboolean r_enabled, GLboolean g_enabled,
 		  GLboolean b_enabled, GLboolean a_enabled)
 {
    CImmDrawContext &drawContext = pGLContext->GetImmDrawContext();

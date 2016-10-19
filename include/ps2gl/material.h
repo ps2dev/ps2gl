@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -41,7 +41,7 @@ class CImmMaterial : public CMaterial {
       }
    public:
       CImmMaterial( CGLContext &context );
-      
+
 
       void SetAmbient( cpu_vec_xyzw ambient ) { Ambient = ambient; TellRendererMaterialChanged(); }
       void SetDiffuse( cpu_vec_xyzw diffuse ) { Diffuse = diffuse; TellRendererMaterialChanged(); }
@@ -83,7 +83,7 @@ class CMaterialManager {
       GLenum		ColorMaterialMode;
       bool		UseColorMaterial;
       bool		InDListDef;
-      
+
    public:
       CMaterialManager( CGLContext &context )
 	 : GLContext(context),
