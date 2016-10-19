@@ -410,7 +410,7 @@ CMMTexture::ChangePsm( GS::tPSM psm )
 }
 
 void
-CMMTexture::Load( bool waitForEnd = true )
+CMMTexture::Load( bool waitForEnd )
 {
    mErrorIf( pImageMem == NULL,
 	     "Trying to load a texture that hasn't been defined!" );
@@ -481,7 +481,7 @@ CMMTexture::Load( CVifSCDmaPacket& packet )
 // again, should be templates..
 
 void
-CMMTexture::Use( bool waitForEnd = false )
+CMMTexture::Use( bool waitForEnd )
 {
    if ( XferImage ) Load();
    SendSettings( waitForEnd, Packet::kDontFlushCache );
