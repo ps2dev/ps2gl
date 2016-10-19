@@ -396,8 +396,8 @@ CBaseRenderer::BuildGiftag( GLenum primType )
    bool alpha = drawContext.GetBlendEnabled();
    unsigned int nreg = OutputQuadsPerVert;
 
-   GS::tPrim prim = { PRIM: primType, IIP: smoothShading, TME: useTexture,
-		      FGE: 0, ABE: alpha, AA1: 0, FST: 0, CTXT: 0, FIX: 0 };
+   GS::tPrim prim = { prim_type: primType, iip: smoothShading, tme: useTexture,
+		      fge: 0, abe: alpha, aa1: 0, fst: 0, ctxt: 0, fix: 0 };
    tGifTag giftag = { NLOOP: 0, EOP: 1, pad0: 0, id: 0, PRE: 1,
 			PRIM: *(tU64*)&prim, FLG: 0, NREG: nreg, REGS0: 2, REGS1: 1,
 			REGS2: 4 };

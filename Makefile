@@ -109,8 +109,8 @@ DEPDIRBASE	= deps
 MAKEPARENTS	= ../ps2stuff
 
 # Where to find PSX2 development stuff.
-SCEDIR		= /usr/local/sce
-PS2DEVDIR	= /usr/local/ps2
+SCEDIR		= $(PS2SDK)
+PS2DEVDIR	= $(PS2SDK)
 
 # Where to find the ps2stuff project
 PS2STUFF	= ../ps2stuff

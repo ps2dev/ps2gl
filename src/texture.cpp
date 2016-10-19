@@ -357,7 +357,7 @@ CMMTexture::SetImage( tU128* imagePtr, tU32 w, tU32 h, GS::tPSM psm )
    CTexture::SetImage( imagePtr, w, h, psm, NULL );
 
    // create a memarea for the image
-   tU32 bufWidth = gsrTex0.TBW * 64;
+   tU32 bufWidth = gsrTex0.tb_width * 64;
    pImageMem = new GS::CMemArea( bufWidth, h, psm, GS::kAlignBlock );
 
    XferImage = true;

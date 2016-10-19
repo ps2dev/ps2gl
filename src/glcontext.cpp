@@ -7,9 +7,9 @@
 #include <string.h>
 
 #ifndef PS2_LINUX
-#  include "libgraph.h"
-#  include "libdma.h"
-#  include "libdev.h"
+#  include "graph.h"
+#  include "dma.h"
+#  include "kernel.h"
 #else
 #  include <sys/mman.h>
 #  include "ps2stuff_kmodule.h"
@@ -120,7 +120,7 @@ CGLContext::CGLContext( int immBufferQwordSize, int immDrawBufferQwordSize )
 #ifndef PS2_LINUX
    // create a few semaphores
 
-   struct SemaParam newSemaphore = { 0, 1, 0 }; // but maxCount doesn't work?
+   struct t_ee_sema newSemaphore = { 0, 1, 0 }; // but maxCount doesn't work?
    VsyncSemaId = CreateSema( &newSemaphore );
    RenderingFinishedSemaId = CreateSema( &newSemaphore );
    ImmediateRenderingFinishedSemaId = CreateSema( &newSemaphore );
@@ -565,38 +565,7 @@ void
 pglWaitForVU1( void )
 {
 #ifndef PS2_LINUX
-   // enable output to cop0 condition flag for vif1 channel
-   *D_PCR = 0x2;
-   // clear the vif1 cis
-   *D_STAT = 2;
-
-   asm volatile ("sync.l");
-   // if vif1 is still transferring
-   if ( *D1_CHCR & 0x100 ) {
-
-      asm volatile (
-	 ".set	noreorder \n"
-
-	 "0: 		\n"
-
-	 "nop 		\n"
-	 "nop 		\n"
-
-	 "nop 		\n"
-	 "nop 		\n"
-
-	 "nop 		\n"
-	 "nop 		\n"
-
-	 "nop 		\n"
-	 "nop 		\n"
-
-	 "bc0f	0b 	\n"
-	 "nop 		\n"
-
-	 ".set	reorder \n"
-	 );
-   }
+   dma_channel_fast_waits(DMAC::Channels::vif1);
 #else
    ioctl( Ps2stuffDeviceFd, PS2STUFF_IOCTV1DMAW, 0 );
 #endif
