@@ -17,10 +17,10 @@
 
 #include "vu1_mem_indexed.h"
 
-CIndexedRenderer::CIndexedRenderer( void *packet, CRendererProps caps, CRendererProps reqs,
+CIndexedRenderer::CIndexedRenderer( void *packet, int packetSize, CRendererProps caps, CRendererProps reqs,
 				    int inQuadsPerVert, int outQuadsPerVert,
 				    const char *name)
-   : CBaseRenderer(packet, caps, reqs,
+   : CBaseRenderer(packet, packetSize, caps, reqs,
 		   inQuadsPerVert, outQuadsPerVert, kInputGeomStart, name)
 {
    printf("Max number of vertices in indexed array is %d\n", (kInputBufSize-4)/3 - 3 );

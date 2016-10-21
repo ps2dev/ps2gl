@@ -18,22 +18,9 @@
 
 using namespace RendererProps;
 
-extern "C" void vsmIndexed();
-
 /********************************************
  * methods
  */
-
-#ifdef PS2_LINUX
-#  include <sys/mman.h>
-#  define mVsmAddr(__sym)					\
-   (void*)(dmaableRenderers + (tU32)__sym - (tU32)vsmStart)
-// this will have been defined by glut or the application
-// when it opened the ps2stuff device
-extern int Ps2stuffDeviceFd;
-#else
-#  define mVsmAddr(__sym)	(void*)__sym
-#endif
 
 CRendererManager::CRendererManager( CGLContext &context)
    : GLContext(context),
@@ -55,14 +42,6 @@ CRendererManager::CRendererManager( CGLContext &context)
    RendererRequirements.ArrayAccess	= 0;
    RendererRequirements.UserProps	= 0;
 
-#ifdef PS2_LINUX
-   tU32 dmaableRenderers = (tU32)mmap(0, (tU32)vsmEnd - (tU32)vsmStart,
-				      PROT_READ | PROT_WRITE,
-				      MAP_SHARED, Ps2stuffDeviceFd,
-				      1 );
-   memcpy( (void*)dmaableRenderers, (void*)vsmStart, (tU32)vsmEnd - (tU32)vsmStart );
-#endif
-
    CRendererProps no_reqs;
    no_reqs = (tU64)0;
 
@@ -83,7 +62,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kIndexed
       };
 
-      RegisterDefaultRenderer( new CIndexedRenderer(mVsmAddr(vsmIndexed), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CIndexedRenderer(mVsmAddr(Indexed), mVsmSize(Indexed), capabilities, no_reqs, 3, 3,
 						    "indexed") );
    }
 
@@ -104,7 +83,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmFastNoLights), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(FastNoLights), mVsmSize(FastNoLights), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "fast, no lights") );
    }
@@ -125,7 +104,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmFast), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(Fast), mVsmSize(Fast), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "fast") );
    }
@@ -147,7 +126,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmSCEI), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(SCEI), mVsmSize(SCEI), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "scei") );
    }
@@ -170,7 +149,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneralNoSpec), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralNoSpec), mVsmSize(GeneralNoSpec), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, no specular") );
    }
@@ -190,7 +169,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneralNoSpecTri), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralNoSpecTri), mVsmSize(GeneralNoSpecTri), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, tris, no specular") );
    }
@@ -210,7 +189,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneralNoSpecQuad), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralNoSpecQuad), mVsmSize(GeneralNoSpecQuad), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, quads, no specular") );
    }
@@ -233,7 +212,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneral), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(General), mVsmSize(General), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear") );
    }
@@ -253,7 +232,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneralQuad), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralQuad), mVsmSize(GeneralQuad), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, quads") );
    }
@@ -273,7 +252,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneralTri), capabilities, no_reqs, 3, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralTri), mVsmSize(GeneralTri), capabilities, no_reqs, 3, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, tris") );
    }
@@ -296,7 +275,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneralPVDiff), capabilities, no_reqs, 4, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralPVDiff), mVsmSize(GeneralPVDiff), capabilities, no_reqs, 4, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, pvc") );
    }
@@ -316,7 +295,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneralPVDiffTri), capabilities, no_reqs, 4, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralPVDiffTri), mVsmSize(GeneralPVDiffTri), capabilities, no_reqs, 4, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, pvc, tris") );
    }
@@ -336,7 +315,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 	 ArrayAccess: kLinear
       };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(vsmGeneralPVDiffQuad), capabilities, no_reqs, 4, 3,
+      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralPVDiffQuad), mVsmSize(GeneralPVDiffQuad), capabilities, no_reqs, 4, 3,
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, pvc, quads") );
    }

@@ -415,16 +415,37 @@ CBaseRenderer::CacheRendererState()
 void
 CBaseRenderer::Load()
 {
-   mErrorIf( *(unsigned short*)MicrocodePacket > 1024,
-	     "This vu1 renderer won't fit into vu1 code memory: 0x%08x",
-	     (unsigned int)Capabilities );
-   CVifSCDmaPacket &packet = pGLContext->GetVif1Packet();
+	unsigned int size64 = MicrocodePacketSize / 8;
+	CVifSCDmaPacket &packet = pGLContext->GetVif1Packet();
+	const u64 * code = (const u64 *)MicrocodePacket;
+	unsigned int addr64 = 0;
 
-   packet.Call( MicrocodePacket );
-   packet.Pad128();
-   packet.CloseTag();
+	mErrorIf( (unsigned int)code  & 0xf, "code not & 0xf");
+	mErrorIf( MicrocodePacketSize & 0xf, "size not & 0xf");
 
-   pglAddToMetric(kMetricsRendererUpload);
+	while(size64 > 0)
+	{
+		// Total send size
+		unsigned int sendSize64 = (size64 > 256) ? 256 : size64;
+
+		// Add send code command (VIF_CMD_MPG)
+		packet.Cnt();
+		{
+			packet.Nop();
+			packet.Mpg((sendSize64 == 256) ? 0 : sendSize64, addr64, 0);
+
+			// FIXME: We should Ref to the code instead of copying it
+			for (unsigned int i = 0; i < sendSize64; i++) {
+				packet.Add(*code++);
+			}
+		}
+		packet.CloseTag();
+
+		size64 -= sendSize64;
+		addr64 += sendSize64;
+	}
+
+	pglAddToMetric(kMetricsRendererUpload);
 }
 
 void
@@ -514,4 +535,3 @@ CBaseRenderer::XferVectors( CVifSCDmaPacket &packet, unsigned int *dataStart,
       packet.CloseTag();
    }
 }
-

@@ -38,10 +38,11 @@ class CBaseRenderer : public CRenderer {
       int		InputGeomOffset;
 
       void		*MicrocodePacket;
+      int		MicrocodePacketSize;
 
       const char	*Name;
 
-      CBaseRenderer( void *packet,
+      CBaseRenderer( void *packet, int packetSize,
 		     int inQuadsPerVert, int outQuadsPerVert,
 		     int inGeomOffset, const char *name)
 	 : XferVertices(true), VifDoubleBuffered(true),
@@ -49,10 +50,11 @@ class CBaseRenderer : public CRenderer {
 	   InputQuadsPerVert(inQuadsPerVert), OutputQuadsPerVert(outQuadsPerVert),
 	   InputGeomOffset(inGeomOffset),
 	   MicrocodePacket(packet),
+	   MicrocodePacketSize(packetSize),
 	   Name(name)
       {}
 
-      CBaseRenderer( void *packet, CRendererProps caps, CRendererProps reqs,
+      CBaseRenderer( void *packet, int packetSize, CRendererProps caps, CRendererProps reqs,
 		     int inQuadsPerVert, int outQuadsPerVert,
 		     int inGeomOffset, const char *name)
 	 : CRenderer(caps, reqs),
@@ -61,6 +63,7 @@ class CBaseRenderer : public CRenderer {
 	   InputQuadsPerVert(inQuadsPerVert), OutputQuadsPerVert(outQuadsPerVert),
 	   InputGeomOffset(inGeomOffset),
 	   MicrocodePacket(packet),
+	   MicrocodePacketSize(packetSize),
 	   Name(name)
       {}
 

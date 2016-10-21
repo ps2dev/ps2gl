@@ -14,7 +14,7 @@ class CIndexedRenderer : public CBaseRenderer {
       cpu_vec_4		ConstantVertColor;
 
    public:
-      CIndexedRenderer( void *packet, CRendererProps caps, CRendererProps reqs,
+      CIndexedRenderer( void *packet, int packetSize, CRendererProps caps, CRendererProps reqs,
 			int inQuadsPerVert, int outQuadsPerVert,
 			const char *name);
 

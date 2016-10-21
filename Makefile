@@ -79,7 +79,9 @@ SRCS		+= $(foreach DIR,$(SRCDIRS),$(subst $(DIR)/,,$(wildcard $(DIR)/*.cpp)))
 # get all c source files
 SRCS		+= $(wildcard *.c)
 SRCS		+= $(foreach DIR,$(SRCDIRS),$(subst $(DIR)/,,$(wildcard $(DIR)/*.c)))
-SRCS		+= vu1renderers.vsm
+# get all _vcl.vsm source files
+SRCS		+= $(wildcard *_vcl.vsm)
+SRCS		+= $(foreach DIR,$(SRCDIRS),$(subst $(DIR)/,,$(wildcard $(DIR)/*_vcl.vsm)))
 
 # Additional objects to link. Only add things that aren't built from SRCS!
 OBJS		=

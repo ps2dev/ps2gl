@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -7,26 +7,31 @@
 #ifndef ps2gl_vu1code_h
 #define ps2gl_vu1code_h
 
+#define VU_FUNCTIONS(name) \
+   void vsm##name##_CodeStart(); \
+   void vsm##name##_CodeEnd()
+
+#define mVsmAddr(name)	((void*)vsm##name##_CodeStart)
+#define mVsmSize(name)	((u8*)vsm##name##_CodeEnd - (u8*)vsm##name##_CodeStart)
+
 extern "C" {
-   void vsmStart();
+   VU_FUNCTIONS(General);
+   VU_FUNCTIONS(GeneralTri);
+   VU_FUNCTIONS(GeneralQuad);
 
-   void vsmGeneral();
-   void vsmGeneralQuad();
-   void vsmGeneralTri();
+   VU_FUNCTIONS(GeneralNoSpec);
+   VU_FUNCTIONS(GeneralNoSpecTri);
+   VU_FUNCTIONS(GeneralNoSpecQuad);
 
-   void vsmGeneralNoSpec();
-   void vsmGeneralNoSpecTri();
-   void vsmGeneralNoSpecQuad();
+   VU_FUNCTIONS(GeneralPVDiff);
+   VU_FUNCTIONS(GeneralPVDiffTri);
+   VU_FUNCTIONS(GeneralPVDiffQuad);
 
-   void vsmGeneralPVDiff();
-   void vsmGeneralPVDiffTri();
-   void vsmGeneralPVDiffQuad();
+   VU_FUNCTIONS(SCEI);
+   VU_FUNCTIONS(Fast);
+   VU_FUNCTIONS(FastNoLights);
 
-   void vsmSCEI();
-   void vsmFast();
-   void vsmFastNoLights();
-
-   void vsmEnd();
+   VU_FUNCTIONS(Indexed);
 }
 
 #endif // ps2gl_vu1code_h

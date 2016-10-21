@@ -38,20 +38,20 @@ class CLinearRenderer : public CBaseRenderer {
 			     int numStripsInBuffer, unsigned short *stripOffsets );
 
    public:
-      CLinearRenderer( void *packet, CRendererProps caps, CRendererProps reqs,
+      CLinearRenderer( void *packet, int packetSize, CRendererProps caps, CRendererProps reqs,
 		       int inQuadsPerVert, int outQuadsPerVert,
 		       int inGeomOffset, int inGeomBufSize,
 		       const char *name)
-	 : CBaseRenderer(packet, caps, reqs,
+	 : CBaseRenderer(packet, packetSize, caps, reqs,
 			 inQuadsPerVert, outQuadsPerVert, inGeomOffset, name),
 	   InputGeomBufSize(inGeomBufSize)
       {}
 
-      CLinearRenderer( void *packet,
+      CLinearRenderer( void *packet, int packetSize,
 		       int inQuadsPerVert, int outQuadsPerVert,
 		       int inGeomOffset, int inGeomBufSize,
 		       const char *name)
-	 : CBaseRenderer(packet, inQuadsPerVert, outQuadsPerVert, inGeomOffset, name),
+	 : CBaseRenderer(packet, packetSize, inQuadsPerVert, outQuadsPerVert, inGeomOffset, name),
 	   InputGeomBufSize(inGeomBufSize)
       {}
 
