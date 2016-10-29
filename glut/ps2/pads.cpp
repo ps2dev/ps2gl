@@ -12,9 +12,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "eetypes.h"
-#include "sifdev.h"
 #include "sifrpc.h"
+#include "loadfile.h"
 
 #include "pads.h"
 #include "ps2s/math.h"
@@ -51,36 +50,25 @@ CPad Pad1( kPad1 );
  */
 
 void
-Pads::Init( const char* module_path )
+Pads::Init( void )
 {
-   char temp_buffer[256];
-   int module_path_len = strlen(module_path);
-
    // open the pads.. this should be elsewhere..
-   sceSifInitRpc(0);
+   SifInitRpc(0);
 
    /* load sio2man.irx */
-   strncpy( temp_buffer, module_path, 256 );
-   if (temp_buffer[module_path_len-1] == '/')
-      temp_buffer[module_path_len-1] = '\0';
-   strncat( temp_buffer, "/sio2man.irx", 256-strlen(temp_buffer) );
-   if (sceSifLoadModule(temp_buffer, 0, NULL) < 0)
+   if (SifLoadModule("rom0:SIO2MAN", 0, NULL) < 0)
    {
       printf("Can't load module sio2man\n");
       exit(0);
    }
    /* load padman.irx */
-   strncpy( temp_buffer, module_path, 256 );
-   if (temp_buffer[module_path_len-1] == '/')
-      temp_buffer[module_path_len-1] = '\0';
-   strncat( temp_buffer, "/padman.irx", 256-strlen(temp_buffer) );
-   if (sceSifLoadModule(temp_buffer,0, NULL) < 0)
+   if (SifLoadModule("rom0:PADMAN", 0, NULL) < 0)
    {
       printf("Can't load module padman\n");
       exit(0);
    }
 
-   scePadInit(0); // "must be zero"
+   padInit(0); // "must be zero"
 
    if ( ! Pad0.Open() ) {
       printf("Couldn't open Pad0.\n");
@@ -109,24 +97,24 @@ bool
 CPad::Open( void )
 {
    // slot is only for use with multitap
-   return scePadPortOpen(uiPort, kSlot0, DmaBuffer);
+   return padPortOpen(uiPort, kSlot0, DmaBuffer);
 }
 
 void
 CPad::Read( void )
 {
-   t32 padState = scePadGetState( kPort0, kSlot0 );
-   if ( padState != scePadStateStable ) return;
+   t32 padState = padGetState( kPort0, kSlot0 );
+   if ( padState != PAD_STATE_STABLE ) return;
 
    if ( !bPadModeSet ) {
       // who knows what the 1 parameter is..  a return val of 1 indicates that the request is
       // being processed
-      if ( scePadSetMainMode(uiPort, kSlot0, 1, kPadSetLockModeUnlock) == 1 )
+      if ( padSetMainMode(uiPort, kSlot0, 1, kPadSetLockModeUnlock) == 1 )
          bPadModeSet = true;
    }
    else {
       tPadStatus padStatus;
-      scePadRead( uiPort, kSlot0, (tU8*)&padStatus );
+      padRead( uiPort, kSlot0, (padButtonStatus*)&padStatus );
 
       if ( padStatus.success == 0 ) { // 0 indicates success
 	 LastStatus = CurStatus;
@@ -134,11 +122,11 @@ CPad::Read( void )
 	 padStatus.leftStick = CurStatus.leftStick;
 	 CurStatus = padStatus;
 
-	 t32 id = scePadInfoMode( uiPort, kSlot0, InfoModeCurID, 0 );
-	 if ( id == kPadModeStandard || id == kPadModeAnalog ) {
-				// flip the sense of the bit field (1 = pressed)
-	    CurStatus.buttons ^= 0xffff;
-	 }
+//	 t32 id = padInfoMode( uiPort, kSlot0, PAD_MODECURID, 0 );
+//	 if ( id == kPadModeStandard || id == kPadModeAnalog ) {
+//				// flip the sense of the bit field (1 = pressed)
+//	    CurStatus.buttons ^= 0xffff;
+//	 }
 
 	 // sticks
 	 if ( WasPushed( Pads::kRightStickButton ) ) {
@@ -178,7 +166,7 @@ CPad::UpdateStick( tStickData* stickCur, tStickData* stickLast )
          temp = ((stickCur->xVal > stickCur->xCenter) ? -kStickDeadRadius : kStickDeadRadius);
          stickCur->xPos = (float)(stickCur->xVal - stickCur->xCenter + temp) /
 	    (float)kStickMaxRadius;
-         isChanged = TRUE;
+         isChanged = true;
       }
       else {
 	 // stick is inside the dead zone

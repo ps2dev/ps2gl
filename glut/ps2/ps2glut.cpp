@@ -7,9 +7,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "libgraph.h"
-#include "libdev.h"
-#include "sifdev.h"
+#include "graph.h"
+//#include "libdev.h"
+//#include "sifdev.h"
 
 #include "GL/glut.h"
 #include "GL/ps2gl.h"
@@ -41,7 +41,6 @@ typedef void (* tFunctionPtr_i)		(int);
  * function prototypes
  */
 
-static void parse_cl( int *argcp, char **argv );
 static void normal_main_loop();
 static void initGsMemory();
 static void do_keys();
@@ -58,8 +57,6 @@ tFunctionPtr IdleFunc = NULL;
 tFunctionPtr_iii SpecialFunc = NULL;
 
 static CEETimer *Timer0;
-static char default_module_path[] = "host0:/usr/local/sce/iop/modules";
-static char *module_path = '\0';
 
 static bool printTimes = false;
 
@@ -96,37 +93,22 @@ static bool printTimes = false;
  * reset the machine and graphics mode before calling pglInit!)
  *
  * @param argcp a pointer to the number of elements in argv
- * @param argvp command line args.  ps2glut will look for a string of
- *              the form "iop_module_path=<path>" and use <path> as
- *              the location of the iop modules (e.g.,
- *              "iop_module_path=host0:/usr/local/sce/iop/modules").
- *              If none is specified "host0:/usr/local/sce/iop/modules"
- *              will be used.
+ * @param argvp command line args.
  */
 void glutInit(int *argcp, char **argv)
 {
-   parse_cl( argcp, argv );
-
-   // get the iop module path and initialize the pads
-   // this is before ps2gl initialization because the sifInitRPC in
-   // Pads::Init needs to happen before the dtv init
-
-   if ( module_path == NULL ) {
-      mWarn("No iop module path specified!  Using %s.", default_module_path);
-      module_path = default_module_path;
-   }
-   Pads::Init(module_path);
+   Pads::Init();
 
    // does the ps2gl library need to be initialized?
 
    if ( ! pglHasLibraryBeenInitted() ) {
       // reset the machine
-      sceDevVif0Reset();
-      sceDevVu0Reset();
-      sceDmaReset(1);
-      sceGsResetPath();
+//      sceDevVif0Reset();
+//      sceDevVu0Reset();
+//      sceDmaReset(1);
+//      sceGsResetPath();
 
-      sceGsResetGraph(0, SCE_GS_INTERLACE, SCE_GS_NTSC, SCE_GS_FRAME);
+//      sceGsResetGraph(0, SCE_GS_INTERLACE, SCE_GS_NTSC, SCE_GS_FRAME);
 
       mWarn( "ps2gl library has not been initialized by the user; using default values." );
       int immBufferVertexSize = 64 * 1024;
@@ -325,33 +307,6 @@ void normal_main_loop()
       pglWaitForVSync();
       pglSwapBuffers();
       pglRenderGeometry();
-   }
-}
-
-void
-parse_cl( int *argcp, char **argv )
-{
-   for ( int i = 0; i < *argcp; i++ ) {
-      bool found = false;
-
-      if ( strstr(argv[i], "iop_module_path=") == argv[i] ) {
-	 module_path = &argv[i][strlen("iop_module_path=")];
-	 found = true;
-      }
-
-      if ( found ) argv[i] = NULL;
-   }
-
-   // fix up argv
-
-   int numArgs = *argcp;
-   for ( int i = 0; i < numArgs; i++ ) {
-      if ( argv[i] == NULL ) {
-	 // move everything after left one
-	 for ( int j = i; j < numArgs - 1; j++ )
-	    argv[j] = argv[j+1];
-	 *argcp -= 1;
-      }
    }
 }
 

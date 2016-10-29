@@ -7,10 +7,12 @@
 #ifndef pads_h
 #define pads_h
 
-#include "eetypes.h" // needed for libpad.h
 #include "libpad.h"
 
 #include "ps2s/types.h"
+
+
+#define scePadDmaBufferMax (256/16)
 
 /********************************************
  * types
@@ -23,7 +25,7 @@
 
 namespace Pads
 {
-      void Init( const char* module_path );
+      void Init( void );
       void Read( void );
 
       static const unsigned int kSelect = 0,
