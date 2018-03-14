@@ -2,4 +2,5 @@ deps_*
 objs_*
 prebuilddone
 *.o
+*.vo
 *.a
