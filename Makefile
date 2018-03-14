@@ -56,10 +56,9 @@ clean:
 	rm -f $(EE_OBJS_LIB) $(EE_OBJS) $(EE_BIN) $(EE_LIB)
 
 realclean: clean
-	rm -rf $(PS2SDK)/ports/include/GL
 	rm -rf $(PS2SDK)/ports/include/ps2gl
 	rm -f  $(PS2SDK)/ports/lib/$(EE_LIB)
-	
+
 include $(PS2SDK)/Defs.make
 include ../ps2sdk-ports/Makefile.eeglobal
 
