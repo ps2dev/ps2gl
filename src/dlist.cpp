@@ -8,6 +8,10 @@
 #include "ps2gl/glcontext.h"
 #include "ps2gl/immgmanager.h"
 
+#ifndef PS2_LINUX
+#include "kernel.h"
+#endif
+
 /********************************************
  * CDList
  */

@@ -15,6 +15,10 @@
 #include "ps2gl/dlgmanager.h"
 #include "ps2gl/metrics.h"
 
+#ifndef PS2_LINUX
+#include "kernel.h"
+#endif
+
 /********************************************
  * CTexManager
  */
