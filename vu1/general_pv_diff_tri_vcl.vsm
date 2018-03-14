@@ -1,4 +1,3 @@
-                .replace_text	_lid, _gpvdt
 ; flowMon::Emit() vcl 1.28 produced this code:
                 .vu
                 .align 4
