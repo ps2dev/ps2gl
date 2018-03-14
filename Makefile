@@ -28,8 +28,20 @@ EE_OBJS = \
 	src/renderermanager.o \
 	src/texture.o
 
-#EE_OBJS += \
-#	vu1/general_tri.vsm
+EE_OBJS += \
+	vu1/fast_nolights.vo \
+	vu1/fast.vo \
+	vu1/general_nospec_quad.vo \
+	vu1/general_nospec_tri.vo \
+	vu1/general_nospec.vo \
+	vu1/general_pv_diff_quad.vo \
+	vu1/general_pv_diff_tri.vo \
+	vu1/general_pv_diff.vo \
+	vu1/general_quad.vo \
+	vu1/general_tri.vo \
+	vu1/general.vo \
+	vu1/indexed.vo \
+	vu1/scei.vo
 
 all: $(EE_LIB)
 
@@ -56,3 +68,6 @@ include ../ps2sdk-ports/Makefile.eeglobal
 
 #%.pp.vcl: %.vcl
 #	vclpp $< $@ -j
+
+%.vo: %_vcl.vsm
+	dvp-as -o $@ $<
