@@ -6,15 +6,9 @@
 
 #include <string.h>
 
-#ifndef PS2_LINUX
 #include "dma.h"
 #include "graph.h"
 #include "kernel.h"
-#else
-#include "ps2stuff_kmodule.h"
-#include <ps2gs.h>
-#include <sys/mman.h>
-#endif
 
 #include "GL/ps2gl.h"
 
@@ -116,7 +110,6 @@ CGLContext::CGLContext(int immBufferQwordSize, int immDrawBufferQwordSize)
 
     GS::Init();
 
-#ifndef PS2_LINUX
     // create a few semaphores
 
     struct t_ee_sema newSemaphore    = { 0, 1, 0 }; // but maxCount doesn't work?
@@ -136,7 +129,6 @@ CGLContext::CGLContext(int immBufferQwordSize, int immDrawBufferQwordSize)
     *(volatile unsigned int*)GS::ControlRegs::csr = 9;
     // enable signal and vsync exceptions
     *(volatile unsigned int*)GS::ControlRegs::imr = 0x7600;
-#endif
 }
 
 CGLContext::~CGLContext()
@@ -309,11 +301,10 @@ void CGLContext::EndVif1Packet(unsigned short signalNum)
     // flush any pending geometry
     GetImmGeomManager().Flush();
 
-// end current packet
-// write our id to the signal register and trigger an
-// exception on the core when this dma chain reaches the end
+    // end current packet
+    // write our id to the signal register and trigger an
+    // exception on the core when this dma chain reaches the end
 
-#ifndef PS2_LINUX
     tGifTag giftag;
     giftag.NLOOP = 1;
     giftag.EOP   = 1;
@@ -332,22 +323,15 @@ void CGLContext::EndVif1Packet(unsigned short signalNum)
     }
     Vif1Packet->CloseDirect();
     Vif1Packet->CloseTag();
-#else
-    Vif1Packet->End();
-    Vif1Packet->Nop().Nop();
-    Vif1Packet->CloseTag();
-#endif
 }
 
 void CGLContext::RenderGeometry()
 {
-//printf("%s\n", __FUNCTION__);
-#ifndef PS2_LINUX
+    //printf("%s\n", __FUNCTION__);
 
     // make sure the semaphore we'll signal on completion is zero now
     while (PollSema(RenderingFinishedSemaId) != -1)
         ;
-#endif
 
     LastPacket->Send();
 }
@@ -356,9 +340,8 @@ int CGLContext::GsIntHandler(int cause)
 {
     int ret = 0;
 
-//printf("%s(%d)\n", __FUNCTION__, cause);
+    //printf("%s(%d)\n", __FUNCTION__, cause);
 
-#ifndef PS2_LINUX
     tU32 csr = *(volatile tU32*)GS::ControlRegs::csr;
     // is this a signal interrupt?
     if (csr & 1) {
@@ -406,29 +389,23 @@ int CGLContext::GsIntHandler(int cause)
         *(volatile unsigned int*)GS::ControlRegs::imr = 0x7f00;
         *(volatile unsigned int*)GS::ControlRegs::imr = 0x7600;
     }
-#endif
 
     return ret;
 }
 
 void CGLContext::FinishRenderingGeometry(bool forceImmediateStop)
 {
-//printf("%s(%d)\n", __FUNCTION__, forceImmediateStop);
+    //printf("%s(%d)\n", __FUNCTION__, forceImmediateStop);
 
-#ifndef PS2_LINUX
     mWarnIf(forceImmediateStop, "Interrupting currently rendering dma chain not supported yet");
     WaitSema(RenderingFinishedSemaId);
-#else
-    pglWaitForVU1();
-#endif
 }
 
 void CGLContext::WaitForVSync()
 {
-//printf("%s\n", __FUNCTION__);
+    //printf("%s\n", __FUNCTION__);
 
-// wait for beginning of v-sync
-#ifndef PS2_LINUX
+    // wait for beginning of v-sync
     WaitSema(VsyncSemaId);
     // sometimes if we miss a frame the semaphore gets incremented
     // more than once (because maxCount is ignored?) which causes the next
@@ -439,9 +416,6 @@ void CGLContext::WaitForVSync()
     // sceGsSyncV(0);
     tU32 csr           = *(volatile tU32*)GS::ControlRegs::csr;
     IsCurrentFieldEven = (bool)((csr >> 13) & 1);
-#else
-    IsCurrentFieldEven = Math::IsEven(ps2_gs_sync_v(0));
-#endif
 }
 
 void CGLContext::SwapBuffers()
@@ -483,11 +457,7 @@ void CGLContext::FreeWaitingBuffersAndSwap()
     CurBuffer = 1 - CurBuffer;
 
     for (int i = 0; i < NumBuffersToBeFreed[CurBuffer]; i++) {
-#ifndef PS2_LINUX
         free(BuffersToBeFreed[CurBuffer][i]);
-#else
-        munmap(BuffersToBeFreed[CurBuffer][i], 1);
-#endif
     }
 
     NumBuffersToBeFreed[CurBuffer] = 0;
@@ -551,12 +521,6 @@ void pglFinish(void)
     ps2sFinish();
 }
 
-#ifdef PS2_LINUX
-// this will have been defined by glut or the application when opening the
-// ps2stuff device
-extern int Ps2stuffDeviceFd;
-#endif
-
 /**
  * Wait for dma transfers to vif1 to end.  Polls cop0, so it should not slow down
  * the transfer, unlike sceGsSyncPath().
@@ -566,11 +530,7 @@ extern int Ps2stuffDeviceFd;
  */
 void pglWaitForVU1(void)
 {
-#ifndef PS2_LINUX
     dma_channel_fast_waits(DMAC::Channels::vif1);
-#else
-    ioctl(Ps2stuffDeviceFd, PS2STUFF_IOCTV1DMAW, 0);
-#endif
 }
 
 /**

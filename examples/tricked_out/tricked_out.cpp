@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -121,13 +121,7 @@ void init(void)
     float material[] = { .5f, .5f, .5f, .5f };
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, material);
 
-// how nice of them to invert the set of reserved timers when building
-// linux...
-#ifdef PS2_LINUX
-    timer1 = new CEETimer(CEETimer::Timer3);
-#else
     timer1 = new CEETimer(CEETimer::Timer1);
-#endif
     timer1->SetResolution(CEETimer::BusClock_256th);
     pglSetRenderingFinishedCallback(rendering_finished);
 

@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -45,16 +45,7 @@ CBillboardRenderer::CBillboardRenderer()
 CBillboardRenderer*
 CBillboardRenderer::Register()
 {
-#ifndef PS2_LINUX
     Microcode = (void*)vsmBillboards;
-#else
-    // under linux, since the renderer is just linked in with the rest of the code,
-    // it is put in normal virtual mem by the loader.  However, we need to dma it
-    // to vu1, so allocate some dma'able memory here and copy the renderer over.
-    unsigned int microcodeSize = (unsigned int)vsmBillboardsEnd - (unsigned int)vsmBillboards;
-    Microcode                  = pglutAllocDmaMem(microcodeSize);
-    memcpy(Microcode, (void*)vsmBillboards, microcodeSize);
-#endif
 
     // create a renderer and register it
 

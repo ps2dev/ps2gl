@@ -160,13 +160,9 @@ class CGLContext {
     void* BuffersToBeFreed[2][kMaxBuffersToBeFreed];
     int NumBuffersToBeFreed[2];
 
-/// this value will be written to the signal register as the last
-/// item in the dma chain.  The method to query its value is below.
-#ifndef PS2_LINUX
+    /// this value will be written to the signal register as the last
+    /// item in the dma chain.  The method to query its value is below.
     static const tU64 Ps2glSignalId = 0xffffffff00000000 | (tU32)'G' << 24 | (tU32)'L' << 16;
-#else
-    static const tU64 Ps2glSignalId = (tU32)'G' << 24 | (tU32)'L' << 16;
-#endif
 
     /// Semaphores signaled by the gs int handler
     static int RenderingFinishedSemaId, ImmediateRenderingFinishedSemaId, VsyncSemaId;

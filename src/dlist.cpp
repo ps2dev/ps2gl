@@ -8,9 +8,7 @@
 #include "ps2gl/glcontext.h"
 #include "ps2gl/immgmanager.h"
 
-#ifndef PS2_LINUX
 #include "kernel.h"
-#endif
 
 /********************************************
  * CDList
@@ -23,9 +21,7 @@ CDList::CDList()
     , ColorBuf(NULL)
     , NumRenderPackets(0)
 {
-#ifndef PS2_LINUX
     FlushCache(0); // hopefully we're not allocating these buffers too often..
-#endif
     FirstCmdBlock = CurCmdBlock = new CDListCmdBlock;
 }
 

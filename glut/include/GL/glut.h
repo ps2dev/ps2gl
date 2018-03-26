@@ -63,10 +63,6 @@ extern void glutIdleFunc(void (*func)(void));
 
 // some ps2-specific stuff
 
-#ifdef PS2_LINUX
-extern int Ps2stuffDeviceFd;
-#endif
-
 extern void* pglutAllocDmaMem(unsigned int num_bytes);
 extern void pglutFreeDmaMem(void* mem);
 

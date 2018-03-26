@@ -15,9 +15,7 @@
 #include "ps2gl/immgmanager.h"
 #include "ps2gl/metrics.h"
 
-#ifndef PS2_LINUX
 #include "kernel.h"
-#endif
 
 /********************************************
  * CTexManager
@@ -452,9 +450,7 @@ void CMMTexture::Load(bool waitForEnd)
         IsResident = false;
     }
     if (!IsResident) {
-#ifndef PS2_LINUX
         FlushCache(0);
-#endif
         // send the image
         SendImage(waitForEnd, Packet::kDontFlushCache);
         IsResident = true;

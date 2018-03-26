@@ -50,21 +50,8 @@ void CDisplayContext::SetDisplayBuffers(bool interlaced,
     int width = frame0Mem->GetWidth(), height = frame0Mem->GetHeight();
     int displayHeight = (DisplayIsInterlaced) ? height * 2 : height;
 
-#ifndef PS2_LINUX
     DisplayEnv->SetFB2(frame0Mem->GetWordAddr(), width, 0, 0, frame0Mem->GetPixFormat());
     DisplayEnv->SetDisplay2(width, displayHeight);
-#else
-    DisplayEnv->SetFB1(frame0Mem->GetWordAddr(), width,
-        0, 0, /* offsets in buffer */
-        frame0Mem->GetPixFormat());
-    DisplayEnv->SetFB2(frame0Mem->GetWordAddr(), width,
-        0, 0, /* offsets in buffer */
-        frame0Mem->GetPixFormat());
-    // DisplayEnv->SetDisplay2( width, height * 2 );
-    DisplayEnv->SetBGColor(0, 0, 0);
-    DisplayEnv->BlendUsingConstAlpha(0x0);
-    DisplayEnv->SetDisplay2(width, displayHeight);
-#endif
     DisplayEnv->SendSettings();
 }
 
@@ -76,14 +63,10 @@ void CDisplayContext::SwapBuffers()
         CurFrameMem        = LastFrameMem;
         LastFrameMem       = temp;
 
-// display the last completed frame (which is frame n-2 because we're not
-// drawing immediately but building up a packet)
-// remember this is immediately sent, not delayed through a packet
-#ifndef PS2_LINUX
+        // display the last completed frame (which is frame n-2 because we're not
+        // drawing immediately but building up a packet)
+        // remember this is immediately sent, not delayed through a packet
         DisplayEnv->SetFB2Addr(CurFrameMem->GetWordAddr());
-#else
-        DisplayEnv->SetFB2Addr(CurFrameMem->GetWordAddr());
-#endif
         DisplayEnv->SendSettings();
     }
 }
