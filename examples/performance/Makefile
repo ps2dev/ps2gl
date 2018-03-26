@@ -1,6 +1,27 @@
-TARGET		= performance.elf
-LIBS		= ps2gl_sample
+EE_BIN       = performance.elf
+EE_CFLAGS   := -I$(PS2SDK)/ports/include -I../shared_code/ $(EE_CFLAGS)
+EE_CXXFLAGS := -I$(PS2SDK)/ports/include -I../shared_code/ $(EE_CXXFLAGS)
+EE_OBJS      = performance.o ../shared_code/text_stuff.o
+EE_LDFLAGS  += -L$(PS2SDK)/ports/lib
+EE_LIBS      = -lps2glut -lps2gl -lps2stuff -lpad -ldma -lgs -lpacket -lgraph
 
-# all the examples share the same makefile, just with a different
-# executable name..
-include ../shared_code/Makefile.examples
+EE_CFLAGS   += -D_DEBUG
+EE_CXXFLAGS += -D_DEBUG
+# VU0 code is broken so disable for now
+EE_CFLAGS   += -DNO_VU0_VECTORS
+EE_CXXFLAGS += -DNO_VU0_VECTORS
+
+all: $(EE_BIN)
+	ee-strip --strip-all $(EE_BIN)
+
+clean:
+	rm -f $(EE_BIN) $(EE_OBJS)
+
+run: $(EE_BIN)
+	ps2client -h 192.168.1.10 execee host:$(EE_BIN)
+
+reset:
+	ps2client -h 192.168.1.10 reset
+
+include $(PS2SDK)/samples/Makefile.pref
+include $(PS2SDK)/samples/Makefile.eeglobal_cpp
