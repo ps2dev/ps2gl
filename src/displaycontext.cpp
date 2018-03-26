@@ -11,81 +11,81 @@
 
 #include "ps2s/displayenv.h"
 
-CDisplayContext::CDisplayContext( CGLContext &context )
-   : GLContext(context),
-     Frame0Mem(NULL), Frame1Mem(NULL),
-     CurFrameMem(NULL), LastFrameMem(NULL),
-     DisplayEnv(NULL),
-     DisplayIsDblBuffered(true),
-     DisplayIsInterlaced(true)
+CDisplayContext::CDisplayContext(CGLContext& context)
+    : GLContext(context)
+    , Frame0Mem(NULL)
+    , Frame1Mem(NULL)
+    , CurFrameMem(NULL)
+    , LastFrameMem(NULL)
+    , DisplayEnv(NULL)
+    , DisplayIsDblBuffered(true)
+    , DisplayIsInterlaced(true)
 {
-   DisplayEnv = new GS::CDisplayEnv;
+    DisplayEnv = new GS::CDisplayEnv;
 }
 
 CDisplayContext::~CDisplayContext()
 {
-   // don't delete the frame mem areas -- they are created/destroyed by
-   // the app
+    // don't delete the frame mem areas -- they are created/destroyed by
+    // the app
 
-   delete DisplayEnv;
+    delete DisplayEnv;
 }
 
-void
-CDisplayContext::SetDisplayBuffers( bool interlaced,
-				    GS::CMemArea *frame0Mem, GS::CMemArea *frame1Mem )
+void CDisplayContext::SetDisplayBuffers(bool interlaced,
+    GS::CMemArea* frame0Mem, GS::CMemArea* frame1Mem)
 {
-   Frame0Mem = frame0Mem;
-   Frame1Mem = frame1Mem;
+    Frame0Mem = frame0Mem;
+    Frame1Mem = frame1Mem;
 
-   DisplayIsDblBuffered = ( frame0Mem && frame1Mem );
-   DisplayIsInterlaced = interlaced;
+    DisplayIsDblBuffered = (frame0Mem && frame1Mem);
+    DisplayIsInterlaced  = interlaced;
 
-   // "current" means the frame being drawn to by the loop of code executing on the core
-   // "last" will be the frame being displayed if drawing immediately, or the frame not
-   // displayed now if building up a packet to be sent next frame.
-   CurFrameMem = Frame0Mem;
-   LastFrameMem = Frame1Mem;
+    // "current" means the frame being drawn to by the loop of code executing on the core
+    // "last" will be the frame being displayed if drawing immediately, or the frame not
+    // displayed now if building up a packet to be sent next frame.
+    CurFrameMem  = Frame0Mem;
+    LastFrameMem = Frame1Mem;
 
-   int width = frame0Mem->GetWidth(), height = frame0Mem->GetHeight();
-   int displayHeight = (DisplayIsInterlaced) ? height * 2 : height;
+    int width = frame0Mem->GetWidth(), height = frame0Mem->GetHeight();
+    int displayHeight = (DisplayIsInterlaced) ? height * 2 : height;
 
 #ifndef PS2_LINUX
-   DisplayEnv->SetFB2( frame0Mem->GetWordAddr(), width, 0, 0, frame0Mem->GetPixFormat() );
-   DisplayEnv->SetDisplay2( width, displayHeight );
+    DisplayEnv->SetFB2(frame0Mem->GetWordAddr(), width, 0, 0, frame0Mem->GetPixFormat());
+    DisplayEnv->SetDisplay2(width, displayHeight);
 #else
-   DisplayEnv->SetFB1( frame0Mem->GetWordAddr(), width,
-		       0, 0, /* offsets in buffer */
-		       frame0Mem->GetPixFormat() );
-   DisplayEnv->SetFB2( frame0Mem->GetWordAddr(), width,
-		       0, 0, /* offsets in buffer */
-		       frame0Mem->GetPixFormat() );
-   // DisplayEnv->SetDisplay2( width, height * 2 );
-   DisplayEnv->SetBGColor( 0, 0, 0 );
-   DisplayEnv->BlendUsingConstAlpha( 0x0 );
-   DisplayEnv->SetDisplay2( width, displayHeight );
+    DisplayEnv->SetFB1(frame0Mem->GetWordAddr(), width,
+        0, 0, /* offsets in buffer */
+        frame0Mem->GetPixFormat());
+    DisplayEnv->SetFB2(frame0Mem->GetWordAddr(), width,
+        0, 0, /* offsets in buffer */
+        frame0Mem->GetPixFormat());
+    // DisplayEnv->SetDisplay2( width, height * 2 );
+    DisplayEnv->SetBGColor(0, 0, 0);
+    DisplayEnv->BlendUsingConstAlpha(0x0);
+    DisplayEnv->SetDisplay2(width, displayHeight);
 #endif
-   DisplayEnv->SendSettings();
+    DisplayEnv->SendSettings();
 }
 
-void
-CDisplayContext::SwapBuffers()
+void CDisplayContext::SwapBuffers()
 {
-   // flip frame buffer ptrs
-   if ( DisplayIsDblBuffered ) {
-      GS::CMemArea* temp = CurFrameMem;
-      CurFrameMem = LastFrameMem;
-      LastFrameMem = temp;
+    // flip frame buffer ptrs
+    if (DisplayIsDblBuffered) {
+        GS::CMemArea* temp = CurFrameMem;
+        CurFrameMem        = LastFrameMem;
+        LastFrameMem       = temp;
 
-      // display the last completed frame (which is frame n-2 because we're not
-      // drawing immediately but building up a packet)
-      // remember this is immediately sent, not delayed through a packet
+// display the last completed frame (which is frame n-2 because we're not
+// drawing immediately but building up a packet)
+// remember this is immediately sent, not delayed through a packet
 #ifndef PS2_LINUX
-      DisplayEnv->SetFB2Addr( CurFrameMem->GetWordAddr() );
+        DisplayEnv->SetFB2Addr(CurFrameMem->GetWordAddr());
 #else
-      DisplayEnv->SetFB2Addr( CurFrameMem->GetWordAddr() );
+        DisplayEnv->SetFB2Addr(CurFrameMem->GetWordAddr());
 #endif
-      DisplayEnv->SendSettings();
-   }
+        DisplayEnv->SendSettings();
+    }
 }
 
 /********************************************
@@ -103,12 +103,11 @@ CDisplayContext::SwapBuffers()
  * @param frame0_mem the first area if double-buffered, otherwise the only area
  * @param frame1_mem the second area if double-buffered, otherwise NULL
  */
-void
-pglSetDisplayBuffers( int interlaced, pgl_area_handle_t frame0_mem, pgl_area_handle_t frame1_mem )
+void pglSetDisplayBuffers(int interlaced, pgl_area_handle_t frame0_mem, pgl_area_handle_t frame1_mem)
 {
-   pGLContext->GetDisplayContext().SetDisplayBuffers( interlaced,
-						      reinterpret_cast<GS::CMemArea*>(frame0_mem),
-						      reinterpret_cast<GS::CMemArea*>(frame1_mem) );
+    pGLContext->GetDisplayContext().SetDisplayBuffers(interlaced,
+        reinterpret_cast<GS::CMemArea*>(frame0_mem),
+        reinterpret_cast<GS::CMemArea*>(frame1_mem));
 }
 
 /** @} */ // pgl_api
@@ -117,26 +116,25 @@ pglSetDisplayBuffers( int interlaced, pgl_area_handle_t frame0_mem, pgl_area_han
  * gl api
  */
 
-void glPixelStorei( GLenum pname, int param )
+void glPixelStorei(GLenum pname, int param)
 {
     //printf("%s\n", __FUNCTION__);
 
-   mNotImplemented( );
+    mNotImplemented();
 }
 
-void glReadPixels( int x, int y, int width, int height,
-		   GLenum format, GLenum type, void *pixels )
+void glReadPixels(int x, int y, int width, int height,
+    GLenum format, GLenum type, void* pixels)
 {
     //printf("%s(%d,%d,%d,%d,...)\n", __FUNCTION__, x, y, width, height);
 
-   mNotImplemented( );
+    mNotImplemented();
 }
 
-void glViewport( GLint x, GLint y,
-		       GLsizei width, GLsizei height )
+void glViewport(GLint x, GLint y,
+    GLsizei width, GLsizei height)
 {
     //printf("%s(%d,%d,%d,%d)\n", __FUNCTION__, x, y, width, height);
 
-   mNotImplemented( );
+    mNotImplemented();
 }
-

@@ -25,35 +25,35 @@
 //
 // 3x + 1x + 1/3x + 1x + 1/3x = S
 // x = 3/17S
-// 
+//
 
 // **** absolute offsets ****
 
-#define kContextStart		0
+#define kContextStart 0
 
 #include "vu1_context.h"
 
-#define kOutputBufStart		(kContextStart + kContextLength)
-#define kOutputStart		kOutputBufStart // temp
-#define kOutputBufSize		((1024 - kOutputBufStart)*9/17)
+#define kOutputBufStart (kContextStart + kContextLength)
+#define kOutputStart kOutputBufStart // temp
+#define kOutputBufSize ((1024 - kOutputBufStart) * 9 / 17)
 
-#define kOutputGeomStart (kOutputBufStart + 1)  // 1 quad for giftag
+#define kOutputGeomStart (kOutputBufStart + 1) // 1 quad for giftag
 
-#define kDoubleBufBase		(kOutputBufStart + kOutputBufSize)
-#define kDoubleBufOffset	((1024 - kDoubleBufBase)/2)
-#define kDoubleBufSize		kDoubleBufOffset
+#define kDoubleBufBase (kOutputBufStart + kOutputBufSize)
+#define kDoubleBufOffset ((1024 - kDoubleBufBase) / 2)
+#define kDoubleBufSize kDoubleBufOffset
 
-#define kInputBufSize	((1024 - kOutputBufStart)*3/17)
+#define kInputBufSize ((1024 - kOutputBufStart) * 3 / 17)
 
 // **** buffer-relative offsets ****
 
 // input buffer
 
-#define kNumVertices	0			// x field
-#define kNumIndicesD2	0			// y field
-#define kNumIndices	0			// z field
-#define kStripADCs	(kNumVertices + 1)
-#define kInputGeomStart	(kStripADCs + 4)
-#define kInputStart	kInputGeomStart // temp
+#define kNumVertices 0  // x field
+#define kNumIndicesD2 0 // y field
+#define kNumIndices 0   // z field
+#define kStripADCs (kNumVertices + 1)
+#define kInputGeomStart (kStripADCs + 4)
+#define kInputStart kInputGeomStart // temp
 
-#define kTempAreaStart	(kInputGeomStart + kInputBufSize)
+#define kTempAreaStart (kInputGeomStart + kInputBufSize)

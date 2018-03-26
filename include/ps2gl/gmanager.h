@@ -8,13 +8,13 @@
 #define ps2gl_gmanager_h
 
 #include "GL/gl.h"
-#include "ps2s/packet.h"
-#include "ps2s/gs.h"
-#include "ps2s/cpu_vector.h"
 #include "ps2s/cpu_matrix.h"
+#include "ps2s/cpu_vector.h"
+#include "ps2s/gs.h"
+#include "ps2s/packet.h"
 
-#include "ps2gl/renderermanager.h"
 #include "ps2gl/gblock.h"
+#include "ps2gl/renderermanager.h"
 
 /********************************************
  * constants
@@ -25,56 +25,54 @@
  */
 
 class CVertArray {
-      void		*Vertices, *Normals, *TexCoords, *Colors;
-      bool		VerticesAreValid, NormalsAreValid, TexCoordsAreValid, ColorsAreValid;
-      char		WordsPerVertex, WordsPerNormal, WordsPerTexCoord, WordsPerColor;
+    void *Vertices, *Normals, *TexCoords, *Colors;
+    bool VerticesAreValid, NormalsAreValid, TexCoordsAreValid, ColorsAreValid;
+    char WordsPerVertex, WordsPerNormal, WordsPerTexCoord, WordsPerColor;
 
-   public:
-      CVertArray();
+public:
+    CVertArray();
 
-      inline bool GetVerticesAreValid() const { return VerticesAreValid; }
-      inline bool GetNormalsAreValid() const { return NormalsAreValid; }
-      inline bool GetTexCoordsAreValid() const { return TexCoordsAreValid; }
-      inline bool GetColorsAreValid() const { return ColorsAreValid; }
+    inline bool GetVerticesAreValid() const { return VerticesAreValid; }
+    inline bool GetNormalsAreValid() const { return NormalsAreValid; }
+    inline bool GetTexCoordsAreValid() const { return TexCoordsAreValid; }
+    inline bool GetColorsAreValid() const { return ColorsAreValid; }
 
-      inline void SetVerticesValid( bool valid ) { VerticesAreValid = valid; }
-      inline void SetNormalsValid( bool valid ) { NormalsAreValid = valid; }
-      inline void SetTexCoordsValid( bool valid ) { TexCoordsAreValid = valid; }
-      inline void SetColorsValid( bool valid ) { ColorsAreValid = valid; }
+    inline void SetVerticesValid(bool valid) { VerticesAreValid = valid; }
+    inline void SetNormalsValid(bool valid) { NormalsAreValid = valid; }
+    inline void SetTexCoordsValid(bool valid) { TexCoordsAreValid = valid; }
+    inline void SetColorsValid(bool valid) { ColorsAreValid = valid; }
 
+    inline void* GetVertices() const { return Vertices; }
+    inline void* GetNormals() const { return Normals; }
+    inline void* GetTexCoords() const { return TexCoords; }
+    inline void* GetColors() const { return Colors; }
 
-      inline void* GetVertices() const { return Vertices; }
-      inline void* GetNormals() const { return Normals; }
-      inline void* GetTexCoords() const { return TexCoords; }
-      inline void* GetColors() const { return Colors; }
+    inline void SetVertices(void* newPtr) { Vertices = newPtr; }
+    inline void SetNormals(void* newPtr) { Normals = newPtr; }
+    inline void SetTexCoords(void* newPtr) { TexCoords = newPtr; }
+    inline void SetColors(void* newPtr) { Colors = newPtr; }
 
-      inline void SetVertices( void *newPtr ) { Vertices = newPtr; }
-      inline void SetNormals( void *newPtr ) { Normals = newPtr; }
-      inline void SetTexCoords( void *newPtr ) { TexCoords = newPtr; }
-      inline void SetColors( void *newPtr ) { Colors = newPtr; }
+    inline int GetWordsPerVertex() const { return WordsPerVertex; }
+    inline int GetWordsPerNormal() const { return WordsPerNormal; }
+    inline int GetWordsPerTexCoord() const { return WordsPerTexCoord; }
+    inline int GetWordsPerColor() const { return WordsPerColor; }
 
+    inline void SetWordsPerVertex(int numWords) { WordsPerVertex = numWords; }
+    inline void SetWordsPerNormal(int numWords) { WordsPerNormal = numWords; }
+    inline void SetWordsPerTexCoord(int numWords) { WordsPerTexCoord = numWords; }
+    inline void SetWordsPerColor(int numWords) { WordsPerColor = numWords; }
 
-      inline int GetWordsPerVertex() const { return WordsPerVertex; }
-      inline int GetWordsPerNormal() const { return WordsPerNormal; }
-      inline int GetWordsPerTexCoord() const { return WordsPerTexCoord; }
-      inline int GetWordsPerColor() const { return WordsPerColor; }
+    //        // for indexed arrays only
 
-      inline void SetWordsPerVertex( int numWords ) { WordsPerVertex = numWords; }
-      inline void SetWordsPerNormal( int numWords ) { WordsPerNormal = numWords; }
-      inline void SetWordsPerTexCoord( int numWords ) { WordsPerTexCoord = numWords; }
-      inline void SetWordsPerColor( int numWords ) { WordsPerColor = numWords; }
+    //        inline void SetIndices( void *newPtr ) { Indices = newPtr; }
+    //        inline void SetStripLengths( void *newPtr ) { StripLengths = newPtr; }
+    //        inline void SetNumIndices( int num ) { NumIndices = num; }
+    //        inline void SetNumStrips( int num ) { NumStrips = num; }
 
-//        // for indexed arrays only
-
-//        inline void SetIndices( void *newPtr ) { Indices = newPtr; }
-//        inline void SetStripLengths( void *newPtr ) { StripLengths = newPtr; }
-//        inline void SetNumIndices( int num ) { NumIndices = num; }
-//        inline void SetNumStrips( int num ) { NumStrips = num; }
-
-//        inline void* GetIndices() { return Indices; }
-//        inline void* GetStripLengths() { return StripLengths; }
-//        inline int GetNumIndices() { return NumIndices; }
-//        inline int GetNumStrips() { return NumStrips; }
+    //        inline void* GetIndices() { return Indices; }
+    //        inline void* GetStripLengths() { return StripLengths; }
+    //        inline int GetNumIndices() { return NumIndices; }
+    //        inline int GetNumStrips() { return NumStrips; }
 };
 
 /********************************************
@@ -82,9 +80,9 @@ class CVertArray {
  */
 
 typedef struct {
-      tU64	requirements;
-      tU64	rendererReqMask;
-      bool	mergeContiguous;
+    tU64 requirements;
+    tU64 rendererReqMask;
+    bool mergeContiguous;
 } tUserPrimEntry;
 
 /********************************************
@@ -96,106 +94,114 @@ class CGLContext;
 class CDList;
 
 class CGeomManager {
-   protected:
-      CGLContext		&GLContext;
+protected:
+    CGLContext& GLContext;
 
-      // vertex array geometry
-      static CVertArray		*VertArray;
+    // vertex array geometry
+    static CVertArray* VertArray;
 
-      static const unsigned int	kMaxUserPrimTypes = PGL_MAX_CUSTOM_PRIM_TYPES;
-      static tUserPrimEntry	UserPrimTypes[kMaxUserPrimTypes];
+    static const unsigned int kMaxUserPrimTypes = PGL_MAX_CUSTOM_PRIM_TYPES;
+    static tUserPrimEntry UserPrimTypes[kMaxUserPrimTypes];
 
-      // GL state
-      cpu_vec_xyz		CurNormal;
-      float			CurTexCoord[2];
-      static bool		DoNormalize;
+    // GL state
+    cpu_vec_xyz CurNormal;
+    float CurTexCoord[2];
+    static bool DoNormalize;
 
-      GLenum			Prim;
+    GLenum Prim;
 
-      bool			InsideBeginEnd;
+    bool InsideBeginEnd;
 
-      bool			LastArrayAccessWasIndexed, LastArrayAccessIsValid;
+    bool LastArrayAccessWasIndexed, LastArrayAccessIsValid;
 
-      bool			UserRenderContextChanged;
+    bool UserRenderContextChanged;
 
-      static inline void CheckPrimAccess( GLenum prim ) {
-	 prim &= 0x7fffffff;
-	 mErrorIf( prim >= kMaxUserPrimTypes,
-		   "trying to access prim %d; max number of custom prim types is %d\n",
-		   prim, kMaxUserPrimTypes );
-      }
+    static inline void CheckPrimAccess(GLenum prim)
+    {
+        prim &= 0x7fffffff;
+        mErrorIf(prim >= kMaxUserPrimTypes,
+            "trying to access prim %d; max number of custom prim types is %d\n",
+            prim, kMaxUserPrimTypes);
+    }
 
-   public:
-      CGeomManager( CGLContext &context );
+public:
+    CGeomManager(CGLContext& context);
 
-      // user prim types
+    // user prim types
 
-      static inline bool IsUserPrimType( unsigned int prim ) { return (prim & 0x80000000); }
+    static inline bool IsUserPrimType(unsigned int prim) { return (prim & 0x80000000); }
 
-      static inline void RegisterUserPrimType( GLenum prim,
-					       tU64 requirements,
-					       tU64 rendererReqMask,
-					       bool mergeContiguous ) {
-	 CheckPrimAccess(prim);
-	 prim &= 0x7fffffff;
-	 UserPrimTypes[prim].requirements = requirements;
-	 UserPrimTypes[prim].rendererReqMask = rendererReqMask;
-	 UserPrimTypes[prim].mergeContiguous = mergeContiguous;
-      }
+    static inline void RegisterUserPrimType(GLenum prim,
+        tU64 requirements,
+        tU64 rendererReqMask,
+        bool mergeContiguous)
+    {
+        CheckPrimAccess(prim);
+        prim &= 0x7fffffff;
+        UserPrimTypes[prim].requirements    = requirements;
+        UserPrimTypes[prim].rendererReqMask = rendererReqMask;
+        UserPrimTypes[prim].mergeContiguous = mergeContiguous;
+    }
 
-      static inline tU64 GetUserPrimRequirements( GLenum prim ) {
-	 CheckPrimAccess(prim);
-	 prim &= 0x7fffffff;
-	 return UserPrimTypes[prim].requirements;
-      }
+    static inline tU64 GetUserPrimRequirements(GLenum prim)
+    {
+        CheckPrimAccess(prim);
+        prim &= 0x7fffffff;
+        return UserPrimTypes[prim].requirements;
+    }
 
-      static inline bool GetUserPrimMerge( GLenum prim ) {
-	 CheckPrimAccess(prim);
-	 prim &= 0x7fffffff;
-	 return UserPrimTypes[prim].mergeContiguous;
-      }
+    static inline bool GetUserPrimMerge(GLenum prim)
+    {
+        CheckPrimAccess(prim);
+        prim &= 0x7fffffff;
+        return UserPrimTypes[prim].mergeContiguous;
+    }
 
-      static inline tU64 GetUserPrimReqMask( GLenum prim ) {
-	 CheckPrimAccess(prim);
-	 prim &= 0x7fffffff;
-	 return UserPrimTypes[prim].rendererReqMask;
-      }
+    static inline tU64 GetUserPrimReqMask(GLenum prim)
+    {
+        CheckPrimAccess(prim);
+        prim &= 0x7fffffff;
+        return UserPrimTypes[prim].rendererReqMask;
+    }
 
-      void SetUserRenderContextChanged() { UserRenderContextChanged = true; }
+    void SetUserRenderContextChanged() { UserRenderContextChanged = true; }
 
-      // GL state
+    // GL state
 
-      inline cpu_vec_xyz GetCurNormal() const { return CurNormal; }
-      inline void SetCurNormal( cpu_vec_xyz normal ) { CurNormal = normal; }
+    inline cpu_vec_xyz GetCurNormal() const { return CurNormal; }
+    inline void SetCurNormal(cpu_vec_xyz normal) { CurNormal = normal; }
 
-      inline const float* GetCurTexCoord() const { return CurTexCoord; }
-      inline void SetCurTexCoord( float u, float v ) {
-	 CurTexCoord[0] = u; CurTexCoord[1] = v;
-      }
+    inline const float* GetCurTexCoord() const { return CurTexCoord; }
+    inline void SetCurTexCoord(float u, float v)
+    {
+        CurTexCoord[0] = u;
+        CurTexCoord[1] = v;
+    }
 
-      // we're not really supporting this
-      void SetDoNormalize( bool normalize ) { DoNormalize = normalize; }
+    // we're not really supporting this
+    void SetDoNormalize(bool normalize) { DoNormalize = normalize; }
 
-      inline CVertArray& GetVertArray() { return *VertArray; }
+    inline CVertArray& GetVertArray() { return *VertArray; }
 
-      // user state
+    // user state
 
-      virtual void EnableCustom( tU64 flag ) = 0;
-      virtual void DisableCustom( tU64 flag ) = 0;
+    virtual void EnableCustom(tU64 flag)  = 0;
+    virtual void DisableCustom(tU64 flag) = 0;
 
-      // rendering interface
+    // rendering interface
 
-      virtual void BeginGeom( GLenum mode ) = 0;
-      virtual void Vertex( cpu_vec_xyzw newVert ) = 0;
-      virtual void Normal( cpu_vec_xyz normal ) = 0;
-      virtual void TexCoord( float u, float v ) = 0;
-      virtual void Color( cpu_vec_xyzw color ) = 0;
-      virtual void EndGeom() = 0;
-      virtual void DrawArrays( GLenum mode, int first, int count ) = 0;
-      virtual void DrawIndexedArrays( GLenum primType,
-				      int numIndices, const unsigned char* indices,
-				      int numVertices ) = 0;
-      virtual void Flush() = 0;
+    virtual void BeginGeom(GLenum mode)       = 0;
+    virtual void Vertex(cpu_vec_xyzw newVert) = 0;
+    virtual void Normal(cpu_vec_xyz normal)   = 0;
+    virtual void TexCoord(float u, float v) = 0;
+    virtual void Color(cpu_vec_xyzw color) = 0;
+    virtual void EndGeom()                 = 0;
+    virtual void DrawArrays(GLenum mode, int first, int count) = 0;
+    virtual void DrawIndexedArrays(GLenum primType,
+        int numIndices, const unsigned char* indices,
+        int numVertices)
+        = 0;
+    virtual void Flush() = 0;
 };
 
 #endif // ps2gl_gmanager_h

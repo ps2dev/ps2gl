@@ -8,18 +8,17 @@
 
 #include "GL/ps2gl.h"
 
-#include "ps2s/packet.h"
 #include "ps2s/cpu_matrix.h"
-#include "ps2s/math.h"
 #include "ps2s/displayenv.h"
+#include "ps2s/math.h"
+#include "ps2s/packet.h"
 
-#include "ps2gl/gmanager.h"
-#include "ps2gl/glcontext.h"
-#include "ps2gl/dlist.h"
 #include "ps2gl/clear.h"
-#include "ps2gl/matrix.h"
 #include "ps2gl/debug.h"
-
+#include "ps2gl/dlist.h"
+#include "ps2gl/glcontext.h"
+#include "ps2gl/gmanager.h"
+#include "ps2gl/matrix.h"
 
 /********************************************
  * class CVertArray
@@ -27,10 +26,10 @@
 
 CVertArray::CVertArray()
 {
-   Vertices = Normals = TexCoords = Colors = NULL;
-   VerticesAreValid = NormalsAreValid = TexCoordsAreValid = ColorsAreValid = false;
-   WordsPerVertex = WordsPerTexCoord = WordsPerColor = 0;
-   WordsPerNormal = 3; // not set by NormalPointer
+    Vertices = Normals = TexCoords = Colors = NULL;
+    VerticesAreValid = NormalsAreValid = TexCoordsAreValid = ColorsAreValid = false;
+    WordsPerVertex = WordsPerTexCoord = WordsPerColor = 0;
+    WordsPerNormal                                    = 3; // not set by NormalPointer
 }
 
 /********************************************
@@ -39,22 +38,23 @@ CVertArray::CVertArray()
 
 // static members
 
-CVertArray 	*CGeomManager::VertArray;
+CVertArray* CGeomManager::VertArray;
 
-tUserPrimEntry	CGeomManager::UserPrimTypes[kMaxUserPrimTypes];
+tUserPrimEntry CGeomManager::UserPrimTypes[kMaxUserPrimTypes];
 
-bool 		CGeomManager::DoNormalize = false;
+bool CGeomManager::DoNormalize = false;
 
-CGeomManager::CGeomManager( CGLContext &context )
-   : GLContext(context),
-     CurNormal(0.0f, 0.0f, 0.0f),
-     Prim(GL_INVALID_VALUE),
-     InsideBeginEnd(false),
-     LastArrayAccessWasIndexed(false), LastArrayAccessIsValid(false),
-     UserRenderContextChanged(false)
+CGeomManager::CGeomManager(CGLContext& context)
+    : GLContext(context)
+    , CurNormal(0.0f, 0.0f, 0.0f)
+    , Prim(GL_INVALID_VALUE)
+    , InsideBeginEnd(false)
+    , LastArrayAccessWasIndexed(false)
+    , LastArrayAccessIsValid(false)
+    , UserRenderContextChanged(false)
 {
-   for ( unsigned int i = 0; i < kMaxUserPrimTypes; i++ )
-      UserPrimTypes[i].requirements = 0xffffffff;
+    for (unsigned int i               = 0; i < kMaxUserPrimTypes; i++)
+        UserPrimTypes[i].requirements = 0xffffffff;
 }
 
 /********************************************
@@ -71,31 +71,29 @@ CGeomManager::CGeomManager( CGLContext &context )
  * @{
  */
 
-
-
 /**
  * @param size 2, 3, or 4
  * @param type must be GL_FLOAT
  * @param stride must be <b>zero</b>.  Non-zero strides are unsupported and likely
  * to remain so.
  */
-void glVertexPointer( GLint size, GLenum type,
-		      GLsizei stride, const GLvoid *ptr )
+void glVertexPointer(GLint size, GLenum type,
+    GLsizei stride, const GLvoid* ptr)
 {
     //printf("%s\n", __FUNCTION__);
 
-   if ( stride != 0 ) {
-      mNotImplemented( "stride must be 0" );
-      return;
-   }
-   if ( type != GL_FLOAT ) {
-      mNotImplemented( "type must be float" );
-      return;
-   }
+    if (stride != 0) {
+        mNotImplemented("stride must be 0");
+        return;
+    }
+    if (type != GL_FLOAT) {
+        mNotImplemented("type must be float");
+        return;
+    }
 
-   CVertArray &vertArray = pGLContext->GetGeomManager().GetVertArray();
-   vertArray.SetVertices( (void*)ptr );
-   vertArray.SetWordsPerVertex( size );
+    CVertArray& vertArray = pGLContext->GetGeomManager().GetVertArray();
+    vertArray.SetVertices((void*)ptr);
+    vertArray.SetWordsPerVertex(size);
 }
 
 /**
@@ -103,12 +101,12 @@ void glVertexPointer( GLint size, GLenum type,
  * @param stride must be <b>zero</b>.  Non-zero strides are unsupported and likely
  * to remain so.
  */
-void glNormalPointer( GLenum type, GLsizei stride,
-		      const GLvoid *ptr )
+void glNormalPointer(GLenum type, GLsizei stride,
+    const GLvoid* ptr)
 {
     //printf("%s\n", __FUNCTION__);
 
-   pglNormalPointer( 3, type, stride, ptr );
+    pglNormalPointer(3, type, stride, ptr);
 }
 
 /**
@@ -117,23 +115,23 @@ void glNormalPointer( GLenum type, GLsizei stride,
  * @param stride must be <b>zero</b>.  Non-zero strides are unsupported and likely
  * to remain so.
  */
-void glTexCoordPointer( GLint size, GLenum type,
-			GLsizei stride, const GLvoid *ptr )
+void glTexCoordPointer(GLint size, GLenum type,
+    GLsizei stride, const GLvoid* ptr)
 {
     //printf("%s\n", __FUNCTION__);
 
-   if ( stride != 0 ) {
-      mNotImplemented( "stride must be 0" );
-      return;
-   }
-   if ( type != GL_FLOAT ) {
-      mNotImplemented( "type must be float" );
-      return;
-   }
+    if (stride != 0) {
+        mNotImplemented("stride must be 0");
+        return;
+    }
+    if (type != GL_FLOAT) {
+        mNotImplemented("type must be float");
+        return;
+    }
 
-   CVertArray &vertArray = pGLContext->GetGeomManager().GetVertArray();
-   vertArray.SetTexCoords( (void*)ptr );
-   vertArray.SetWordsPerTexCoord( size );
+    CVertArray& vertArray = pGLContext->GetGeomManager().GetVertArray();
+    vertArray.SetTexCoords((void*)ptr);
+    vertArray.SetWordsPerTexCoord(size);
 }
 
 /**
@@ -142,23 +140,23 @@ void glTexCoordPointer( GLint size, GLenum type,
  * @param stride must be <b>zero</b>.  Non-zero strides are unsupported and likely
  * to remain so.
  */
-void glColorPointer( GLint size, GLenum type,
-		     GLsizei stride, const GLvoid *ptr )
+void glColorPointer(GLint size, GLenum type,
+    GLsizei stride, const GLvoid* ptr)
 {
     //printf("%s\n", __FUNCTION__);
 
-   if ( stride != 0 ) {
-      mNotImplemented( "stride must be 0" );
-      return;
-   }
-   if ( type != GL_FLOAT ) {
-      mNotImplemented( "type must be float" );
-      return;
-   }
+    if (stride != 0) {
+        mNotImplemented("stride must be 0");
+        return;
+    }
+    if (type != GL_FLOAT) {
+        mNotImplemented("type must be float");
+        return;
+    }
 
-   CVertArray &vertArray = pGLContext->GetGeomManager().GetVertArray();
-   vertArray.SetColors( (void*)ptr );
-   vertArray.SetWordsPerColor( size );
+    CVertArray& vertArray = pGLContext->GetGeomManager().GetVertArray();
+    vertArray.SetColors((void*)ptr);
+    vertArray.SetWordsPerColor(size);
 }
 
 /**
@@ -172,216 +170,230 @@ void glColorPointer( GLint size, GLenum type,
  *
  * There is no limit on strip lengths (make them as long as possible!).
  */
-void glDrawArrays( GLenum mode, GLint first, GLsizei count )
+void glDrawArrays(GLenum mode, GLint first, GLsizei count)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager& gmanager = pGLContext->GetGeomManager();
-   gmanager.DrawArrays( mode, first, count );
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.DrawArrays(mode, first, count);
 }
 
 /**
  * This is not implemented yet
  */
-void glDrawElements( GLenum mode, GLsizei count, GLenum type, const GLvoid *indices )
+void glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices)
 {
     //printf("%s\n", __FUNCTION__);
 
-   mError("glDrawElements is a placeholder ATM and should not be called");
+    mError("glDrawElements is a placeholder ATM and should not be called");
 }
 
 /**
  * This is not implemented yet
  */
-void glInterleavedArrays( GLenum format, GLsizei stride, const GLvoid *pointer )
+void glInterleavedArrays(GLenum format, GLsizei stride, const GLvoid* pointer)
 {
     //printf("%s\n", __FUNCTION__);
 
-   mError("glInterleavedArrays is a placeholder ATM and should not be called");
+    mError("glInterleavedArrays is a placeholder ATM and should not be called");
 }
 
 /**
  * This is not implemented yet
  */
-void glArrayElement( GLint i )
+void glArrayElement(GLint i)
 {
     //printf("%s\n", __FUNCTION__);
 
-   mError("glArrayElement is a placeholder ATM and should not be called");
+    mError("glArrayElement is a placeholder ATM and should not be called");
 }
 
 /**
  * Flushes the internal geometry buffers.
  */
-void glFlush( void )
+void glFlush(void)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager& gmanager = pGLContext->GetGeomManager();
-   gmanager.Flush();
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.Flush();
 }
 
 /** @} */ // gl_api
 
-void glEnableClientState( GLenum cap )
+void glEnableClientState(GLenum cap)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager& gmanager = pGLContext->GetGeomManager();
-   CVertArray &vertArray = gmanager.GetVertArray();
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    CVertArray& vertArray  = gmanager.GetVertArray();
 
-   switch (cap) {
-      case GL_NORMAL_ARRAY: vertArray.SetNormalsValid(true); break;
-      case GL_VERTEX_ARRAY: vertArray.SetVerticesValid(true); break;
-      case GL_COLOR_ARRAY: vertArray.SetColorsValid(true); break;
-      case GL_TEXTURE_COORD_ARRAY: vertArray.SetTexCoordsValid(true); break;
+    switch (cap) {
+    case GL_NORMAL_ARRAY:
+        vertArray.SetNormalsValid(true);
+        break;
+    case GL_VERTEX_ARRAY:
+        vertArray.SetVerticesValid(true);
+        break;
+    case GL_COLOR_ARRAY:
+        vertArray.SetColorsValid(true);
+        break;
+    case GL_TEXTURE_COORD_ARRAY:
+        vertArray.SetTexCoordsValid(true);
+        break;
 
-      case GL_INDEX_ARRAY:
-      case GL_EDGE_FLAG_ARRAY:
-	 mNotImplemented( "capability = %d", cap );
-	 break;
-   }
+    case GL_INDEX_ARRAY:
+    case GL_EDGE_FLAG_ARRAY:
+        mNotImplemented("capability = %d", cap);
+        break;
+    }
 }
 
-void glDisableClientState( GLenum cap )
+void glDisableClientState(GLenum cap)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager &gmanager = pGLContext->GetGeomManager();
-   CVertArray &vertArray = gmanager.GetVertArray();
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    CVertArray& vertArray  = gmanager.GetVertArray();
 
-   switch (cap) {
-      case GL_NORMAL_ARRAY: vertArray.SetNormalsValid(false); break;
-      case GL_VERTEX_ARRAY: vertArray.SetVerticesValid(false); break;
-      case GL_COLOR_ARRAY: vertArray.SetColorsValid(false); break;
-      case GL_TEXTURE_COORD_ARRAY: vertArray.SetTexCoordsValid(false); break;
+    switch (cap) {
+    case GL_NORMAL_ARRAY:
+        vertArray.SetNormalsValid(false);
+        break;
+    case GL_VERTEX_ARRAY:
+        vertArray.SetVerticesValid(false);
+        break;
+    case GL_COLOR_ARRAY:
+        vertArray.SetColorsValid(false);
+        break;
+    case GL_TEXTURE_COORD_ARRAY:
+        vertArray.SetTexCoordsValid(false);
+        break;
 
-      case GL_INDEX_ARRAY:
-      case GL_EDGE_FLAG_ARRAY:
-	 mNotImplemented( "capability = %d", cap );
-	 break;
-   }
+    case GL_INDEX_ARRAY:
+    case GL_EDGE_FLAG_ARRAY:
+        mNotImplemented("capability = %d", cap);
+        break;
+    }
 }
 
-
-
-void glBegin( GLenum mode )
+void glBegin(GLenum mode)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager& gmanager = pGLContext->GetGeomManager();
-   gmanager.BeginGeom( mode );
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.BeginGeom(mode);
 }
 
-void glNormal3f( GLfloat x, GLfloat y, GLfloat z )
+void glNormal3f(GLfloat x, GLfloat y, GLfloat z)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager& gmanager = pGLContext->GetGeomManager();
-   gmanager.Normal( cpu_vec_xyz(x, y, z) );
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.Normal(cpu_vec_xyz(x, y, z));
 }
 
-void glNormal3fv( const GLfloat *v )
+void glNormal3fv(const GLfloat* v)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glNormal3f( v[0], v[1], v[2] );
+    glNormal3f(v[0], v[1], v[2]);
 }
 
-void glVertex4f( GLfloat x, GLfloat y, GLfloat z, GLfloat w )
+void glVertex4f(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager &gmanager = pGLContext->GetGeomManager();
-   gmanager.Vertex( cpu_vec_xyzw(x, y, z, w) );
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.Vertex(cpu_vec_xyzw(x, y, z, w));
 }
 
-void glVertex4fv( const GLfloat *vertex )
+void glVertex4fv(const GLfloat* vertex)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glVertex4f( vertex[0], vertex[1], vertex[2], vertex[3] );
+    glVertex4f(vertex[0], vertex[1], vertex[2], vertex[3]);
 }
 
-void glVertex3f( GLfloat x, GLfloat y, GLfloat z )
+void glVertex3f(GLfloat x, GLfloat y, GLfloat z)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glVertex4f(x, y, z, 1.0f);
+    glVertex4f(x, y, z, 1.0f);
 }
 
-void glVertex3fv( const GLfloat *vertex )
+void glVertex3fv(const GLfloat* vertex)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glVertex4f( vertex[0], vertex[1], vertex[2], 1.0f );
+    glVertex4f(vertex[0], vertex[1], vertex[2], 1.0f);
 }
 
-void glVertex2f( GLfloat x, GLfloat y )
+void glVertex2f(GLfloat x, GLfloat y)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glVertex4f(x, y, 0.0f, 1.0f);
+    glVertex4f(x, y, 0.0f, 1.0f);
 }
 
-void glVertex2fv( const GLfloat *vertex )
+void glVertex2fv(const GLfloat* vertex)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glVertex4f( vertex[0], vertex[1], 0.0f, 1.0f );
+    glVertex4f(vertex[0], vertex[1], 0.0f, 1.0f);
 }
 
-void glTexCoord2f( GLfloat u, GLfloat v )
+void glTexCoord2f(GLfloat u, GLfloat v)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager &gmanager = pGLContext->GetGeomManager();
-   gmanager.TexCoord( u, v );
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.TexCoord(u, v);
 }
 
-void glTexCoord2fv( const GLfloat *texCoord )
+void glTexCoord2fv(const GLfloat* texCoord)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glTexCoord2f( texCoord[0], texCoord[1] );
+    glTexCoord2f(texCoord[0], texCoord[1]);
 }
 
-void glColor3f( GLfloat red, GLfloat green, GLfloat blue )
+void glColor3f(GLfloat red, GLfloat green, GLfloat blue)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager &gmanager = pGLContext->GetGeomManager();
-   gmanager.Color( cpu_vec_xyzw(red, green, blue, 1.0f) );
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.Color(cpu_vec_xyzw(red, green, blue, 1.0f));
 }
 
-void glColor3fv( const GLfloat *color )
+void glColor3fv(const GLfloat* color)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glColor3f( color[0], color[1], color[2] );
+    glColor3f(color[0], color[1], color[2]);
 }
 
-void glColor4f( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha )
+void glColor4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager &gmanager = pGLContext->GetGeomManager();
-   gmanager.Color( cpu_vec_xyzw(red, green, blue, alpha) );
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.Color(cpu_vec_xyzw(red, green, blue, alpha));
 }
 
-void glColor4fv( const GLfloat *color )
+void glColor4fv(const GLfloat* color)
 {
     //printf("%s\n", __FUNCTION__);
 
-   glColor4f( color[0], color[1], color[2], color[3] );
+    glColor4f(color[0], color[1], color[2], color[3]);
 }
 
-void glEnd( void )
+void glEnd(void)
 {
     //printf("%s\n", __FUNCTION__);
 
-   CGeomManager &gmanager = pGLContext->GetGeomManager();
-   gmanager.EndGeom();
+    CGeomManager& gmanager = pGLContext->GetGeomManager();
+    gmanager.EndGeom();
 }
 
 /********************************************
@@ -398,28 +410,28 @@ void glEnd( void )
  * If 4-element normals are specified, the last element (w)
  * will be ignored.
  */
-void pglNormalPointer( GLint size, GLenum type,
-		       GLsizei stride, const GLvoid *ptr )
+void pglNormalPointer(GLint size, GLenum type,
+    GLsizei stride, const GLvoid* ptr)
 {
-   if ( stride != 0 ) {
-      mNotImplemented( "stride must be 0" );
-      return;
-   }
-   if ( type != GL_FLOAT ) {
-      mNotImplemented( "type must be float" );
-      return;
-   }
+    if (stride != 0) {
+        mNotImplemented("stride must be 0");
+        return;
+    }
+    if (type != GL_FLOAT) {
+        mNotImplemented("type must be float");
+        return;
+    }
 
-   CVertArray &vertArray = pGLContext->GetGeomManager().GetVertArray();
-   vertArray.SetNormals( (void*)ptr );
-   vertArray.SetWordsPerNormal(size);
+    CVertArray& vertArray = pGLContext->GetGeomManager().GetVertArray();
+    vertArray.SetNormals((void*)ptr);
+    vertArray.SetWordsPerNormal(size);
 }
 
-void pglDrawIndexedArrays( GLenum primType,
-			   int numIndices, const unsigned char* indices,
-			   int numVertices )
+void pglDrawIndexedArrays(GLenum primType,
+    int numIndices, const unsigned char* indices,
+    int numVertices)
 {
-   pGLContext->GetGeomManager().DrawIndexedArrays(primType, numIndices, indices, numVertices);
+    pGLContext->GetGeomManager().DrawIndexedArrays(primType, numIndices, indices, numVertices);
 }
 
 /**
@@ -455,12 +467,11 @@ void pglDrawIndexedArrays( GLenum primType,
  * 			    points, lines, triangles, and quads, but not with
  * 			    strips, since merging would lose the strip boundaries.
  */
-void
-pglRegisterCustomPrimType( GLenum primType,
-			   pglU64_t requirements, pglU64_t rendererReqMask, int mergeContiguous )
+void pglRegisterCustomPrimType(GLenum primType,
+    pglU64_t requirements, pglU64_t rendererReqMask, int mergeContiguous)
 {
-   mErrorIf( ! CGeomManager::IsUserPrimType(primType), "custom prim types must have bit 31 set" );
-   CGeomManager::RegisterUserPrimType( primType, requirements, rendererReqMask, mergeContiguous );
+    mErrorIf(!CGeomManager::IsUserPrimType(primType), "custom prim types must have bit 31 set");
+    CGeomManager::RegisterUserPrimType(primType, requirements, rendererReqMask, mergeContiguous);
 }
 
 /**
@@ -469,11 +480,10 @@ pglRegisterCustomPrimType( GLenum primType,
  * be zero.
  * @param flag the bit(s) to enable (lower 32 should be zero)
  */
-void
-pglEnableCustom( pglU64_t flag )
+void pglEnableCustom(pglU64_t flag)
 {
-   flag &= ~(tU64)0xffffffff;
-   pGLContext->GetGeomManager().EnableCustom( flag );
+    flag &= ~(tU64)0xffffffff;
+    pGLContext->GetGeomManager().EnableCustom(flag);
 }
 
 /**
@@ -482,17 +492,15 @@ pglEnableCustom( pglU64_t flag )
  * @param flag the bit(s) to disable (lower 32 should be zero).  This is the same
  *             constant passed to pglEnableCustom.
  */
-void
-pglDisableCustom( pglU64_t flag )
+void pglDisableCustom(pglU64_t flag)
 {
-   flag &= ~(tU64)0xffffffff;
-   pGLContext->GetGeomManager().DisableCustom( flag );
+    flag &= ~(tU64)0xffffffff;
+    pGLContext->GetGeomManager().DisableCustom(flag);
 }
 
-void
-pglUserRenderContextChanged()
+void pglUserRenderContextChanged()
 {
-   pGLContext->GetGeomManager().SetUserRenderContextChanged();
+    pGLContext->GetGeomManager().SetUserRenderContextChanged();
 }
 
 /** @} */

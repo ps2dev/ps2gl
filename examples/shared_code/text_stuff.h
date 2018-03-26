@@ -7,9 +7,9 @@
 #ifndef glut_text_stuff_h
 #define glut_text_stuff_h
 
-extern void tsShowFont( const char *text );
+extern void tsShowFont(const char* text);
 extern void tsResetCursor();
-extern void tsDrawString( const char *text );
+extern void tsDrawString(const char* text);
 extern void tsLoadFont();
 
 #endif // glut_text_stuff_h

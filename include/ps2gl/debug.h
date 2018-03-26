@@ -8,12 +8,12 @@
 #define ps2gl_debug_h
 
 #ifdef DEBUG_MODULE_NAME
-#  undef DEBUG_MODULE_NAME
+#undef DEBUG_MODULE_NAME
 #endif
 #define DEBUG_MODULE_NAME PS2GL
 
 #include "ps2s/debug_macros.h"
 
-#define mNotImplemented( _msg, _args... ) mWarn( "not implemented" _msg, ## _args )
+#define mNotImplemented(_msg, _args...) mWarn("not implemented" _msg, ##_args)
 
 #endif // ps2gl_debug_h

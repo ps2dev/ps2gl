@@ -7,42 +7,41 @@
 #include <string.h>
 
 #ifndef PS2_LINUX
-#  include "graph.h"
-#  include "dma.h"
-#  include "kernel.h"
+#include "dma.h"
+#include "graph.h"
+#include "kernel.h"
 #else
-#  include <sys/mman.h>
-#  include "ps2stuff_kmodule.h"
-#  include <ps2gs.h>
+#include "ps2stuff_kmodule.h"
+#include <ps2gs.h>
+#include <sys/mman.h>
 #endif
 
 #include "GL/ps2gl.h"
 
-#include "ps2s/ps2stuff.h"
-#include "ps2s/types.h"
-#include "ps2s/math.h"
-#include "ps2s/drawenv.h"
 #include "ps2s/displayenv.h"
-#include "ps2s/packet.h"
+#include "ps2s/drawenv.h"
 #include "ps2s/gsmem.h"
+#include "ps2s/math.h"
+#include "ps2s/packet.h"
+#include "ps2s/ps2stuff.h"
 #include "ps2s/texture.h"
+#include "ps2s/types.h"
 
-#include "ps2gl/glcontext.h"
-#include "ps2gl/matrix.h"
-#include "ps2gl/gmanager.h"
+#include "ps2gl/displaycontext.h"
 #include "ps2gl/dlgmanager.h"
+#include "ps2gl/dlist.h"
+#include "ps2gl/drawcontext.h"
+#include "ps2gl/glcontext.h"
+#include "ps2gl/gmanager.h"
 #include "ps2gl/immgmanager.h"
 #include "ps2gl/lighting.h"
 #include "ps2gl/material.h"
-#include "ps2gl/dlist.h"
+#include "ps2gl/matrix.h"
 #include "ps2gl/texture.h"
-#include "ps2gl/displaycontext.h"
-#include "ps2gl/drawcontext.h"
 
 /********************************************
  * globals
  */
-
 
 /********************************************
  * CGLContext
@@ -51,164 +50,161 @@
 // static members
 
 CVifSCDmaPacket *CGLContext::CurPacket, *CGLContext::LastPacket,
-     *CGLContext::Vif1Packet = NULL, *CGLContext::SavedVif1Packet = NULL,
-     *CGLContext::ImmVif1Packet;
+    *CGLContext::Vif1Packet = NULL, *CGLContext::SavedVif1Packet = NULL,
+    *CGLContext::ImmVif1Packet;
 
-int CGLContext::RenderingFinishedSemaId			= -1;
-int CGLContext::ImmediateRenderingFinishedSemaId	= -1;
-int CGLContext::VsyncSemaId				= -1;
+int CGLContext::RenderingFinishedSemaId          = -1;
+int CGLContext::ImmediateRenderingFinishedSemaId = -1;
+int CGLContext::VsyncSemaId                      = -1;
 
 CGLContext::tRenderingFinishedCallback CGLContext::RenderingFinishedCallback = NULL;
 
-CGLContext::CGLContext( int immBufferQwordSize, int immDrawBufferQwordSize )
-   : StateChangesArePushed(false),
-     IsCurrentFieldEven(true),
-     CurrentFrameNumber(0),
-     CurBuffer(0)
+CGLContext::CGLContext(int immBufferQwordSize, int immDrawBufferQwordSize)
+    : StateChangesArePushed(false)
+    , IsCurrentFieldEven(true)
+    , CurrentFrameNumber(0)
+    , CurBuffer(0)
 {
-   CurPacket = new CVifSCDmaPacket( kDmaPacketMaxQwordLength, DMAC::Channels::vif1,
-				     Packet::kXferTags, Core::MemMappings::UncachedAccl );
-   LastPacket = new CVifSCDmaPacket( kDmaPacketMaxQwordLength, DMAC::Channels::vif1,
-				      Packet::kXferTags, Core::MemMappings::UncachedAccl );
-   Vif1Packet = CurPacket;
+    CurPacket = new CVifSCDmaPacket(kDmaPacketMaxQwordLength, DMAC::Channels::vif1,
+        Packet::kXferTags, Core::MemMappings::UncachedAccl);
+    LastPacket = new CVifSCDmaPacket(kDmaPacketMaxQwordLength, DMAC::Channels::vif1,
+        Packet::kXferTags, Core::MemMappings::UncachedAccl);
+    Vif1Packet = CurPacket;
 
-   ImmVif1Packet = new CVifSCDmaPacket( immDrawBufferQwordSize, DMAC::Channels::vif1,
-					Packet::kXferTags, Core::MemMappings::UncachedAccl );
+    ImmVif1Packet = new CVifSCDmaPacket(immDrawBufferQwordSize, DMAC::Channels::vif1,
+        Packet::kXferTags, Core::MemMappings::UncachedAccl);
 
-   CurDrawEnvPtrs = DrawEnvPtrs0;
-   LastDrawEnvPtrs = DrawEnvPtrs1;
-   NumCurDrawEnvPtrs = 0;
-   NumLastDrawEnvPtrs = 0;
+    CurDrawEnvPtrs     = DrawEnvPtrs0;
+    LastDrawEnvPtrs    = DrawEnvPtrs1;
+    NumCurDrawEnvPtrs  = 0;
+    NumLastDrawEnvPtrs = 0;
 
-   ImmGManager = new CImmGeomManager(*this, immBufferQwordSize);
-   DListGManager = new CDListGeomManager(*this);
-   CurGManager = ImmGManager;
+    ImmGManager   = new CImmGeomManager(*this, immBufferQwordSize);
+    DListGManager = new CDListGeomManager(*this);
+    CurGManager   = ImmGManager;
 
-   ProjectionMatStack = new CImmMatrixStack(*this);
-   ModelViewMatStack = new CImmMatrixStack(*this);
-   DListMatStack = new CDListMatrixStack(*this);
-   CurMatrixStack = ModelViewMatStack;
-   SavedCurMatStack = NULL;
+    ProjectionMatStack = new CImmMatrixStack(*this);
+    ModelViewMatStack  = new CImmMatrixStack(*this);
+    DListMatStack      = new CDListMatrixStack(*this);
+    CurMatrixStack     = ModelViewMatStack;
+    SavedCurMatStack   = NULL;
 
-   ImmLighting = new CImmLighting(*this);
-   DListLighting = new CDListLighting(*this);
-   CurLighting = ImmLighting;
-   // defaults
-   CLight &light = ImmLighting->GetLight(0);
-   light.SetDiffuse( cpu_vec_xyzw(1.0f, 1.0f, 1.0f, 1.0f) );
-   light.SetSpecular( cpu_vec_xyzw(1.0f, 1.0f, 1.0f, 1.0f) );
+    ImmLighting   = new CImmLighting(*this);
+    DListLighting = new CDListLighting(*this);
+    CurLighting   = ImmLighting;
+    // defaults
+    CLight& light = ImmLighting->GetLight(0);
+    light.SetDiffuse(cpu_vec_xyzw(1.0f, 1.0f, 1.0f, 1.0f));
+    light.SetSpecular(cpu_vec_xyzw(1.0f, 1.0f, 1.0f, 1.0f));
 
-   MaterialManager = new CMaterialManager(*this);
-   DListManager = new CDListManager;
-   TexManager = new CTexManager(*this);
+    MaterialManager = new CMaterialManager(*this);
+    DListManager    = new CDListManager;
+    TexManager      = new CTexManager(*this);
 
-   ImmDrawContext = new CImmDrawContext(*this);
-   DListDrawContext = new CDListDrawContext(*this);
-   CurDrawContext = ImmDrawContext;
+    ImmDrawContext   = new CImmDrawContext(*this);
+    DListDrawContext = new CDListDrawContext(*this);
+    CurDrawContext   = ImmDrawContext;
 
-   DisplayContext = new CDisplayContext(*this);
+    DisplayContext = new CDisplayContext(*this);
 
-   SetRendererContextChanged(true);
-   SetGsContextChanged(true);
-   SetRendererPropsChanged(true);
+    SetRendererContextChanged(true);
+    SetGsContextChanged(true);
+    SetRendererPropsChanged(true);
 
-   // util
-   NumBuffersToBeFreed[0] = NumBuffersToBeFreed[1] = 0;
+    // util
+    NumBuffersToBeFreed[0] = NumBuffersToBeFreed[1] = 0;
 
-   GS::Init();
+    GS::Init();
 
 #ifndef PS2_LINUX
-   // create a few semaphores
+    // create a few semaphores
 
-   struct t_ee_sema newSemaphore = { 0, 1, 0 }; // but maxCount doesn't work?
-   VsyncSemaId = CreateSema( &newSemaphore );
-   RenderingFinishedSemaId = CreateSema( &newSemaphore );
-   ImmediateRenderingFinishedSemaId = CreateSema( &newSemaphore );
-   mErrorIf( VsyncSemaId == -1
-	     || RenderingFinishedSemaId == -1
-	     || ImmediateRenderingFinishedSemaId == -1,
-	     "Failed to create ps2gl semaphores." );
+    struct t_ee_sema newSemaphore    = { 0, 1, 0 }; // but maxCount doesn't work?
+    VsyncSemaId                      = CreateSema(&newSemaphore);
+    RenderingFinishedSemaId          = CreateSema(&newSemaphore);
+    ImmediateRenderingFinishedSemaId = CreateSema(&newSemaphore);
+    mErrorIf(VsyncSemaId == -1
+            || RenderingFinishedSemaId == -1
+            || ImmediateRenderingFinishedSemaId == -1,
+        "Failed to create ps2gl semaphores.");
 
+    // add an interrupt handler for gs "signal" exceptions
 
-   // add an interrupt handler for gs "signal" exceptions
-
-   AddIntcHandler( INTC_GS, CGLContext::GsIntHandler, 0 /*first handler*/ );
-   EnableIntc( INTC_GS );
-   // clear any signal/vsync exceptions and wait for the next
-   *(volatile unsigned int*)GS::ControlRegs::csr = 9;
-   // enable signal and vsync exceptions
-   *(volatile unsigned int*)GS::ControlRegs::imr = 0x7600;
+    AddIntcHandler(INTC_GS, CGLContext::GsIntHandler, 0 /*first handler*/);
+    EnableIntc(INTC_GS);
+    // clear any signal/vsync exceptions and wait for the next
+    *(volatile unsigned int*)GS::ControlRegs::csr = 9;
+    // enable signal and vsync exceptions
+    *(volatile unsigned int*)GS::ControlRegs::imr = 0x7600;
 #endif
 }
 
 CGLContext::~CGLContext()
 {
-   delete CurPacket;
-   delete LastPacket;
+    delete CurPacket;
+    delete LastPacket;
 
-   delete ImmGManager;
-   delete DListGManager;
+    delete ImmGManager;
+    delete DListGManager;
 
-   delete ProjectionMatStack;
-   delete ModelViewMatStack;
-   delete DListMatStack;
+    delete ProjectionMatStack;
+    delete ModelViewMatStack;
+    delete DListMatStack;
 
-   delete ImmLighting;
-   delete DListLighting;
+    delete ImmLighting;
+    delete DListLighting;
 
-   delete MaterialManager;
-   delete DListManager;
-   delete TexManager;
+    delete MaterialManager;
+    delete DListManager;
+    delete TexManager;
 
-   delete ImmDrawContext;
-   delete DListDrawContext;
+    delete ImmDrawContext;
+    delete DListDrawContext;
 
-   delete DisplayContext;
+    delete DisplayContext;
 }
 
 /********************************************
  * display lists
  */
 
-void
-CGLContext::BeginDListDef( unsigned int listID, GLenum mode )
+void CGLContext::BeginDListDef(unsigned int listID, GLenum mode)
 {
-   DListManager->NewList( listID, mode );
+    DListManager->NewList(listID, mode);
 
-   PushStateChanges();
+    PushStateChanges();
 
-   // not so sure about these two, but let's be cautious
-   SetRendererContextChanged(true);
-   SetGsContextChanged(true);
-   // definately need this to force an update - indexed/linear arrays
-   SetRendererPropsChanged(true);
+    // not so sure about these two, but let's be cautious
+    SetRendererContextChanged(true);
+    SetGsContextChanged(true);
+    // definately need this to force an update - indexed/linear arrays
+    SetRendererPropsChanged(true);
 
-   MaterialManager->BeginDListDef();
-   TexManager->BeginDListDef();
-   DListGManager->BeginDListDef();
+    MaterialManager->BeginDListDef();
+    TexManager->BeginDListDef();
+    DListGManager->BeginDListDef();
 
-   CurLighting = DListLighting;
-   CurGManager = DListGManager;
-   SavedCurMatStack = CurMatrixStack;
-   CurMatrixStack = DListMatStack;
-   CurDrawContext = DListDrawContext;
+    CurLighting      = DListLighting;
+    CurGManager      = DListGManager;
+    SavedCurMatStack = CurMatrixStack;
+    CurMatrixStack   = DListMatStack;
+    CurDrawContext   = DListDrawContext;
 }
 
-void
-CGLContext::EndDListDef()
+void CGLContext::EndDListDef()
 {
-   DListGManager->EndDListDef();
-   MaterialManager->EndDListDef();
-   TexManager->EndDListDef();
+    DListGManager->EndDListDef();
+    MaterialManager->EndDListDef();
+    TexManager->EndDListDef();
 
-   CurLighting = ImmLighting;
-   CurGManager = ImmGManager;
-   CurMatrixStack = SavedCurMatStack;
-   CurDrawContext = ImmDrawContext;
+    CurLighting    = ImmLighting;
+    CurGManager    = ImmGManager;
+    CurMatrixStack = SavedCurMatStack;
+    CurDrawContext = ImmDrawContext;
 
-   PopStateChanges();
+    PopStateChanges();
 
-   DListManager->EndList();
+    DListManager->EndList();
 }
 
 /********************************************
@@ -216,290 +212,285 @@ CGLContext::EndDListDef()
  */
 
 class CSetMatrixModeCmd : public CDListCmd {
-      GLenum	Mode;
-   public:
-      CSetMatrixModeCmd( GLenum mode ) : Mode(mode) {}
-      CDListCmd* Play() { glMatrixMode( Mode ); return CDListCmd::GetNextCmd(this); }
+    GLenum Mode;
+
+public:
+    CSetMatrixModeCmd(GLenum mode)
+        : Mode(mode)
+    {
+    }
+    CDListCmd* Play()
+    {
+        glMatrixMode(Mode);
+        return CDListCmd::GetNextCmd(this);
+    }
 };
 
-void
-CGLContext::SetMatrixMode( GLenum mode )
+void CGLContext::SetMatrixMode(GLenum mode)
 {
-   if ( InDListDef() ) {
-      DListManager->GetOpenDList() += CSetMatrixModeCmd(mode);
-   }
-   else {
-      switch (mode) {
-	 case GL_MODELVIEW:
-	    CurMatrixStack = ModelViewMatStack;
-	    break;
-	 case GL_PROJECTION:
-	    CurMatrixStack = ProjectionMatStack;
-	    break;
-	 default:
-	    mNotImplemented( );
-      }
-   }
+    if (InDListDef()) {
+        DListManager->GetOpenDList() += CSetMatrixModeCmd(mode);
+    } else {
+        switch (mode) {
+        case GL_MODELVIEW:
+            CurMatrixStack = ModelViewMatStack;
+            break;
+        case GL_PROJECTION:
+            CurMatrixStack = ProjectionMatStack;
+            break;
+        default:
+            mNotImplemented();
+        }
+    }
 }
 
 /********************************************
  * immediate geometry
  */
 
-void
-CGLContext::BeginImmediateGeometry()
+void CGLContext::BeginImmediateGeometry()
 {
-//     mErrorIf( InDListDef == true,
-//  	     "pglBeginImmediateGeom can't be called in a display list definition." );
+    //     mErrorIf( InDListDef == true,
+    //  	     "pglBeginImmediateGeom can't be called in a display list definition." );
 
-   // flush any pending geometry
-   GetImmGeomManager().Flush();
+    // flush any pending geometry
+    GetImmGeomManager().Flush();
 
-   PushVif1Packet();
-   SetVif1Packet( *ImmVif1Packet );
+    PushVif1Packet();
+    SetVif1Packet(*ImmVif1Packet);
 
-   ImmVif1Packet->Reset();
+    ImmVif1Packet->Reset();
 }
 
-void
-CGLContext::EndImmediateGeometry()
+void CGLContext::EndImmediateGeometry()
 {
-   mAssert( Vif1Packet == ImmVif1Packet );
+    mAssert(Vif1Packet == ImmVif1Packet);
 
-   EndVif1Packet(2);
+    EndVif1Packet(2);
 
-   PopVif1Packet();
+    PopVif1Packet();
 }
 
-void
-CGLContext::RenderImmediateGeometry()
+void CGLContext::RenderImmediateGeometry()
 {
-   ImmVif1Packet->End();
-   ImmVif1Packet->Pad128();
-   ImmVif1Packet->CloseTag();
+    ImmVif1Packet->End();
+    ImmVif1Packet->Pad128();
+    ImmVif1Packet->CloseTag();
 
-   ImmVif1Packet->Send();
+    ImmVif1Packet->Send();
 }
 
-void
-CGLContext::FinishRenderingImmediateGeometry( bool forceImmediateStop )
+void CGLContext::FinishRenderingImmediateGeometry(bool forceImmediateStop)
 {
-   mWarnIf( forceImmediateStop, "Interrupting currently rendering dma chain not supported yet" );
-   mNotImplemented( );
+    mWarnIf(forceImmediateStop, "Interrupting currently rendering dma chain not supported yet");
+    mNotImplemented();
 }
 
 /********************************************
  * normal geometry
  */
 
-void
-CGLContext::BeginGeometry()
+void CGLContext::BeginGeometry()
 {
-   // reset packets that will be drawn to during this frame
+    // reset packets that will be drawn to during this frame
 
-   CurPacket->Reset();
+    CurPacket->Reset();
 }
 
-void
-CGLContext::EndGeometry()
+void CGLContext::EndGeometry()
 {
-   EndVif1Packet(1);
+    EndVif1Packet(1);
 }
 
-void
-CGLContext::EndVif1Packet( unsigned short signalNum )
+void CGLContext::EndVif1Packet(unsigned short signalNum)
 {
     //printf("%s(%d)\n", __FUNCTION__, signalNum);
 
-   // flush any pending geometry
-   GetImmGeomManager().Flush();
+    // flush any pending geometry
+    GetImmGeomManager().Flush();
 
-   // end current packet
-   // write our id to the signal register and trigger an
-   // exception on the core when this dma chain reaches the end
+// end current packet
+// write our id to the signal register and trigger an
+// exception on the core when this dma chain reaches the end
 
 #ifndef PS2_LINUX
-   tGifTag giftag;
-   giftag.NLOOP = 1;
-   giftag.EOP = 1;
-   giftag.PRE = 0;
-   giftag.FLG = 0; // packed
-   giftag.NREG = 1;
-   giftag.REGS0 = 0xe; // a+d
+    tGifTag giftag;
+    giftag.NLOOP = 1;
+    giftag.EOP   = 1;
+    giftag.PRE   = 0;
+    giftag.FLG   = 0; // packed
+    giftag.NREG  = 1;
+    giftag.REGS0 = 0xe; // a+d
 
-   Vif1Packet->End();
-   Vif1Packet->Flush();
-   Vif1Packet->OpenDirect();
-   {
-      *Vif1Packet += giftag;
-      *Vif1Packet += Ps2glSignalId | signalNum;
-      *Vif1Packet += (tU64)0x60; // signal
-   }
-   Vif1Packet->CloseDirect();
-   Vif1Packet->CloseTag();
+    Vif1Packet->End();
+    Vif1Packet->Flush();
+    Vif1Packet->OpenDirect();
+    {
+        *Vif1Packet += giftag;
+        *Vif1Packet += Ps2glSignalId | signalNum;
+        *Vif1Packet += (tU64)0x60; // signal
+    }
+    Vif1Packet->CloseDirect();
+    Vif1Packet->CloseTag();
 #else
-   Vif1Packet->End();
-   Vif1Packet->Nop().Nop();
-   Vif1Packet->CloseTag();
+    Vif1Packet->End();
+    Vif1Packet->Nop().Nop();
+    Vif1Packet->CloseTag();
 #endif
 }
 
-void
-CGLContext::RenderGeometry()
+void CGLContext::RenderGeometry()
 {
-    //printf("%s\n", __FUNCTION__);
+//printf("%s\n", __FUNCTION__);
 #ifndef PS2_LINUX
 
-   // make sure the semaphore we'll signal on completion is zero now
-   while ( PollSema(RenderingFinishedSemaId) != -1 );
+    // make sure the semaphore we'll signal on completion is zero now
+    while (PollSema(RenderingFinishedSemaId) != -1)
+        ;
 #endif
 
-   LastPacket->Send();
+    LastPacket->Send();
 }
 
-int
-CGLContext::GsIntHandler( int cause )
+int CGLContext::GsIntHandler(int cause)
 {
-   int ret = 0;
+    int ret = 0;
 
-    //printf("%s(%d)\n", __FUNCTION__, cause);
+//printf("%s(%d)\n", __FUNCTION__, cause);
 
 #ifndef PS2_LINUX
-   tU32 csr = *(volatile tU32*)GS::ControlRegs::csr;
-   // is this a signal interrupt?
-   if ( csr & 1 ) {
-      // is it one of ours?
-      tU64 sigLblId = *(volatile tU64*)GS::ControlRegs::siglblid;
-      if ( (tU16)(sigLblId >> 16) == GetPs2glSignalId() ) {
-	 switch ( sigLblId & 0xffff ) {
-	    case 1:
-	       iSignalSema( RenderingFinishedSemaId );
-	       if ( RenderingFinishedCallback != NULL )
-		  RenderingFinishedCallback();
-	       break;
-	    case 2:
-	       iSignalSema( ImmediateRenderingFinishedSemaId );
-	       break;
-	    default:
-	       mError( "Unknown signal" );
-	 }
+    tU32 csr = *(volatile tU32*)GS::ControlRegs::csr;
+    // is this a signal interrupt?
+    if (csr & 1) {
+        // is it one of ours?
+        tU64 sigLblId = *(volatile tU64*)GS::ControlRegs::siglblid;
+        if ((tU16)(sigLblId >> 16) == GetPs2glSignalId()) {
+            switch (sigLblId & 0xffff) {
+            case 1:
+                iSignalSema(RenderingFinishedSemaId);
+                if (RenderingFinishedCallback != NULL)
+                    RenderingFinishedCallback();
+                break;
+            case 2:
+                iSignalSema(ImmediateRenderingFinishedSemaId);
+                break;
+            default:
+                mError("Unknown signal");
+            }
 
-	 // clear our signal id
-	 sigLblId &= ~0xffffffff;
-	 *(volatile tU64*)GS::ControlRegs::siglblid = sigLblId;
-	 // clear the exception and wait for the next
-	 *(volatile unsigned int*)GS::ControlRegs::csr = 1;
+            // clear our signal id
+            sigLblId &= ~0xffffffff;
+            *(volatile tU64*)GS::ControlRegs::siglblid = sigLblId;
+            // clear the exception and wait for the next
+            *(volatile unsigned int*)GS::ControlRegs::csr = 1;
 
-	 ret = -1; // don't call other handlers
-      }
-   }
-   // is this a vsync interrupt?
-   else if ( csr & 8 ) {
-      iSignalSema( VsyncSemaId );
-      // clear the exception and wait for the next
-      *(volatile unsigned int*)GS::ControlRegs::csr = 8;
-   }
+            ret = -1; // don't call other handlers
+        }
+    }
+    // is this a vsync interrupt?
+    else if (csr & 8) {
+        iSignalSema(VsyncSemaId);
+        // clear the exception and wait for the next
+        *(volatile unsigned int*)GS::ControlRegs::csr = 8;
+    }
 
-   // I'm not entirely sure why this is necessary, but if I don't do
-   // it then framing out can cause the display thread to lock (I've
-   // only verified it frozen waiting on pglFinishRenderingGeometry().)
-   // The GS manual says that a second "signal" event occuring before
-   // the first is cleared causes the gs to stop drawing, and the second
-   // interrupt will not be raised until that interrupt (signal) is masked
-   // and then unmasked.  Could something similar be true for gs events/
-   // interrupts in general?  This needs to be here, not in the vsync branch.
-   if ( ret == -1 ) {
-      *(volatile unsigned int*)GS::ControlRegs::imr = 0x7f00;
-      *(volatile unsigned int*)GS::ControlRegs::imr = 0x7600;
-   }
+    // I'm not entirely sure why this is necessary, but if I don't do
+    // it then framing out can cause the display thread to lock (I've
+    // only verified it frozen waiting on pglFinishRenderingGeometry().)
+    // The GS manual says that a second "signal" event occuring before
+    // the first is cleared causes the gs to stop drawing, and the second
+    // interrupt will not be raised until that interrupt (signal) is masked
+    // and then unmasked.  Could something similar be true for gs events/
+    // interrupts in general?  This needs to be here, not in the vsync branch.
+    if (ret == -1) {
+        *(volatile unsigned int*)GS::ControlRegs::imr = 0x7f00;
+        *(volatile unsigned int*)GS::ControlRegs::imr = 0x7600;
+    }
 #endif
 
-   return ret;
+    return ret;
 }
 
-void
-CGLContext::FinishRenderingGeometry( bool forceImmediateStop )
+void CGLContext::FinishRenderingGeometry(bool forceImmediateStop)
 {
-    //printf("%s(%d)\n", __FUNCTION__, forceImmediateStop);
+//printf("%s(%d)\n", __FUNCTION__, forceImmediateStop);
 
 #ifndef PS2_LINUX
-   mWarnIf( forceImmediateStop, "Interrupting currently rendering dma chain not supported yet" );
-   WaitSema( RenderingFinishedSemaId );
+    mWarnIf(forceImmediateStop, "Interrupting currently rendering dma chain not supported yet");
+    WaitSema(RenderingFinishedSemaId);
 #else
-   pglWaitForVU1();
+    pglWaitForVU1();
 #endif
 }
 
-void
-CGLContext::WaitForVSync()
+void CGLContext::WaitForVSync()
 {
-    //printf("%s\n", __FUNCTION__);
+//printf("%s\n", __FUNCTION__);
 
-   // wait for beginning of v-sync
+// wait for beginning of v-sync
 #ifndef PS2_LINUX
-   WaitSema( VsyncSemaId );
-   // sometimes if we miss a frame the semaphore gets incremented
-   // more than once (because maxCount is ignored?) which causes the next
-   // call to WaitForVSync to fall through immediately, which is kinda bad,
-   // so make sure the count is zero after waiting.
-   while ( PollSema(VsyncSemaId) != -1 );
-   // sceGsSyncV(0);
-   tU32 csr = *(volatile tU32*)GS::ControlRegs::csr;
-   IsCurrentFieldEven = (bool)((csr >> 13) & 1);
+    WaitSema(VsyncSemaId);
+    // sometimes if we miss a frame the semaphore gets incremented
+    // more than once (because maxCount is ignored?) which causes the next
+    // call to WaitForVSync to fall through immediately, which is kinda bad,
+    // so make sure the count is zero after waiting.
+    while (PollSema(VsyncSemaId) != -1)
+        ;
+    // sceGsSyncV(0);
+    tU32 csr           = *(volatile tU32*)GS::ControlRegs::csr;
+    IsCurrentFieldEven = (bool)((csr >> 13) & 1);
 #else
-   IsCurrentFieldEven = Math::IsEven(ps2_gs_sync_v(0));
+    IsCurrentFieldEven = Math::IsEven(ps2_gs_sync_v(0));
 #endif
 }
 
-void
-CGLContext::SwapBuffers()
+void CGLContext::SwapBuffers()
 {
     //printf("%s\n", __FUNCTION__);
 
-   // switch packet ptrs
+    // switch packet ptrs
 
-   CVifSCDmaPacket *tempPkt = CurPacket;
-   CurPacket = LastPacket;
-   LastPacket = tempPkt;
-   Vif1Packet = CurPacket;
+    CVifSCDmaPacket* tempPkt = CurPacket;
+    CurPacket                = LastPacket;
+    LastPacket               = tempPkt;
+    Vif1Packet               = CurPacket;
 
-   // switch drawenv ptrs
+    // switch drawenv ptrs
 
-   void **tempDEPtrs = CurDrawEnvPtrs;
-   CurDrawEnvPtrs = LastDrawEnvPtrs;
-   LastDrawEnvPtrs = tempDEPtrs;
-   NumLastDrawEnvPtrs = NumCurDrawEnvPtrs;
-   NumCurDrawEnvPtrs = 0;
+    void** tempDEPtrs  = CurDrawEnvPtrs;
+    CurDrawEnvPtrs     = LastDrawEnvPtrs;
+    LastDrawEnvPtrs    = tempDEPtrs;
+    NumLastDrawEnvPtrs = NumCurDrawEnvPtrs;
+    NumCurDrawEnvPtrs  = 0;
 
-   // tell some modules that it's time to flip
+    // tell some modules that it's time to flip
 
-   GetImmGeomManager().SwapBuffers();
-   GetDListManager().SwapBuffers();
-   GetDisplayContext().SwapBuffers();
-   GetImmDrawContext().SwapBuffers( IsCurrentFieldEven );
+    GetImmGeomManager().SwapBuffers();
+    GetDListManager().SwapBuffers();
+    GetDisplayContext().SwapBuffers();
+    GetImmDrawContext().SwapBuffers(IsCurrentFieldEven);
 
-   // free memory that was waiting til end of frame
-   FreeWaitingBuffersAndSwap();
+    // free memory that was waiting til end of frame
+    FreeWaitingBuffersAndSwap();
 
-   CurrentFrameNumber++;
+    CurrentFrameNumber++;
 }
 
-void
-CGLContext::FreeWaitingBuffersAndSwap()
+void CGLContext::FreeWaitingBuffersAndSwap()
 {
     //printf("%s\n", __FUNCTION__);
 
-   CurBuffer = 1 - CurBuffer;
+    CurBuffer = 1 - CurBuffer;
 
-   for ( int i = 0; i < NumBuffersToBeFreed[CurBuffer]; i++ ) {
+    for (int i = 0; i < NumBuffersToBeFreed[CurBuffer]; i++) {
 #ifndef PS2_LINUX
-      free( BuffersToBeFreed[CurBuffer][i] );
+        free(BuffersToBeFreed[CurBuffer][i]);
 #else
-      munmap(BuffersToBeFreed[CurBuffer][i], 1);
+        munmap(BuffersToBeFreed[CurBuffer][i], 1);
 #endif
-   }
+    }
 
-   NumBuffersToBeFreed[CurBuffer] = 0;
+    NumBuffersToBeFreed[CurBuffer] = 0;
 }
 
 /********************************************
@@ -507,7 +498,7 @@ CGLContext::FreeWaitingBuffersAndSwap()
  */
 
 /// global pointer to the GLContext
-CGLContext *pGLContext = NULL;
+CGLContext* pGLContext = NULL;
 
 /**
  * @addtogroup pgl_api pgl* API
@@ -533,33 +524,31 @@ CGLContext *pGLContext = NULL;
  * @param immBufferVertexSize ps2gl uses fixed-size internal buffers to store geometry;
  * this argument tells the library how much space to allocate.
  */
-int
-pglInit( int immBufferVertexSize, int immDrawBufferQwordSize )
+int pglInit(int immBufferVertexSize, int immDrawBufferQwordSize)
 {
-   ps2sInit();
-   pGLContext = new CGLContext(immBufferVertexSize, immDrawBufferQwordSize);
+    ps2sInit();
+    pGLContext = new CGLContext(immBufferVertexSize, immDrawBufferQwordSize);
 
-   return true;
+    return true;
 }
 
 /**
  * Has pglInit() been called?
  * @return 1 if pglInit has been called, 0 otherwise
  */
-int
-pglHasLibraryBeenInitted(void)
+int pglHasLibraryBeenInitted(void)
 {
-   return (pGLContext != NULL);
+    return (pGLContext != NULL);
 }
 
 /**
  * Do any necessary clean up when finished using ps2gl.
  */
-void
-pglFinish( void )
+void pglFinish(void)
 {
-   if (pGLContext) delete pGLContext;
-   ps2sFinish();
+    if (pGLContext)
+        delete pGLContext;
+    ps2sFinish();
 }
 
 #ifdef PS2_LINUX
@@ -575,13 +564,12 @@ extern int Ps2stuffDeviceFd;
  * This call is for convenience only -- there is no need to call it if the app
  * can manage on its own.
  */
-void
-pglWaitForVU1( void )
+void pglWaitForVU1(void)
 {
 #ifndef PS2_LINUX
-   dma_channel_fast_waits(DMAC::Channels::vif1);
+    dma_channel_fast_waits(DMAC::Channels::vif1);
 #else
-   ioctl( Ps2stuffDeviceFd, PS2STUFF_IOCTV1DMAW, 0 );
+    ioctl(Ps2stuffDeviceFd, PS2STUFF_IOCTV1DMAW, 0);
 #endif
 }
 
@@ -589,10 +577,9 @@ pglWaitForVU1( void )
  * Wait for the vertical retrace.  Note that this call is <b>required</b>
  * for the interlacing to work properly.  (Called by glut.)
  */
-void
-pglWaitForVSync( void )
+void pglWaitForVSync(void)
 {
-   pGLContext->WaitForVSync();
+    pGLContext->WaitForVSync();
 }
 
 /**
@@ -601,12 +588,11 @@ pglWaitForVSync( void )
  *
  * Note that this call is <b>required</b>.  (Called by glut.)
  */
-void
-pglSwapBuffers( void )
+void pglSwapBuffers(void)
 {
-   mErrorIf( pGLContext == NULL, "You need to call pglInit()" );
+    mErrorIf(pGLContext == NULL, "You need to call pglInit()");
 
-   pGLContext->SwapBuffers();
+    pGLContext->SwapBuffers();
 }
 
 /**
@@ -614,88 +600,77 @@ pglSwapBuffers( void )
  * function will be called from the interrupt handler; be careful!</b>
  * @param a pointer to the callback function or NULL to clear
  */
-void
-pglSetRenderingFinishedCallback( void (*cb)(void) )
+void pglSetRenderingFinishedCallback(void (*cb)(void))
 {
-   pGLContext->SetRenderingFinishedCallback(cb);
+    pGLContext->SetRenderingFinishedCallback(cb);
 }
 
 /********************************************
  * immediate geometry
  */
 
-void
-pglBeginImmediateGeometry( void )
+void pglBeginImmediateGeometry(void)
 {
-   pGLContext->BeginImmediateGeometry();
+    pGLContext->BeginImmediateGeometry();
 }
-void
-pglEndImmediateGeometry( void )
+void pglEndImmediateGeometry(void)
 {
-   pGLContext->EndImmediateGeometry();
+    pGLContext->EndImmediateGeometry();
 }
-void
-pglRenderImmediateGeometry( void )
+void pglRenderImmediateGeometry(void)
 {
-   pGLContext->RenderImmediateGeometry();
+    pGLContext->RenderImmediateGeometry();
 }
-void
-pglFinishRenderingImmediateGeometry( int forceImmediateStop )
+void pglFinishRenderingImmediateGeometry(int forceImmediateStop)
 {
-   pGLContext->FinishRenderingImmediateGeometry( (bool)forceImmediateStop );
+    pGLContext->FinishRenderingImmediateGeometry((bool)forceImmediateStop);
 }
 
 /********************************************
  * normal geometry
  */
 
-void
-pglBeginGeometry( void )
+void pglBeginGeometry(void)
 {
-   pGLContext->BeginGeometry();
+    pGLContext->BeginGeometry();
 }
-void
-pglEndGeometry( void )
+void pglEndGeometry(void)
 {
-   pGLContext->EndGeometry();
+    pGLContext->EndGeometry();
 }
-void
-pglRenderGeometry( void )
+void pglRenderGeometry(void)
 {
-   pGLContext->RenderGeometry();
+    pGLContext->RenderGeometry();
 }
-void
-pglFinishRenderingGeometry( int forceImmediateStop )
+void pglFinishRenderingGeometry(int forceImmediateStop)
 {
-   pGLContext->FinishRenderingGeometry( (bool)forceImmediateStop );
+    pGLContext->FinishRenderingGeometry((bool)forceImmediateStop);
 }
 
 /********************************************
  * enable / disable
  */
 
-void
-pglEnable( GLenum cap )
+void pglEnable(GLenum cap)
 {
-   switch (cap) {
-      case PGL_CLIPPING:
-	 pGLContext->GetDrawContext().SetDoClipping(true);
-	 break;
-      default:
-	 mError( "Unknown option passed to pglEnable()" );
-   }
+    switch (cap) {
+    case PGL_CLIPPING:
+        pGLContext->GetDrawContext().SetDoClipping(true);
+        break;
+    default:
+        mError("Unknown option passed to pglEnable()");
+    }
 }
 
-void
-pglDisable( GLenum cap )
+void pglDisable(GLenum cap)
 {
-   switch (cap) {
-      case PGL_CLIPPING:
-	 pGLContext->GetDrawContext().SetDoClipping(false);
-	 break;
-      default:
-	 mError( "Unknown option passed to pglDisable()" );
-   }
+    switch (cap) {
+    case PGL_CLIPPING:
+        pGLContext->GetDrawContext().SetDoClipping(false);
+        break;
+    default:
+        mError("Unknown option passed to pglDisable()");
+    }
 }
 
 /**
@@ -706,157 +681,157 @@ pglDisable( GLenum cap )
  * gl interface
  */
 
-void glEnable( GLenum cap )
+void glEnable(GLenum cap)
 {
     //printf("%s(0x%x)\n", __FUNCTION__, cap);
 
-   CLighting& lighting = pGLContext->GetLighting();
+    CLighting& lighting = pGLContext->GetLighting();
 
-   switch (cap) {
-      case GL_LIGHT0:
-      case GL_LIGHT1:
-      case GL_LIGHT2:
-      case GL_LIGHT3:
-      case GL_LIGHT4:
-      case GL_LIGHT5:
-      case GL_LIGHT6:
-      case GL_LIGHT7:
-	 lighting.GetLight(0x7 & cap).SetEnabled(true);
-	 break;
-      case GL_LIGHTING:
-	 lighting.SetLightingEnabled(true);
-	 break;
+    switch (cap) {
+    case GL_LIGHT0:
+    case GL_LIGHT1:
+    case GL_LIGHT2:
+    case GL_LIGHT3:
+    case GL_LIGHT4:
+    case GL_LIGHT5:
+    case GL_LIGHT6:
+    case GL_LIGHT7:
+        lighting.GetLight(0x7 & cap).SetEnabled(true);
+        break;
+    case GL_LIGHTING:
+        lighting.SetLightingEnabled(true);
+        break;
 
-      case GL_BLEND:
-	 pGLContext->GetDrawContext().SetBlendEnabled(true);
-	 break;
+    case GL_BLEND:
+        pGLContext->GetDrawContext().SetBlendEnabled(true);
+        break;
 
-      case GL_COLOR_MATERIAL:
-	 pGLContext->GetMaterialManager().SetUseColorMaterial(true);
-	 break;
-      case GL_RESCALE_NORMAL:
-	 pGLContext->GetDrawContext().SetRescaleNormals(true);
-	 break;
+    case GL_COLOR_MATERIAL:
+        pGLContext->GetMaterialManager().SetUseColorMaterial(true);
+        break;
+    case GL_RESCALE_NORMAL:
+        pGLContext->GetDrawContext().SetRescaleNormals(true);
+        break;
 
-      case GL_TEXTURE_2D:
-	 pGLContext->GetTexManager().SetTexEnabled(true);
-	 break;
+    case GL_TEXTURE_2D:
+        pGLContext->GetTexManager().SetTexEnabled(true);
+        break;
 
-      case GL_NORMALIZE:
-	 pGLContext->GetGeomManager().SetDoNormalize(true);
-	 break;
+    case GL_NORMALIZE:
+        pGLContext->GetGeomManager().SetDoNormalize(true);
+        break;
 
-      case GL_CULL_FACE:
-	 pGLContext->GetDrawContext().SetDoCullFace(true);
-	 break;
+    case GL_CULL_FACE:
+        pGLContext->GetDrawContext().SetDoCullFace(true);
+        break;
 
-      case GL_ALPHA_TEST:
-         pGLContext->GetDrawContext().SetAlphaTestEnabled(true);
-         break;
+    case GL_ALPHA_TEST:
+        pGLContext->GetDrawContext().SetAlphaTestEnabled(true);
+        break;
 
-      case GL_DEPTH_TEST:
-      default:
-	 mNotImplemented( );
-	 break;
-   }
+    case GL_DEPTH_TEST:
+    default:
+        mNotImplemented();
+        break;
+    }
 }
 
-void glDisable( GLenum cap )
+void glDisable(GLenum cap)
 {
     //printf("%s(0x%x)\n", __FUNCTION__, cap);
 
-   switch (cap) {
-      case GL_LIGHT0:
-      case GL_LIGHT1:
-      case GL_LIGHT2:
-      case GL_LIGHT3:
-      case GL_LIGHT4:
-      case GL_LIGHT5:
-      case GL_LIGHT6:
-      case GL_LIGHT7:
-	 pGLContext->GetLighting().GetLight(0x7 & cap).SetEnabled(false);
-	 break;
-      case GL_LIGHTING:
-	 pGLContext->GetLighting().SetLightingEnabled(false);
-	 break;
+    switch (cap) {
+    case GL_LIGHT0:
+    case GL_LIGHT1:
+    case GL_LIGHT2:
+    case GL_LIGHT3:
+    case GL_LIGHT4:
+    case GL_LIGHT5:
+    case GL_LIGHT6:
+    case GL_LIGHT7:
+        pGLContext->GetLighting().GetLight(0x7 & cap).SetEnabled(false);
+        break;
+    case GL_LIGHTING:
+        pGLContext->GetLighting().SetLightingEnabled(false);
+        break;
 
-      case GL_BLEND:
-	 pGLContext->GetDrawContext().SetBlendEnabled(false);
-	 break;
+    case GL_BLEND:
+        pGLContext->GetDrawContext().SetBlendEnabled(false);
+        break;
 
-      case GL_COLOR_MATERIAL:
-	 pGLContext->GetMaterialManager().SetUseColorMaterial(false);
-	 break;
-      case GL_RESCALE_NORMAL:
-	 pGLContext->GetDrawContext().SetRescaleNormals(false);
-	 break;
+    case GL_COLOR_MATERIAL:
+        pGLContext->GetMaterialManager().SetUseColorMaterial(false);
+        break;
+    case GL_RESCALE_NORMAL:
+        pGLContext->GetDrawContext().SetRescaleNormals(false);
+        break;
 
-      case GL_TEXTURE_2D:
-	 pGLContext->GetTexManager().SetTexEnabled(false);
-	 break;
+    case GL_TEXTURE_2D:
+        pGLContext->GetTexManager().SetTexEnabled(false);
+        break;
 
-      case GL_NORMALIZE:
-	 pGLContext->GetGeomManager().SetDoNormalize(false);
-	 break;
+    case GL_NORMALIZE:
+        pGLContext->GetGeomManager().SetDoNormalize(false);
+        break;
 
-      case GL_CULL_FACE:
-	 pGLContext->GetDrawContext().SetDoCullFace(false);
-	 break;
+    case GL_CULL_FACE:
+        pGLContext->GetDrawContext().SetDoCullFace(false);
+        break;
 
-      case GL_ALPHA_TEST:
-         pGLContext->GetDrawContext().SetAlphaTestEnabled(false);
-         break;
+    case GL_ALPHA_TEST:
+        pGLContext->GetDrawContext().SetAlphaTestEnabled(false);
+        break;
 
-      case GL_DEPTH_TEST:
-      default:
-	 mNotImplemented( );
-   }
+    case GL_DEPTH_TEST:
+    default:
+        mNotImplemented();
+    }
 }
 
-void glHint( GLenum target, GLenum mode )
+void glHint(GLenum target, GLenum mode)
 {
     //printf("%s(0x%x,0x%x)\n", __FUNCTION__, target, mode);
 
-   mNotImplemented( );
+    mNotImplemented();
 }
 
-void glGetFloatv( GLenum pname, GLfloat *params )
+void glGetFloatv(GLenum pname, GLfloat* params)
 {
     //printf("%s(0x%x,...)\n", __FUNCTION__, pname);
 
-   switch (pname) {
-      case GL_MODELVIEW_MATRIX:
-	 memcpy( params, & (pGLContext->GetModelViewStack().GetTop()), 16 * 4 );
-	 break;
-      case GL_PROJECTION_MATRIX:
-	 memcpy( params, & (pGLContext->GetProjectionStack().GetTop()), 16 * 4 );
-	 break;
-      default:
-	 mNotImplemented( "pname %d", pname );
-	 break;
-   }
+    switch (pname) {
+    case GL_MODELVIEW_MATRIX:
+        memcpy(params, &(pGLContext->GetModelViewStack().GetTop()), 16 * 4);
+        break;
+    case GL_PROJECTION_MATRIX:
+        memcpy(params, &(pGLContext->GetProjectionStack().GetTop()), 16 * 4);
+        break;
+    default:
+        mNotImplemented("pname %d", pname);
+        break;
+    }
 }
 
-void glGetIntegerv( GLenum pname, int *params )
+void glGetIntegerv(GLenum pname, int* params)
 {
     //printf("%s(0x%x,...)\n", __FUNCTION__, pname);
 
-   mNotImplemented( );
+    mNotImplemented();
 }
 
-GLenum glGetError( void )
+GLenum glGetError(void)
 {
     //printf("%s()\n", __FUNCTION__);
 
-   mWarn("glGetError does nothing");
+    mWarn("glGetError does nothing");
 
-   return 0;
+    return 0;
 }
 
-const GLubyte *glGetString( GLenum name )
+const GLubyte* glGetString(GLenum name)
 {
     //printf("%s(0x%x)\n", __FUNCTION__, name);
 
-   mNotImplemented( );
-   return (GLubyte*)"not implemented";
+    mNotImplemented();
+    return (GLubyte*)"not implemented";
 }

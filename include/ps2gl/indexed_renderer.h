@@ -10,19 +10,19 @@
 #include "ps2gl/base_renderer.h"
 
 class CIndexedRenderer : public CBaseRenderer {
-   protected:
-      cpu_vec_4		ConstantVertColor;
+protected:
+    cpu_vec_4 ConstantVertColor;
 
-   public:
-      CIndexedRenderer( void *packet, int packetSize, CRendererProps caps, CRendererProps reqs,
-			int inQuadsPerVert, int outQuadsPerVert,
-			const char *name);
+public:
+    CIndexedRenderer(void* packet, int packetSize, CRendererProps caps, CRendererProps reqs,
+        int inQuadsPerVert, int outQuadsPerVert,
+        const char* name);
 
-      virtual void InitContext( GLenum primType, tU32 rcChanges, bool userRcChanged );
-      virtual void DrawIndexedArrays( CGeometryBlock &block );
-      virtual int GetPacketQwordSize( const CGeometryBlock &geometry );
-      virtual CRendererProps GetRenderContextDeps();
-      virtual bool GetCachePackets( const CGeometryBlock &geometry );
+    virtual void InitContext(GLenum primType, tU32 rcChanges, bool userRcChanged);
+    virtual void DrawIndexedArrays(CGeometryBlock& block);
+    virtual int GetPacketQwordSize(const CGeometryBlock& geometry);
+    virtual CRendererProps GetRenderContextDeps();
+    virtual bool GetCachePackets(const CGeometryBlock& geometry);
 };
 
 #endif // ps2gl_indexed_renderer_h

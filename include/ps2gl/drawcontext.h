@@ -17,8 +17,8 @@
 #include "ps2gl/immgmanager.h"
 
 namespace GS {
-   class CDrawEnv;
-   class CMemArea;
+class CDrawEnv;
+class CMemArea;
 }
 
 /********************************************
@@ -26,30 +26,34 @@ namespace GS {
  */
 
 class CDrawContext {
-   protected:
-      CGLContext	&GLContext;
+protected:
+    CGLContext& GLContext;
 
-   public:
-      inline CDrawContext( CGLContext &context ) : GLContext(context) {}
+public:
+    inline CDrawContext(CGLContext& context)
+        : GLContext(context)
+    {
+    }
 
-      virtual void SetDoSmoothShading( bool yesNo ) = 0;
-      virtual void SetDoClipping( bool clip ) = 0;
-      virtual void SetDoCullFace( bool cull ) = 0;
-      virtual void SetCullFaceDir( int direction ) = 0;
-      virtual void SetRescaleNormals( bool rescale ) = 0;
-      virtual void SetBlendEnabled( bool enabled ) = 0;
-      virtual void SetDepthWriteEnabled( bool enabled ) = 0;
-      virtual void SetFrameBufferDrawMask(unsigned int mask)=0;
-      virtual void SetAlphaTestEnabled( bool enabled ) = 0;
-      virtual void SetInterlacingOffset( float yPixels ) = 0;
-      virtual void SetPolygonMode( GLenum mode ) = 0;
+    virtual void SetDoSmoothShading(bool yesNo)            = 0;
+    virtual void SetDoClipping(bool clip)                  = 0;
+    virtual void SetDoCullFace(bool cull)                  = 0;
+    virtual void SetCullFaceDir(int direction)             = 0;
+    virtual void SetRescaleNormals(bool rescale)           = 0;
+    virtual void SetBlendEnabled(bool enabled)             = 0;
+    virtual void SetDepthWriteEnabled(bool enabled)        = 0;
+    virtual void SetFrameBufferDrawMask(unsigned int mask) = 0;
+    virtual void SetAlphaTestEnabled(bool enabled)         = 0;
+    virtual void SetInterlacingOffset(float yPixels)       = 0;
+    virtual void SetPolygonMode(GLenum mode)               = 0;
 
-      virtual void SetBlendMode( GLenum source, GLenum dest ) = 0;
-      virtual void SetAlphaFunc( GLenum func, GLclampf ref ) = 0;
+    virtual void SetBlendMode(GLenum source, GLenum dest) = 0;
+    virtual void SetAlphaFunc(GLenum func, GLclampf ref)  = 0;
 
-      virtual void SetDrawBuffers( bool interlaced,
-				   GS::CMemArea *frame0Mem, GS::CMemArea *frame1Mem,
-				   GS::CMemArea *depthMem ) = 0;
+    virtual void SetDrawBuffers(bool interlaced,
+        GS::CMemArea* frame0Mem, GS::CMemArea* frame1Mem,
+        GS::CMemArea* depthMem)
+        = 0;
 };
 
 /********************************************
@@ -59,93 +63,95 @@ class CDrawContext {
 class CClearEnv;
 
 class CImmDrawContext : public CDrawContext {
-   public:
-      GS::CDrawEnv	*DrawEnv;
+public:
+    GS::CDrawEnv* DrawEnv;
 
-      GS::CMemArea	*Frame0Mem, *Frame1Mem, *ZBufMem;
-      GS::CMemArea	*CurFrameMem, *LastFrameMem;
+    GS::CMemArea *Frame0Mem, *Frame1Mem, *ZBufMem;
+    GS::CMemArea *CurFrameMem, *LastFrameMem;
 
-      CClearEnv		*ClearEnv;
+    CClearEnv* ClearEnv;
 
-      bool		FrameIsDblBuffered;
+    bool FrameIsDblBuffered;
 
-      // gl state
-      bool		DoSmoothShading;
-      bool		DoClipping;
-      bool		DoCullFace;
-      int		CullFaceDir; // 1 or -1
-      bool		RescaleNormals;
-      bool		BlendIsEnabled;
-      bool		AlphaTestIsEnabled;
-      bool		DrawInterlaced;
-      GLenum		PolyMode;
-      int		DepthBits;
+    // gl state
+    bool DoSmoothShading;
+    bool DoClipping;
+    bool DoCullFace;
+    int CullFaceDir; // 1 or -1
+    bool RescaleNormals;
+    bool BlendIsEnabled;
+    bool AlphaTestIsEnabled;
+    bool DrawInterlaced;
+    GLenum PolyMode;
+    int DepthBits;
 
-      // current vertex xform
-      cpu_mat_44	VertexXform;
-      cpu_mat_44	GSScale;
-      bool		IsVertexXformValid;
+    // current vertex xform
+    cpu_mat_44 VertexXform;
+    cpu_mat_44 GSScale;
+    bool IsVertexXformValid;
 
-      int		Width, Height;
+    int Width, Height;
 
-   public:
-      CImmDrawContext( CGLContext &context );
-      virtual ~CImmDrawContext();
+public:
+    CImmDrawContext(CGLContext& context);
+    virtual ~CImmDrawContext();
 
-      GS::CDrawEnv& GetDrawEnv() { return *DrawEnv; }
-      void SwapBuffers( bool fieldIsEven );
+    GS::CDrawEnv& GetDrawEnv() { return *DrawEnv; }
+    void SwapBuffers(bool fieldIsEven);
 
-      inline CClearEnv& GetClearEnv() { return *ClearEnv; }
+    inline CClearEnv& GetClearEnv() { return *ClearEnv; }
 
-      const cpu_mat_44& GetVertexXform();
-      inline void SetVertexXformValid( bool valid ) {
-	 IsVertexXformValid = valid;
-	 if ( ! valid ) GLContext.XformChanged();
-      }
+    const cpu_mat_44& GetVertexXform();
+    inline void SetVertexXformValid(bool valid)
+    {
+        IsVertexXformValid = valid;
+        if (!valid)
+            GLContext.XformChanged();
+    }
 
-      int GetFBWidth() const { return Width; }
-      int GetFBHeight() const { return Height; }
+    int GetFBWidth() const { return Width; }
+    int GetFBHeight() const { return Height; }
 
-      int GetDepthBits() const { return DepthBits; }
-      void SetDepthBits( int depth ) { DepthBits = depth; }
+    int GetDepthBits() const { return DepthBits; }
+    void SetDepthBits(int depth) { DepthBits = depth; }
 
-      // virtuals
+    // virtuals
 
-      void SetBlendMode( GLenum source, GLenum dest );
-      void SetAlphaFunc( GLenum func, GLclampf ref );
+    void SetBlendMode(GLenum source, GLenum dest);
+    void SetAlphaFunc(GLenum func, GLclampf ref);
 
-      inline bool GetDoSmoothShading() const { return DoSmoothShading; }
-      void SetDoSmoothShading( bool yesNo );
+    inline bool GetDoSmoothShading() const { return DoSmoothShading; }
+    void SetDoSmoothShading(bool yesNo);
 
-      inline bool GetDoClipping() const { return DoClipping; }
-      void SetDoClipping( bool clip );
+    inline bool GetDoClipping() const { return DoClipping; }
+    void SetDoClipping(bool clip);
 
-      inline bool GetDoCullFace() const { return DoCullFace; }
-      void SetDoCullFace( bool cull );
+    inline bool GetDoCullFace() const { return DoCullFace; }
+    void SetDoCullFace(bool cull);
 
-      inline int GetCullFaceDir() const { return CullFaceDir; }
-      void SetCullFaceDir( int direction );
+    inline int GetCullFaceDir() const { return CullFaceDir; }
+    void SetCullFaceDir(int direction);
 
-      inline bool GetBlendEnabled() const { return BlendIsEnabled; }
-      void SetBlendEnabled( bool enabled );
+    inline bool GetBlendEnabled() const { return BlendIsEnabled; }
+    void SetBlendEnabled(bool enabled);
 
-      inline bool GetAlphaTestEnabled() const { return AlphaTestIsEnabled; }
-      void SetAlphaTestEnabled( bool enabled );
+    inline bool GetAlphaTestEnabled() const { return AlphaTestIsEnabled; }
+    void SetAlphaTestEnabled(bool enabled);
 
-      void SetInterlacingOffset( float yPixels );
+    void SetInterlacingOffset(float yPixels);
 
-      void SetDepthWriteEnabled( bool enabled );
-      void SetFrameBufferDrawMask(unsigned int mask);
+    void SetDepthWriteEnabled(bool enabled);
+    void SetFrameBufferDrawMask(unsigned int mask);
 
-      inline GLenum GetPolygonMode() const { return PolyMode; }
-      void SetPolygonMode( GLenum mode );
+    inline GLenum GetPolygonMode() const { return PolyMode; }
+    void SetPolygonMode(GLenum mode);
 
-      inline bool GetRescaleNormals() const { return RescaleNormals; }
-      void SetRescaleNormals( bool rescale );
+    inline bool GetRescaleNormals() const { return RescaleNormals; }
+    void SetRescaleNormals(bool rescale);
 
-      void SetDrawBuffers( bool interlaced,
-			   GS::CMemArea *frame0Mem, GS::CMemArea *frame1Mem,
-			   GS::CMemArea *depthMem );
+    void SetDrawBuffers(bool interlaced,
+        GS::CMemArea* frame0Mem, GS::CMemArea* frame1Mem,
+        GS::CMemArea* depthMem);
 };
 
 /********************************************
@@ -153,28 +159,30 @@ class CImmDrawContext : public CDrawContext {
  */
 
 class CDListDrawContext : public CDrawContext {
-   public:
-      CDListDrawContext( CGLContext &context ) : CDrawContext(context) {}
+public:
+    CDListDrawContext(CGLContext& context)
+        : CDrawContext(context)
+    {
+    }
 
-      void SetBlendMode( GLenum source, GLenum dest );
-      void SetAlphaFunc( GLenum func, GLclampf ref );
+    void SetBlendMode(GLenum source, GLenum dest);
+    void SetAlphaFunc(GLenum func, GLclampf ref);
 
-      void SetDoSmoothShading( bool yesNo );
-      void SetDoClipping( bool clip );
-      void SetDoCullFace( bool cull );
-      void SetCullFaceDir( int direction );
-      void SetRescaleNormals( bool rescale );
-      void SetBlendEnabled( bool enabled );
-      void SetAlphaTestEnabled( bool enabled );
-      void SetInterlacingOffset( float yPixels );
-      void SetDepthWriteEnabled( bool enabled );
-      void SetFrameBufferDrawMask(unsigned int mask);
-      void SetPolygonMode( GLenum mode ) { assert(false); }
+    void SetDoSmoothShading(bool yesNo);
+    void SetDoClipping(bool clip);
+    void SetDoCullFace(bool cull);
+    void SetCullFaceDir(int direction);
+    void SetRescaleNormals(bool rescale);
+    void SetBlendEnabled(bool enabled);
+    void SetAlphaTestEnabled(bool enabled);
+    void SetInterlacingOffset(float yPixels);
+    void SetDepthWriteEnabled(bool enabled);
+    void SetFrameBufferDrawMask(unsigned int mask);
+    void SetPolygonMode(GLenum mode) { assert(false); }
 
-
-      void SetDrawBuffers( bool interlaced,
-			   GS::CMemArea *frame0Mem, GS::CMemArea *frame1Mem,
-			   GS::CMemArea *depthMem );
+    void SetDrawBuffers(bool interlaced,
+        GS::CMemArea* frame0Mem, GS::CMemArea* frame1Mem,
+        GS::CMemArea* depthMem);
 };
 
 #endif // ps2gl_drawcontext_h

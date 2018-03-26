@@ -8,7 +8,8 @@
 
 #include <PREFIX_PS2.h>
 
-#pragma	divbyzerocheck		on	/*	break if divided by zero	*/
+/* break if divided by zero */
+#pragma divbyzerocheck on
 
-#define	DEBUG					/*	just for debugging	*/
-
+/* just for debugging */
+#define DEBUG

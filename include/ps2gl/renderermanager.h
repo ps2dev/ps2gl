@@ -15,8 +15,8 @@
 #include "GL/gl.h"
 #include "GL/ps2gl.h"
 
-#include "ps2gl/renderer.h"
 #include "ps2gl/base_renderer.h"
+#include "ps2gl/renderer.h"
 
 /********************************************
  * CRendererManager
@@ -28,58 +28,60 @@ class CVifSCDmaPacket;
 class CGeometryBlock;
 class CRenderer;
 
-typedef enum { kDirectional, kPoint, kSpot } tLightType;
+typedef enum { kDirectional,
+    kPoint,
+    kSpot } tLightType;
 
 typedef struct {
-      tU64	capabilities;
-      tU64	requirements;
-      CRenderer	*renderer;
-} tRenderer __attribute__ (( aligned(8) ));
+    tU64 capabilities;
+    tU64 requirements;
+    CRenderer* renderer;
+} tRenderer __attribute__((aligned(8)));
 
 class CRendererManager {
-      CGLContext	&GLContext;
+    CGLContext& GLContext;
 
-      CRendererProps	RendererRequirements;
-      bool		RendererReqsHaveChanged;
-      tU64		CurUserPrimReqs, CurUserPrimReqMask;
+    CRendererProps RendererRequirements;
+    bool RendererReqsHaveChanged;
+    tU64 CurUserPrimReqs, CurUserPrimReqMask;
 
-      static const int	kMaxDefaultRenderers = 64;
-      static const int	kMaxUserRenderers = PGL_MAX_CUSTOM_RENDERERS;
-      tRenderer		DefaultRenderers[kMaxDefaultRenderers];
-      tRenderer		UserRenderers[kMaxUserRenderers];
-      int	       	NumDefaultRenderers, NumUserRenderers;
-      const tRenderer	*CurrentRenderer, *NewRenderer;
+    static const int kMaxDefaultRenderers = 64;
+    static const int kMaxUserRenderers    = PGL_MAX_CUSTOM_RENDERERS;
+    tRenderer DefaultRenderers[kMaxDefaultRenderers];
+    tRenderer UserRenderers[kMaxUserRenderers];
+    int NumDefaultRenderers, NumUserRenderers;
+    const tRenderer *CurrentRenderer, *NewRenderer;
 
-      void RegisterDefaultRenderer( CRenderer *renderer );
+    void RegisterDefaultRenderer(CRenderer* renderer);
 
-   public:
-      CRendererManager( CGLContext &context);
+public:
+    CRendererManager(CGLContext& context);
 
-      void RegisterUserRenderer( CRenderer *renderer );
+    void RegisterUserRenderer(CRenderer* renderer);
 
-      bool UpdateNewRenderer();
-      void MakeNewRendererCurrent();
-      void LoadRenderer( CVifSCDmaPacket &packet );
+    bool UpdateNewRenderer();
+    void MakeNewRendererCurrent();
+    void LoadRenderer(CVifSCDmaPacket& packet);
 
-      CRenderer& GetCurRenderer() { return *(CurrentRenderer->renderer); }
-      CRendererProps GetRendererReqs() const { return RendererRequirements; }
+    CRenderer& GetCurRenderer() { return *(CurrentRenderer->renderer); }
+    CRendererProps GetRendererReqs() const { return RendererRequirements; }
 
-      bool IsCurRendererCustom() const { return ((tU32)CurrentRenderer >= (tU32)UserRenderers); }
+    bool IsCurRendererCustom() const { return ((tU32)CurrentRenderer >= (tU32)UserRenderers); }
 
-      // state updates
+    // state updates
 
-      void EnableCustom( tU64 flag );
-      void DisableCustom( tU64 flag );
+    void EnableCustom(tU64 flag);
+    void DisableCustom(tU64 flag);
 
-      void NumLightsChanged( tLightType type, int num );
-      void PrimChanged( unsigned int prim );
-      void TexEnabledChanged( bool enabled );
-      void LightingEnabledChanged( bool enabled );
-      void SpecularEnabledChanged( bool enabled );
-      void PerVtxMaterialChanged( RendererProps::tPerVtxMaterial matType );
-      void ClippingEnabledChanged( bool enabled );
-      void CullFaceEnabledChanged( bool enabled );
-      void ArrayAccessChanged( RendererProps::tArrayAccess accessType );
+    void NumLightsChanged(tLightType type, int num);
+    void PrimChanged(unsigned int prim);
+    void TexEnabledChanged(bool enabled);
+    void LightingEnabledChanged(bool enabled);
+    void SpecularEnabledChanged(bool enabled);
+    void PerVtxMaterialChanged(RendererProps::tPerVtxMaterial matType);
+    void ClippingEnabledChanged(bool enabled);
+    void CullFaceEnabledChanged(bool enabled);
+    void ArrayAccessChanged(RendererProps::tArrayAccess accessType);
 };
 
 #endif // ps2gl_renderermanager_h

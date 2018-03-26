@@ -8,99 +8,94 @@
 #include "ps2s/packet.h"
 
 #include "ps2gl/clear.h"
+#include "ps2gl/drawcontext.h"
 #include "ps2gl/glcontext.h"
 #include "ps2gl/immgmanager.h"
-#include "ps2gl/drawcontext.h"
 
 CClearEnv::CClearEnv()
 {
-   pDrawEnv = new GS::CDrawEnv( GS::kContext2 );
-   pDrawEnv->SetDepthTestPassMode( GS::ZTest::kAlways );
+    pDrawEnv = new GS::CDrawEnv(GS::kContext2);
+    pDrawEnv->SetDepthTestPassMode(GS::ZTest::kAlways);
 
-   pSprite = new CSprite( GS::kContext2, 0, 0, 0, 0 );
-   pSprite->SetUseTexture( false );
-   unsigned int clearColor[4] = { 0, 0, 0, 0 };
-   pSprite->SetColor( clearColor[0], clearColor[1], clearColor[2], clearColor[3] );
-   pSprite->SetDepth( 0 );
+    pSprite = new CSprite(GS::kContext2, 0, 0, 0, 0);
+    pSprite->SetUseTexture(false);
+    unsigned int clearColor[4] = { 0, 0, 0, 0 };
+    pSprite->SetColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+    pSprite->SetDepth(0);
 }
 
 CClearEnv::~CClearEnv()
 {
-   delete pDrawEnv;
-   delete pSprite;
+    delete pDrawEnv;
+    delete pSprite;
 }
 
-void
-CClearEnv::SetDimensions( int width, int height )
+void CClearEnv::SetDimensions(int width, int height)
 {
-   pDrawEnv->SetFrameBufferDim( width, height );
-   pSprite->SetVertices( 0, 0, width, height );
+    pDrawEnv->SetFrameBufferDim(width, height);
+    pSprite->SetVertices(0, 0, width, height);
 }
 
-void
-CClearEnv::SetFrameBufPsm( GS::tPSM psm )
+void CClearEnv::SetFrameBufPsm(GS::tPSM psm)
 {
-   pDrawEnv->SetFrameBufferPSM( psm );
+    pDrawEnv->SetFrameBufferPSM(psm);
 }
 
-void
-CClearEnv::SetDepthBufPsm( GS::tPSM psm )
+void CClearEnv::SetDepthBufPsm(GS::tPSM psm)
 {
-   pDrawEnv->SetDepthBufferPSM( psm );
+    pDrawEnv->SetDepthBufferPSM(psm);
 }
 
-void
-CClearEnv::ClearBuffers( unsigned int bitMask )
+void CClearEnv::ClearBuffers(unsigned int bitMask)
 {
-  if ( bitMask & GL_DEPTH_BUFFER_BIT )
-    pDrawEnv->EnableDepthTest();
-  else
-    pDrawEnv->DisableDepthTest();
+    if (bitMask & GL_DEPTH_BUFFER_BIT)
+        pDrawEnv->EnableDepthTest();
+    else
+        pDrawEnv->DisableDepthTest();
 
-  if ( bitMask & GL_COLOR_BUFFER_BIT )
-    pDrawEnv->SetFrameBufferDrawMask( 0 );
-  else
-    pDrawEnv->SetFrameBufferDrawMask( 0xffffffff );
+    if (bitMask & GL_COLOR_BUFFER_BIT)
+        pDrawEnv->SetFrameBufferDrawMask(0);
+    else
+        pDrawEnv->SetFrameBufferDrawMask(0xffffffff);
 
-  CVifSCDmaPacket &packet = pGLContext->GetVif1Packet();
-  pGLContext->AddingDrawEnvToPacket( (tU128*)pGLContext->GetVif1Packet().GetNextPtr() + 1 );
-  pDrawEnv->SendSettings( packet );
-  pSprite->Draw( packet );
+    CVifSCDmaPacket& packet = pGLContext->GetVif1Packet();
+    pGLContext->AddingDrawEnvToPacket((tU128*)pGLContext->GetVif1Packet().GetNextPtr() + 1);
+    pDrawEnv->SendSettings(packet);
+    pSprite->Draw(packet);
 }
 
 /********************************************
  * C gl api
  */
 
-void glClearColor( GLclampf red,
-		   GLclampf green,
-		   GLclampf blue,
-		   GLclampf alpha )
+void glClearColor(GLclampf red,
+    GLclampf green,
+    GLclampf blue,
+    GLclampf alpha)
 {
     //printf("%s(%f,%f,%f,%f)\n", __FUNCTION__, red, green, blue, alpha);
 
-   CClearEnv& clearEnv = pGLContext->GetImmDrawContext().GetClearEnv();
+    CClearEnv& clearEnv = pGLContext->GetImmDrawContext().GetClearEnv();
 
-   using namespace Math;
-   clearEnv.SetClearColor( Clamp(red, 0.0f, 1.0f),
-			   Clamp(green, 0.0f, 1.0f),
-			   Clamp(blue, 0.0f, 1.0f),
-			   Clamp(alpha, 0.0f, 1.0f) );
+    using namespace Math;
+    clearEnv.SetClearColor(Clamp(red, 0.0f, 1.0f),
+        Clamp(green, 0.0f, 1.0f),
+        Clamp(blue, 0.0f, 1.0f),
+        Clamp(alpha, 0.0f, 1.0f));
 }
 
-void glClearDepth( GLclampd depth )
+void glClearDepth(GLclampd depth)
 {
     //printf("%s(%f)\n", __FUNCTION__, depth);
 
-   CClearEnv& clearEnv = pGLContext->GetImmDrawContext().GetClearEnv();
+    CClearEnv& clearEnv = pGLContext->GetImmDrawContext().GetClearEnv();
 
-   clearEnv.SetClearDepth( (float)depth );
+    clearEnv.SetClearDepth((float)depth);
 }
 
-void glClear( GLbitfield mask )
+void glClear(GLbitfield mask)
 {
     //printf("%s(0x%x)\n", __FUNCTION__, mask);
 
-   pGLContext->GetImmDrawContext().GetClearEnv().ClearBuffers( mask );
+    pGLContext->GetImmDrawContext().GetClearEnv().ClearBuffers(mask);
 }
-

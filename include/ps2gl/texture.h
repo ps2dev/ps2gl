@@ -7,8 +7,8 @@
 #ifndef ps2gl_texture_h
 #define ps2gl_texture_h
 
-#include "ps2s/texture.h"
 #include "ps2s/gsmem.h"
+#include "ps2s/texture.h"
 
 #include "GL/gl.h"
 
@@ -22,50 +22,52 @@ class CMMClut;
 class CVifSCDmaPacket;
 
 class CTexManager {
-      CGLContext	&GLContext;
+    CGLContext& GLContext;
 
-      bool		IsTexEnabled;
-      bool		InsideDListDef;
+    bool IsTexEnabled;
+    bool InsideDListDef;
 
-      static const int	NumTexNames = 512;      // :TODO: Make configurable
-      CMMTexture	*TexNames[NumTexNames];
-      unsigned int	Cursor;
+    static const int NumTexNames = 512; // :TODO: Make configurable
+    CMMTexture* TexNames[NumTexNames];
+    unsigned int Cursor;
 
-      CMMTexture	*DefaultTex, *CurTexture, *LastTexSent;
-      CMMClut		*CurClut;
-      GS::tTexMode	TexMode;
+    CMMTexture *DefaultTex, *CurTexture, *LastTexSent;
+    CMMClut* CurClut;
+    GS::tTexMode TexMode;
 
-      void IncCursor() { Cursor = (Cursor + 1) & (NumTexNames - 1); }
-   public:
-      CTexManager( CGLContext &context );
-      ~CTexManager();
+    void IncCursor() { Cursor = (Cursor + 1) & (NumTexNames - 1); }
 
-      void SetTexEnabled( bool yesNo );
-      bool GetTexEnabled() const { return IsTexEnabled; }
+public:
+    CTexManager(CGLContext& context);
+    ~CTexManager();
 
-      void GenTextures( GLsizei numNewTexNames, GLuint *newTexNames );
-      void BindTexture( GLuint texNameToBind );
-      void DeleteTextures( GLsizei numToDelete, const GLuint *texNames );
+    void SetTexEnabled(bool yesNo);
+    bool GetTexEnabled() const { return IsTexEnabled; }
 
-      CMMTexture& GetCurTexture() const { return *CurTexture; }
+    void GenTextures(GLsizei numNewTexNames, GLuint* newTexNames);
+    void BindTexture(GLuint texNameToBind);
+    void DeleteTextures(GLsizei numToDelete, const GLuint* texNames);
 
-      CMMTexture& GetNamedTexture( GLuint tex ) const {
-	 mErrorIf( TexNames[tex] == NULL, "Trying to access a null texture" );
-	 return *TexNames[tex];
-      }
+    CMMTexture& GetCurTexture() const { return *CurTexture; }
 
-      void UseCurTexture( CVifSCDmaPacket &renderPacket );
+    CMMTexture& GetNamedTexture(GLuint tex) const
+    {
+        mErrorIf(TexNames[tex] == NULL, "Trying to access a null texture");
+        return *TexNames[tex];
+    }
 
-      void SetTexMode( GS::tTexMode mode );
+    void UseCurTexture(CVifSCDmaPacket& renderPacket);
 
-      void SetCurTexParam( GLenum pname, GLint param );
-      void SetCurTexImage( tU128* imagePtr, tU32 w, tU32 h,
-			   GS::tPSM psm );
-      void SetGsTexture( GS::CMemArea &area );
-      void SetCurClut( const void *clut, int numEntries );
+    void SetTexMode(GS::tTexMode mode);
 
-      void BeginDListDef() { InsideDListDef = true; }
-      void EndDListDef() { InsideDListDef = false; }
+    void SetCurTexParam(GLenum pname, GLint param);
+    void SetCurTexImage(tU128* imagePtr, tU32 w, tU32 h,
+        GS::tPSM psm);
+    void SetGsTexture(GS::CMemArea& area);
+    void SetCurClut(const void* clut, int numEntries);
+
+    void BeginDListDef() { InsideDListDef = true; }
+    void EndDListDef() { InsideDListDef = false; }
 };
 
 /********************************************
@@ -76,16 +78,18 @@ class CTexManager {
  * A memory-managed color lookup table.
  */
 class CMMClut : public GS::CClut {
-      GS::CMemArea	GsMem;
-   public:
-      CMMClut( const void *table, int numEntries = 256 )
-	 : GS::CClut(table, numEntries),
-	   GsMem(16, 16, GS::kPsm32, GS::kAlignPage)
-      { }
+    GS::CMemArea GsMem;
 
-      ~CMMClut() { }
+public:
+    CMMClut(const void* table, int numEntries = 256)
+        : GS::CClut(table, numEntries)
+        , GsMem(16, 16, GS::kPsm32, GS::kAlignPage)
+    {
+    }
 
-      void Load( CVifSCDmaPacket &packet );
+    ~CMMClut() {}
+
+    void Load(CVifSCDmaPacket& packet);
 };
 
 /********************************************
@@ -93,44 +97,44 @@ class CMMClut : public GS::CClut {
  */
 
 namespace GS {
-   class CMemArea;
+class CMemArea;
 }
 
-class CMMTexture : public GS::CTexture
-{
-      GS::CMemArea	*pImageMem;
-      bool		XferImage;
-      bool		IsResident;
+class CMMTexture : public GS::CTexture {
+    GS::CMemArea* pImageMem;
+    bool XferImage;
+    bool IsResident;
 
-   public:
-      CMMTexture( GS::tContext context );
-      ~CMMTexture();
+public:
+    CMMTexture(GS::tContext context);
+    ~CMMTexture();
 
-      void SetImage( const GS::CMemArea &area );
-      void SetImage( tU128* imagePtr, tU32 w, tU32 h, GS::tPSM psm );
+    void SetImage(const GS::CMemArea& area);
+    void SetImage(tU128* imagePtr, tU32 w, tU32 h, GS::tPSM psm);
 
-      void SetClut( const CMMClut &clut ) {
-	 CTexEnv::SetClutGsAddr( clut.GetGsAddr() );
-      }
+    void SetClut(const CMMClut& clut)
+    {
+        CTexEnv::SetClutGsAddr(clut.GetGsAddr());
+    }
 
-      void ChangePsm( GS::tPSM psm );
+    void ChangePsm(GS::tPSM psm);
 
-      // the following Load methods will check to see if a texture is resident and
-      // transfer it if necessary.  The Use methods invoke the corresponding Load but
-      // also transfer the gs register settings that belong to the texture
+    // the following Load methods will check to see if a texture is resident and
+    // transfer it if necessary.  The Use methods invoke the corresponding Load but
+    // also transfer the gs register settings that belong to the texture
 
-      // warning! these two will flush the data cache!
-      void Load( bool waitForEnd = true );
-      void Use( bool waitForEnd = false );
+    // warning! these two will flush the data cache!
+    void Load(bool waitForEnd = true);
+    void Use(bool waitForEnd = false);
 
-      void Load( CSCDmaPacket& packet );
-      void Load( CVifSCDmaPacket& packet );
+    void Load(CSCDmaPacket& packet);
+    void Load(CVifSCDmaPacket& packet);
 
-      void Use( CSCDmaPacket& packet );
-      void Use( CVifSCDmaPacket& packet );
+    void Use(CSCDmaPacket& packet);
+    void Use(CVifSCDmaPacket& packet);
 
-      void BindToSlot( GS::CMemSlot &slot );
-      void Free( void );
+    void BindToSlot(GS::CMemSlot& slot);
+    void Free(void);
 };
 
 #endif // ps2gl_texture_h

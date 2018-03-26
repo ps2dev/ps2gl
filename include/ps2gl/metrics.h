@@ -4,7 +4,7 @@
 //  Original author: Stefan Boberg (boberg@team17.com)
 //
 
-#define PS2GL_METRICS_ENABLE            1
+#define PS2GL_METRICS_ENABLE 1
 
 enum MetricsEnum {
     /// Number of textures uploaded to the GS
@@ -26,7 +26,7 @@ enum MetricsEnum {
     kMetricsCount,
 };
 
-typedef unsigned long Metric_t;     // 64-bit integer
+typedef unsigned long Metric_t; // 64-bit integer
 
 extern Metric_t g_Metrics[kMetricsCount];
 
@@ -36,19 +36,22 @@ extern void pglResetMetrics();
 
 /** Get value of specified metric
   */
-inline Metric_t pglGetMetric(MetricsEnum eMetric) {
+inline Metric_t pglGetMetric(MetricsEnum eMetric)
+{
     return g_Metrics[eMetric];
 }
 
 /** Reset specified metric
   */
-inline void pglResetMetric(MetricsEnum eMetric) {
+inline void pglResetMetric(MetricsEnum eMetric)
+{
     g_Metrics[eMetric] = 0;
 }
 
 /** Increase metric value by specified amount
   */
-inline void pglAddToMetric(MetricsEnum eMetric, Metric_t Value = 1) {
+inline void pglAddToMetric(MetricsEnum eMetric, Metric_t Value = 1)
+{
 #if PS2GL_METRICS_ENABLE
     g_Metrics[eMetric] += Value;
 #endif

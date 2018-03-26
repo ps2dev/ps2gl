@@ -17,48 +17,48 @@ class CDList;
 
 class CDListGeomManager : public CGeomManager {
 
-      CDmaPacket	*CurVertexBuf, *CurNormalBuf, *CurTexCoordBuf, *CurColorBuf;
+    CDmaPacket *CurVertexBuf, *CurNormalBuf, *CurTexCoordBuf, *CurColorBuf;
 
-      CDList		*CurDList;
-      CGeometryBlock	Geometry;
+    CDList* CurDList;
+    CGeometryBlock Geometry;
 
-      bool		RendererMayHaveChanged;
+    bool RendererMayHaveChanged;
 
-      void DrawBlock( CGeometryBlock &block );
-      void CommitNewGeom();
+    void DrawBlock(CGeometryBlock& block);
+    void CommitNewGeom();
 
-      void DrawingIndexedArray();
-      void DrawingLinearArray();
+    void DrawingIndexedArray();
+    void DrawingLinearArray();
 
-   public:
-      CDListGeomManager( CGLContext &context );
-      virtual ~CDListGeomManager() {}
+public:
+    CDListGeomManager(CGLContext& context);
+    virtual ~CDListGeomManager() {}
 
-      void PrimChanged( unsigned char prim );
+    void PrimChanged(unsigned char prim);
 
-      // user state
+    // user state
 
-      void EnableCustom( tU64 flag );
-      void DisableCustom( tU64 flag );
+    void EnableCustom(tU64 flag);
+    void DisableCustom(tU64 flag);
 
-      void SetUserRenderContextChanged() { mError("not implemented yet"); }
+    void SetUserRenderContextChanged() { mError("not implemented yet"); }
 
-      // geometry
+    // geometry
 
-      void BeginDListDef();
-      void EndDListDef();
+    void BeginDListDef();
+    void EndDListDef();
 
-      void BeginGeom( GLenum mode );
-      void Vertex( cpu_vec_xyzw newVert );
-      void Normal( cpu_vec_xyz normal );
-      void TexCoord( float u, float v );
-      void Color( cpu_vec_xyzw color );
-      void EndGeom();
-      void DrawArrays( GLenum mode, int first, int count );
-      void DrawIndexedArrays( GLenum primType,
-			      int numIndices, const unsigned char* indices,
-			      int numVertices );
-      void Flush();
+    void BeginGeom(GLenum mode);
+    void Vertex(cpu_vec_xyzw newVert);
+    void Normal(cpu_vec_xyz normal);
+    void TexCoord(float u, float v);
+    void Color(cpu_vec_xyzw color);
+    void EndGeom();
+    void DrawArrays(GLenum mode, int first, int count);
+    void DrawIndexedArrays(GLenum primType,
+        int numIndices, const unsigned char* indices,
+        int numVertices);
+    void Flush();
 };
 
 #endif // ps2gl_dlgmanager_h

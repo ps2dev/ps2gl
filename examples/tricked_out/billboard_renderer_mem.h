@@ -6,7 +6,7 @@
 
 // **** absolute offsets ****
 
-#define kContextStart	0
+#define kContextStart 0
 
 // we'll use the default rendering context, as our new bb renderer
 // will be basically the same as a default renderer, with a little
@@ -15,27 +15,26 @@
 
 // this is the end of the rendering context, where we will put
 // double-buffered (quad-buffered) data
-#define kDoubleBufBase	(kContextStart + kContextLength)
+#define kDoubleBufBase (kContextStart + kContextLength)
 
 // the offset into the double-buffered area (starting at
 // kDoubleBufBase) that points to the second buffer
-#define kDoubleBufOffset	((1024 - kDoubleBufBase)/2)
+#define kDoubleBufOffset ((1024 - kDoubleBufBase) / 2)
 
 // the size of each buffer
-#define kDoubleBufSize		kDoubleBufOffset
+#define kDoubleBufSize kDoubleBufOffset
 
 // **** buffer-relative offsets ****
 
-#define kNumVertices	0
-#define kNumBillboards	kNumVertices
+#define kNumVertices 0
+#define kNumBillboards kNumVertices
 // we don't use the strip adcs, but linear_renderer always xfers them
-#define kStripADCs	(kNumVertices + 1)
-#define kInputStart	(kStripADCs + 4)
-
+#define kStripADCs (kNumVertices + 1)
+#define kInputStart (kStripADCs + 4)
 
 // we will be outputting about 8 times as much data as we input
 // (one center position -> 4 vertices, 4 tex coords)
 
-#define kInputBufSize	(kDoubleBufSize/9)
-#define kOutputStart	(0 + kInputBufSize)
-#define kOutputBufSize	(kDoubleBufSize - kOutputStart)
+#define kInputBufSize (kDoubleBufSize / 9)
+#define kOutputStart (0 + kInputBufSize)
+#define kOutputBufSize (kDoubleBufSize - kOutputStart)

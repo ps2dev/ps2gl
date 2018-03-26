@@ -21,36 +21,39 @@ class CVifSCDmaPacket;
 
 class CClearEnv {
 
-      GS::CDrawEnv	*pDrawEnv;
-      CSprite		*pSprite;
+    GS::CDrawEnv* pDrawEnv;
+    CSprite* pSprite;
 
-   public:
-      CClearEnv();
-      ~CClearEnv();
+public:
+    CClearEnv();
+    ~CClearEnv();
 
-      void SetDimensions( int width, int height );
-      void SetFrameBufPsm( GS::tPSM psm );
-      void SetDepthBufPsm( GS::tPSM psm );
-      void SetFrameBufAddr( unsigned int gsWordAddr ) {
-	 pDrawEnv->SetFrameBufferAddr( gsWordAddr );
-      }
-      void SetDepthBufAddr( unsigned int gsWordAddr ) {
-	 pDrawEnv->SetDepthBufferAddr( gsWordAddr );
-      }
+    void SetDimensions(int width, int height);
+    void SetFrameBufPsm(GS::tPSM psm);
+    void SetDepthBufPsm(GS::tPSM psm);
+    void SetFrameBufAddr(unsigned int gsWordAddr)
+    {
+        pDrawEnv->SetFrameBufferAddr(gsWordAddr);
+    }
+    void SetDepthBufAddr(unsigned int gsWordAddr)
+    {
+        pDrawEnv->SetDepthBufferAddr(gsWordAddr);
+    }
 
-      void SetClearColor( float r, float g, float b, float a ) {
-	 pSprite->SetColor(  (unsigned int)(255.0f * r),
-			     (unsigned int)(255.0f * g),
-			     (unsigned int)(255.0f * b),
-			     (unsigned int)(255.0f * a) );
-      }
+    void SetClearColor(float r, float g, float b, float a)
+    {
+        pSprite->SetColor((unsigned int)(255.0f * r),
+            (unsigned int)(255.0f * g),
+            (unsigned int)(255.0f * b),
+            (unsigned int)(255.0f * a));
+    }
 
-      void SetClearDepth( float depth ) {
-	 pSprite->SetDepth( Core::FToI4(depth) );
-      }
+    void SetClearDepth(float depth)
+    {
+        pSprite->SetDepth(Core::FToI4(depth));
+    }
 
-      void ClearBuffers( unsigned int bitMask );
+    void ClearBuffers(unsigned int bitMask);
 };
-
 
 #endif // ps2gl_clear_h

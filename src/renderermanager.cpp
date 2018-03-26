@@ -6,15 +6,15 @@
 
 #include "ps2s/packet.h"
 
-#include "ps2gl/renderermanager.h"
 #include "ps2gl/glcontext.h"
 #include "ps2gl/metrics.h"
+#include "ps2gl/renderermanager.h"
 
-#include "ps2gl/linear_renderer.h"
 #include "ps2gl/indexed_renderer.h"
+#include "ps2gl/linear_renderer.h"
 
-#include "vu1renderers.h"
 #include "vu1_mem_linear.h"
+#include "vu1renderers.h"
 
 using namespace RendererProps;
 
@@ -22,240 +22,233 @@ using namespace RendererProps;
  * methods
  */
 
-CRendererManager::CRendererManager( CGLContext &context)
-   : GLContext(context),
-     RendererReqsHaveChanged(false),
-     CurUserPrimReqs(0), CurUserPrimReqMask(~0),
-     NumDefaultRenderers(0), NumUserRenderers(0),
-     CurrentRenderer(NULL), NewRenderer(NULL)
+CRendererManager::CRendererManager(CGLContext& context)
+    : GLContext(context)
+    , RendererReqsHaveChanged(false)
+    , CurUserPrimReqs(0)
+    , CurUserPrimReqMask(~0)
+    , NumDefaultRenderers(0)
+    , NumUserRenderers(0)
+    , CurrentRenderer(NULL)
+    , NewRenderer(NULL)
 {
-   RendererRequirements.PrimType	= 0;
-   RendererRequirements.Lighting	= 0;
-   RendererRequirements.NumDirLights	= 0;
-   RendererRequirements.NumPtLights	= 0;
-   RendererRequirements.Texture		= 0;
-   RendererRequirements.Specular	= 0;
-   RendererRequirements.PerVtxMaterial 	= kNoMaterial;
-   RendererRequirements.Clipping	= kClipped;
-   RendererRequirements.CullFace	= 0;
-   RendererRequirements.TwoSidedLighting = 0;
-   RendererRequirements.ArrayAccess	= 0;
-   RendererRequirements.UserProps	= 0;
+    RendererRequirements.PrimType         = 0;
+    RendererRequirements.Lighting         = 0;
+    RendererRequirements.NumDirLights     = 0;
+    RendererRequirements.NumPtLights      = 0;
+    RendererRequirements.Texture          = 0;
+    RendererRequirements.Specular         = 0;
+    RendererRequirements.PerVtxMaterial   = kNoMaterial;
+    RendererRequirements.Clipping         = kClipped;
+    RendererRequirements.CullFace         = 0;
+    RendererRequirements.TwoSidedLighting = 0;
+    RendererRequirements.ArrayAccess      = 0;
+    RendererRequirements.UserProps        = 0;
 
-   CRendererProps no_reqs;
-   no_reqs = (tU64)0;
+    CRendererProps no_reqs;
+    no_reqs = (tU64)0;
 
-   // indexed array renderer
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kPtsLinesStripsFans,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	1,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kIndexed
-      };
+    // indexed array renderer
+    {
+        CRendererProps capabilities = {
+            PrimType : kPtsLinesStripsFans,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 1,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kIndexed
+        };
 
-      RegisterDefaultRenderer( new CIndexedRenderer(mVsmAddr(Indexed), mVsmSize(Indexed), capabilities, no_reqs, 3, 3,
-						    "indexed") );
-   }
+        RegisterDefaultRenderer(new CIndexedRenderer(mVsmAddr(Indexed), mVsmSize(Indexed), capabilities, no_reqs, 3, 3,
+            "indexed"));
+    }
 
-   // fast, no lights renderer
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kPtsLinesStripsFans,
-	 Lighting:	0,
-	 NumDirLights:	k3DirLights,
-	 NumPtLights:	0,
-	 Texture:	1,
-	 Specular:	0,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped,
-	 CullFace:	0,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+    // fast, no lights renderer
+    {
+        CRendererProps capabilities = {
+            PrimType : kPtsLinesStripsFans,
+            Lighting : 0,
+            NumDirLights : k3DirLights,
+            NumPtLights : 0,
+            Texture : 1,
+            Specular : 0,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped,
+            CullFace : 0,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(FastNoLights), mVsmSize(FastNoLights), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "fast, no lights") );
-   }
-   // fast renderer
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kPtsLinesStripsFans,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights,
-	 NumPtLights:	0,
-	 Texture:	1,
-	 Specular:	0,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped,
-	 CullFace:	0,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(FastNoLights), mVsmSize(FastNoLights), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "fast, no lights"));
+    }
+    // fast renderer
+    {
+        CRendererProps capabilities = {
+            PrimType : kPtsLinesStripsFans,
+            Lighting : 1,
+            NumDirLights : k3DirLights,
+            NumPtLights : 0,
+            Texture : 1,
+            Specular : 0,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped,
+            CullFace : 0,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(Fast), mVsmSize(Fast), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "fast") );
-   }
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(Fast), mVsmSize(Fast), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "fast"));
+    }
 
-   // SCEI renderer
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kPtsLinesStripsFans,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights,
-	 NumPtLights:	0,
-	 Texture:	1,
-	 Specular:	0,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kClipped,
-	 CullFace:	0,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+    // SCEI renderer
+    {
+        CRendererProps capabilities = {
+            PrimType : kPtsLinesStripsFans,
+            Lighting : 1,
+            NumDirLights : k3DirLights,
+            NumPtLights : 0,
+            Texture : 1,
+            Specular : 0,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kClipped,
+            CullFace : 0,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(SCEI), mVsmSize(SCEI), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "scei") );
-   }
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(SCEI), mVsmSize(SCEI), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "scei"));
+    }
 
-   // linear, no specular renderers
+    // linear, no specular renderers
 
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kPtsLinesStripsFans,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	0,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+    {
+        CRendererProps capabilities = {
+            PrimType : kPtsLinesStripsFans,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 0,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralNoSpec), mVsmSize(GeneralNoSpec), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear, no specular") );
-   }
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kTriangles,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	0,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(GeneralNoSpec), mVsmSize(GeneralNoSpec), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear, no specular"));
+    }
+    {
+        CRendererProps capabilities = {
+            PrimType : kTriangles,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 0,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralNoSpecTri), mVsmSize(GeneralNoSpecTri), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear, tris, no specular") );
-   }
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kQuads,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	0,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(GeneralNoSpecTri), mVsmSize(GeneralNoSpecTri), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear, tris, no specular"));
+    }
+    {
+        CRendererProps capabilities = {
+            PrimType : kQuads,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 0,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralNoSpecQuad), mVsmSize(GeneralNoSpecQuad), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear, quads, no specular") );
-   }
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(GeneralNoSpecQuad), mVsmSize(GeneralNoSpecQuad), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear, quads, no specular"));
+    }
 
-   // linear renderers
+    // linear renderers
 
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kPtsLinesStripsFans,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	1,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+    {
+        CRendererProps capabilities = {
+            PrimType : kPtsLinesStripsFans,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 1,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(General), mVsmSize(General), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear") );
-   }
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kQuads,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	1,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(General), mVsmSize(General), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear"));
+    }
+    {
+        CRendererProps capabilities = {
+            PrimType : kQuads,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 1,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralQuad), mVsmSize(GeneralQuad), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear, quads") );
-   }
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kTriangles,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	1,
-	 PerVtxMaterial: kNoMaterial,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(GeneralQuad), mVsmSize(GeneralQuad), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear, quads"));
+    }
+    {
+        CRendererProps capabilities = {
+            PrimType : kTriangles,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 1,
+            PerVtxMaterial : kNoMaterial,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralTri), mVsmSize(GeneralTri), capabilities, no_reqs, 3, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear, tris") );
-   }
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(GeneralTri), mVsmSize(GeneralTri), capabilities, no_reqs, 3, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear, tris"));
+    }
 
 #if 0
 /*
@@ -337,240 +330,232 @@ CRendererManager::CRendererManager( CGLContext &context)
    }
 #endif
 
-   // if we don't do this pglGetCurRendererName() will crash if called before rendering
-   // any geometry
-   CurrentRenderer = &DefaultRenderers[0];
+    // if we don't do this pglGetCurRendererName() will crash if called before rendering
+    // any geometry
+    CurrentRenderer = &DefaultRenderers[0];
 }
 
-void
-CRendererManager::RegisterDefaultRenderer( CRenderer *renderer )
+void CRendererManager::RegisterDefaultRenderer(CRenderer* renderer)
 {
-   mErrorIf( NumDefaultRenderers == kMaxDefaultRenderers,
-	     "Trying to register too many renderers; adjust the limit" );
+    mErrorIf(NumDefaultRenderers == kMaxDefaultRenderers,
+        "Trying to register too many renderers; adjust the limit");
 
-   tRenderer newEntry = { renderer->GetCapabilities(), renderer->GetRequirements(), renderer };
-   DefaultRenderers[NumDefaultRenderers++] = newEntry;
+    tRenderer newEntry                      = { renderer->GetCapabilities(), renderer->GetRequirements(), renderer };
+    DefaultRenderers[NumDefaultRenderers++] = newEntry;
 }
 
-void
-CRendererManager::RegisterUserRenderer( CRenderer *renderer )
+void CRendererManager::RegisterUserRenderer(CRenderer* renderer)
 {
-   mErrorIf( renderer == NULL,
-	     "Trying to register a null renderer is not playing fair..." );
+    mErrorIf(renderer == NULL,
+        "Trying to register a null renderer is not playing fair...");
 
-   mErrorIf( NumUserRenderers == kMaxUserRenderers,
-	     "Trying to register too many renderers; adjust the limit" );
+    mErrorIf(NumUserRenderers == kMaxUserRenderers,
+        "Trying to register too many renderers; adjust the limit");
 
-   tRenderer newEntry = { renderer->GetCapabilities(), renderer->GetRequirements(), renderer };
-   UserRenderers[NumUserRenderers++] = newEntry;
+    tRenderer newEntry                = { renderer->GetCapabilities(), renderer->GetRequirements(), renderer };
+    UserRenderers[NumUserRenderers++] = newEntry;
 }
 
 // state updates
 
-void
-CRendererManager::EnableCustom( tU64 flag )
+void CRendererManager::EnableCustom(tU64 flag)
 {
-   tU64 newState = RendererRequirements;
-   newState |= flag;
+    tU64 newState = RendererRequirements;
+    newState |= flag;
 
-   if ( newState != (tU64)RendererRequirements )
-      RendererReqsHaveChanged = true;
+    if (newState != (tU64)RendererRequirements)
+        RendererReqsHaveChanged = true;
 
-   RendererRequirements = newState;
+    RendererRequirements = newState;
 }
 
-void
-CRendererManager::DisableCustom( tU64 flag )
+void CRendererManager::DisableCustom(tU64 flag)
 {
-   tU64 newState = RendererRequirements;
-   newState &= ~flag;
+    tU64 newState = RendererRequirements;
+    newState &= ~flag;
 
-   if ( newState != (tU64)RendererRequirements )
-      RendererReqsHaveChanged = true;
+    if (newState != (tU64)RendererRequirements)
+        RendererReqsHaveChanged = true;
 
-   RendererRequirements = newState;
+    RendererRequirements = newState;
 }
 
-void
-CRendererManager::NumLightsChanged( tLightType type, int num )
+void CRendererManager::NumLightsChanged(tLightType type, int num)
 {
-   CRendererProps newState = RendererRequirements;
+    CRendererProps newState = RendererRequirements;
 
-   switch (type) {
-      case kDirectional:
-	 if ( num == 0 )
-	    newState.NumDirLights = 0;
-	 else if (0 < num && num <= 3)
-	    newState.NumDirLights = k3DirLights; // in namespace??
-	 else
-	    newState.NumDirLights = k8DirLights;
+    switch (type) {
+    case kDirectional:
+        if (num == 0)
+            newState.NumDirLights = 0;
+        else if (0 < num && num <= 3)
+            newState.NumDirLights = k3DirLights; // in namespace??
+        else
+            newState.NumDirLights = k8DirLights;
 
-	 if ( RendererRequirements != newState ) {
-	    RendererRequirements = newState;
-	    RendererReqsHaveChanged = true;
-	 }
-	 break;
+        if (RendererRequirements != newState) {
+            RendererRequirements    = newState;
+            RendererReqsHaveChanged = true;
+        }
+        break;
 
-      case kPoint:
-	 if (num == 0)
-	    newState.NumPtLights = 0;
-	 else if (num == 1)
-	    newState.NumPtLights = k1PtLight;
-	 else if (num == 2)
-	    newState.NumPtLights = k2PtLights;
-	 else
-	    newState.NumPtLights = k8PtLights;
+    case kPoint:
+        if (num == 0)
+            newState.NumPtLights = 0;
+        else if (num == 1)
+            newState.NumPtLights = k1PtLight;
+        else if (num == 2)
+            newState.NumPtLights = k2PtLights;
+        else
+            newState.NumPtLights = k8PtLights;
 
-	 if ( RendererRequirements != newState ) {
-	    RendererRequirements = newState;
-	    RendererReqsHaveChanged = true;
-	 }
-	 break;
+        if (RendererRequirements != newState) {
+            RendererRequirements    = newState;
+            RendererReqsHaveChanged = true;
+        }
+        break;
 
-      case kSpot:
-	 break;
-   }
+    case kSpot:
+        break;
+    }
 }
 
-void
-CRendererManager::PrimChanged( unsigned int prim )
+void CRendererManager::PrimChanged(unsigned int prim)
 {
-   // is this a user-defined prim type?
-   if ( CGeomManager::IsUserPrimType(prim) ) {
-      // user-defined
+    // is this a user-defined prim type?
+    if (CGeomManager::IsUserPrimType(prim)) {
+        // user-defined
 
-      tU64 newState = RendererRequirements;
+        tU64 newState = RendererRequirements;
 
-      // clear the current user prim flags (if any)
-      newState &= ~CurUserPrimReqs;
+        // clear the current user prim flags (if any)
+        newState &= ~CurUserPrimReqs;
 
-      // clear the user-prim-type flag (bit 31)
-      prim &= 0x7fffffff;
+        // clear the user-prim-type flag (bit 31)
+        prim &= 0x7fffffff;
 
-      CurUserPrimReqs = CGeomManager::GetUserPrimRequirements(prim);
-      newState |= CurUserPrimReqs;
+        CurUserPrimReqs = CGeomManager::GetUserPrimRequirements(prim);
+        newState |= CurUserPrimReqs;
 
-      CurUserPrimReqMask = CGeomManager::GetUserPrimReqMask(prim);
+        CurUserPrimReqMask = CGeomManager::GetUserPrimReqMask(prim);
 
-      if ( (tU64)RendererRequirements != newState ) {
-	 RendererRequirements = newState;
-	 RendererReqsHaveChanged = true;
-      }
-   }
-   else {
-      // normal prim type
+        if ((tU64)RendererRequirements != newState) {
+            RendererRequirements    = newState;
+            RendererReqsHaveChanged = true;
+        }
+    } else {
+        // normal prim type
 
-      CRendererProps newState = RendererRequirements;
+        CRendererProps newState = RendererRequirements;
 
-      if ( CurUserPrimReqs ) {
-	 RendererReqsHaveChanged = true;
-	 // clear any requirements set by a user prim type
-	 newState = (tU64)newState & ~CurUserPrimReqs;
-	 CurUserPrimReqs = 0;
-      }
+        if (CurUserPrimReqs) {
+            RendererReqsHaveChanged = true;
+            // clear any requirements set by a user prim type
+            newState        = (tU64)newState & ~CurUserPrimReqs;
+            CurUserPrimReqs = 0;
+        }
 
-      CurUserPrimReqMask = ~(tU32)0;
+        CurUserPrimReqMask = ~(tU32)0;
 
-      if (prim <= GL_LINE_STRIP)
-	 newState.PrimType = kPtsLinesStripsFans;
-      else if (prim == GL_TRIANGLE_STRIP
-	       || prim == GL_TRIANGLE_FAN
-	       || prim == GL_POLYGON)
-	 newState.PrimType = kPtsLinesStripsFans;
-      else if (prim == GL_QUAD_STRIP)
-	 newState.PrimType = kPtsLinesStripsFans;
-      else if (prim == GL_TRIANGLES)
-	 newState.PrimType = kTriangles;
-      else if (prim == GL_QUADS)
-	 newState.PrimType = kQuads;
-      else {
-	 mError("shouldn't get here");
-      }
+        if (prim <= GL_LINE_STRIP)
+            newState.PrimType = kPtsLinesStripsFans;
+        else if (prim == GL_TRIANGLE_STRIP
+            || prim == GL_TRIANGLE_FAN
+            || prim == GL_POLYGON)
+            newState.PrimType = kPtsLinesStripsFans;
+        else if (prim == GL_QUAD_STRIP)
+            newState.PrimType = kPtsLinesStripsFans;
+        else if (prim == GL_TRIANGLES)
+            newState.PrimType = kTriangles;
+        else if (prim == GL_QUADS)
+            newState.PrimType = kQuads;
+        else {
+            mError("shouldn't get here");
+        }
 
-      if ( RendererRequirements != newState ) {
-	 RendererRequirements = newState;
-	 RendererReqsHaveChanged = true;
-      }
-   }
+        if (RendererRequirements != newState) {
+            RendererRequirements    = newState;
+            RendererReqsHaveChanged = true;
+        }
+    }
 }
 
-void
-CRendererManager::TexEnabledChanged( bool enabled )
+void CRendererManager::TexEnabledChanged(bool enabled)
 {
-   CRendererProps newState = RendererRequirements;
+    CRendererProps newState = RendererRequirements;
 
-   if ( enabled ) newState.Texture = 1;
-   else newState.Texture = 0;
+    if (enabled)
+        newState.Texture = 1;
+    else
+        newState.Texture = 0;
 
-   if ( RendererRequirements != newState ) {
-      RendererRequirements = newState;
-      RendererReqsHaveChanged = true;
-   }
+    if (RendererRequirements != newState) {
+        RendererRequirements    = newState;
+        RendererReqsHaveChanged = true;
+    }
 }
 
-void
-CRendererManager::LightingEnabledChanged( bool enabled )
+void CRendererManager::LightingEnabledChanged(bool enabled)
 {
-   CRendererProps newState = RendererRequirements;
+    CRendererProps newState = RendererRequirements;
 
-   if (enabled) newState.Lighting = 1;
-   else newState.Lighting = 0;
+    if (enabled)
+        newState.Lighting = 1;
+    else
+        newState.Lighting = 0;
 
-   if (RendererRequirements != newState) {
-      RendererRequirements = newState;
-      RendererReqsHaveChanged = true;
-   }
+    if (RendererRequirements != newState) {
+        RendererRequirements    = newState;
+        RendererReqsHaveChanged = true;
+    }
 }
 
-void
-CRendererManager::SpecularEnabledChanged( bool enabled )
+void CRendererManager::SpecularEnabledChanged(bool enabled)
 {
-   CRendererProps newState = RendererRequirements;
+    CRendererProps newState = RendererRequirements;
 
-   if (enabled) newState.Specular = 1;
-   else newState.Specular = 0;
+    if (enabled)
+        newState.Specular = 1;
+    else
+        newState.Specular = 0;
 
-   if (RendererRequirements != newState) {
-      RendererRequirements = newState;
-      RendererReqsHaveChanged = true;
-   }
+    if (RendererRequirements != newState) {
+        RendererRequirements    = newState;
+        RendererReqsHaveChanged = true;
+    }
 }
 
-void
-CRendererManager::PerVtxMaterialChanged( RendererProps::tPerVtxMaterial matType )
+void CRendererManager::PerVtxMaterialChanged(RendererProps::tPerVtxMaterial matType)
 {
-   if ( RendererRequirements.PerVtxMaterial != (unsigned int)matType ) {
-      RendererRequirements.PerVtxMaterial = matType;
-      RendererReqsHaveChanged = true;
-   }
+    if (RendererRequirements.PerVtxMaterial != (unsigned int)matType) {
+        RendererRequirements.PerVtxMaterial = matType;
+        RendererReqsHaveChanged             = true;
+    }
 }
 
-void
-CRendererManager::ClippingEnabledChanged( bool enabled )
+void CRendererManager::ClippingEnabledChanged(bool enabled)
 {
-   tClipping clipping = (enabled) ? kClipped : kNonClipped;
-   if ( RendererRequirements.Clipping != (unsigned int)clipping ) {
-      RendererRequirements.Clipping = clipping;
-      RendererReqsHaveChanged = true;
-   }
+    tClipping clipping = (enabled) ? kClipped : kNonClipped;
+    if (RendererRequirements.Clipping != (unsigned int)clipping) {
+        RendererRequirements.Clipping = clipping;
+        RendererReqsHaveChanged       = true;
+    }
 }
 
-void
-CRendererManager::CullFaceEnabledChanged( bool enabled )
+void CRendererManager::CullFaceEnabledChanged(bool enabled)
 {
-   if ( RendererRequirements.CullFace != enabled ) {
-      RendererRequirements.CullFace = enabled;
-      RendererReqsHaveChanged = true;
-   }
+    if (RendererRequirements.CullFace != enabled) {
+        RendererRequirements.CullFace = enabled;
+        RendererReqsHaveChanged       = true;
+    }
 }
 
-void
-CRendererManager::ArrayAccessChanged( RendererProps::tArrayAccess accessType )
+void CRendererManager::ArrayAccessChanged(RendererProps::tArrayAccess accessType)
 {
-   if ( RendererRequirements.ArrayAccess != (unsigned int)accessType ) {
-      RendererRequirements.ArrayAccess = accessType;
-      RendererReqsHaveChanged = true;
-   }
+    if (RendererRequirements.ArrayAccess != (unsigned int)accessType) {
+        RendererRequirements.ArrayAccess = accessType;
+        RendererReqsHaveChanged          = true;
+    }
 }
 
 /**
@@ -579,93 +564,89 @@ CRendererManager::ArrayAccessChanged( RendererProps::tArrayAccess accessType )
  * call MakeNewRendererCurrent().
  * @return true if the renderer changed, false otherwise
  */
-bool
-CRendererManager::UpdateNewRenderer()
+bool CRendererManager::UpdateNewRenderer()
 {
-   bool rendererChanged = false;
+    bool rendererChanged = false;
 
-   if ( RendererReqsHaveChanged ) {
-      // do a little fixin' up..
-      CRendererProps rreqs = RendererRequirements;
-      if ( ! rreqs.Lighting ) {
-	 // don't care about these if there's no light
-	 rreqs.Specular = 0;
-	 rreqs.TwoSidedLighting = 0;
-      }
+    if (RendererReqsHaveChanged) {
+        // do a little fixin' up..
+        CRendererProps rreqs = RendererRequirements;
+        if (!rreqs.Lighting) {
+            // don't care about these if there's no light
+            rreqs.Specular         = 0;
+            rreqs.TwoSidedLighting = 0;
+        }
 
-      rreqs = (tU64)rreqs & CurUserPrimReqMask;
+        rreqs = (tU64)rreqs & CurUserPrimReqMask;
 
-      // first check the user renderers
+        // first check the user renderers
 
-      int i;
-      bool userRendererFound = false;
+        int i;
+        bool userRendererFound = false;
 
-      for ( i = 0; i < NumUserRenderers; i++ )
-	 if ( rreqs == (rreqs & UserRenderers[i].capabilities)
-	      && UserRenderers[i].requirements == (rreqs & UserRenderers[i].requirements) )
-	    break;
+        for (i = 0; i < NumUserRenderers; i++)
+            if (rreqs == (rreqs & UserRenderers[i].capabilities)
+                && UserRenderers[i].requirements == (rreqs & UserRenderers[i].requirements))
+                break;
 
-      // did we find a user renderer?
-      if ( i < NumUserRenderers ) {
-	 userRendererFound = true;
+        // did we find a user renderer?
+        if (i < NumUserRenderers) {
+            userRendererFound = true;
 
-	 NewRenderer = &UserRenderers[i];
+            NewRenderer = &UserRenderers[i];
 
-	 if (CurrentRenderer != &UserRenderers[i]) {
-	    rendererChanged = true;
-	 }
-      }
+            if (CurrentRenderer != &UserRenderers[i]) {
+                rendererChanged = true;
+            }
+        }
 
-      // now the default renderers
+        // now the default renderers
 
-      if ( ! userRendererFound ) {
-	 for ( i = 0; i < NumDefaultRenderers; i++ )
-	    if ( rreqs == (rreqs & DefaultRenderers[i].capabilities)
-	       && DefaultRenderers[i].requirements == (rreqs & DefaultRenderers[i].requirements) )
-	       break;
+        if (!userRendererFound) {
+            for (i = 0; i < NumDefaultRenderers; i++)
+                if (rreqs == (rreqs & DefaultRenderers[i].capabilities)
+                    && DefaultRenderers[i].requirements == (rreqs & DefaultRenderers[i].requirements))
+                    break;
 
-	 mErrorIf( i == NumDefaultRenderers,
-		   "Couldn't find a suitable renderer..\n"
-		   "state reqs = 0x%08x 0x%08x, mask = %08x %08x\n",
-		   (tU32)((tU64)rreqs >> 32),
-		   (tU32)((tU64)rreqs),
-		   (tU32)((tU64)CurUserPrimReqMask >> 32),
-		   (tU32)((tU64)CurUserPrimReqMask)
-	    );
+            mErrorIf(i == NumDefaultRenderers,
+                "Couldn't find a suitable renderer..\n"
+                "state reqs = 0x%08x 0x%08x, mask = %08x %08x\n",
+                (tU32)((tU64)rreqs >> 32),
+                (tU32)((tU64)rreqs),
+                (tU32)((tU64)CurUserPrimReqMask >> 32),
+                (tU32)((tU64)CurUserPrimReqMask));
 
-	 NewRenderer = &DefaultRenderers[i];
+            NewRenderer = &DefaultRenderers[i];
 
-	 if (CurrentRenderer != &DefaultRenderers[i]) {
-	    // printf("vu1 renderer requirements are 0x%08x, renderer = 0x%08x i = %d\n",
-	    // (unsigned int)RendererRequirements, (unsigned int)CurrentRenderer->capabilities, i);
-	    rendererChanged = true;
-	 }
-      }
-   }
+            if (CurrentRenderer != &DefaultRenderers[i]) {
+                // printf("vu1 renderer requirements are 0x%08x, renderer = 0x%08x i = %d\n",
+                // (unsigned int)RendererRequirements, (unsigned int)CurrentRenderer->capabilities, i);
+                rendererChanged = true;
+            }
+        }
+    }
 
-   RendererReqsHaveChanged = false;
+    RendererReqsHaveChanged = false;
 
-   return rendererChanged;
+    return rendererChanged;
 }
 
-void
-CRendererManager::MakeNewRendererCurrent()
+void CRendererManager::MakeNewRendererCurrent()
 {
-   mAssert( NewRenderer != NULL );
-   CurrentRenderer = NewRenderer;
-   NewRenderer = NULL;
+    mAssert(NewRenderer != NULL);
+    CurrentRenderer = NewRenderer;
+    NewRenderer     = NULL;
 }
 
-void
-CRendererManager::LoadRenderer( CVifSCDmaPacket &packet )
+void CRendererManager::LoadRenderer(CVifSCDmaPacket& packet)
 {
-   mAssert( CurrentRenderer != NULL );
+    mAssert(CurrentRenderer != NULL);
 
-     printf("Loading renderer: %s\n", CurrentRenderer->renderer->GetName() );
+    printf("Loading renderer: %s\n", CurrentRenderer->renderer->GetName());
 
-   CurrentRenderer->renderer->Load();
+    CurrentRenderer->renderer->Load();
 
-   pglAddToMetric(kMetricsRendererUpload);
+    pglAddToMetric(kMetricsRendererUpload);
 }
 
 /********************************************
@@ -728,11 +709,10 @@ CRendererManager::LoadRenderer( CVifSCDmaPacket &packet )
 /**
  * Call this before registering any renderers.
  */
-void
-pglBeginRendererDefs()
+void pglBeginRendererDefs()
 {
-   // does nothing now, but a begin/end pair could come in handy later
-   // if I add caches, hashes, etc..
+    // does nothing now, but a begin/end pair could come in handy later
+    // if I add caches, hashes, etc..
 }
 
 /**
@@ -741,20 +721,18 @@ pglBeginRendererDefs()
  * @param renderer should point to a CRenderer object (passed as a void* for
  * 	  	   compatibility with C code)
  */
-void
-pglRegisterRenderer( void *renderer )
+void pglRegisterRenderer(void* renderer)
 {
-   CRenderer *newRenderer = reinterpret_cast<CRenderer*>(renderer);
-   pGLContext->GetImmGeomManager().GetRendererManager().RegisterUserRenderer( newRenderer );
+    CRenderer* newRenderer = reinterpret_cast<CRenderer*>(renderer);
+    pGLContext->GetImmGeomManager().GetRendererManager().RegisterUserRenderer(newRenderer);
 }
 
 /**
  * Call this after registering custom renderers.
  */
-void
-pglEndRendererDefs()
+void pglEndRendererDefs()
 {
-   // see comment in begin
+    // see comment in begin
 }
 
 /**
@@ -766,10 +744,9 @@ pglEndRendererDefs()
 const char*
 pglGetCurRendererName()
 {
-   return pGLContext->GetImmGeomManager().GetRendererManager().GetCurRenderer().GetName();
+    return pGLContext->GetImmGeomManager().GetRendererManager().GetCurRenderer().GetName();
 }
 
 /** @} */
 
 /** @} */
-

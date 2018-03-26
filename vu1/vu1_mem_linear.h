@@ -6,17 +6,17 @@
 
 // **** absolute offsets ****
 
-#define kContextStart		0
+#define kContextStart 0
 
 #include "vu1_context.h"
 
-#define kDoubleBufBase		(kContextStart + kContextLength)
-#define kDoubleBufOffset	((1024 - kDoubleBufBase)/2)
-#define kDoubleBufSize		kDoubleBufOffset
+#define kDoubleBufBase (kContextStart + kContextLength)
+#define kDoubleBufOffset ((1024 - kDoubleBufBase) / 2)
+#define kDoubleBufSize kDoubleBufOffset
 
 // **** buffer-relative offsets ****
 
-#define kNumVertices	0
+#define kNumVertices 0
 
 //#define kInputStrides	(kNumVertices + 1)
 //#define kQuadADCs	(kInputStrides + 1)
@@ -24,11 +24,10 @@
 //#define kStripADCs	(kQuadADCs + 1)
 
 // these are temporary till I think of something better..
-#define kStripADCs	(kNumVertices + 1)
+#define kStripADCs (kNumVertices + 1)
 
-#define kInputStart	(kStripADCs + 4)
+#define kInputStart (kStripADCs + 4)
 
-#define kInputBufSize	(kDoubleBufSize/2)
-#define kOutputStart	(0 + kInputBufSize)
-#define kOutputBufSize	(kDoubleBufSize - kOutputStart)
-
+#define kInputBufSize (kDoubleBufSize / 2)
+#define kOutputStart (0 + kInputBufSize)
+#define kOutputBufSize (kDoubleBufSize - kOutputStart)

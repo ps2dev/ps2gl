@@ -15,68 +15,71 @@
 
 class CImmGeomManager : public CGeomManager {
 
-      CRendererManager 	RendererManager;
+    CRendererManager RendererManager;
 
-      // a double set of buffers for storing immediate-mode vertices, normals, etc.
-      // these don't really need to be dma packets since they will be reffed by
-      // the microcode
-      CDmaPacket	VertexBuf0, NormalBuf0, TexCoordBuf0, ColorBuf0;
-      CDmaPacket	VertexBuf1, NormalBuf1, TexCoordBuf1, ColorBuf1;
-      CDmaPacket	*CurVertexBuf, *CurNormalBuf, *CurTexCoordBuf, *CurColorBuf;
+    // a double set of buffers for storing immediate-mode vertices, normals, etc.
+    // these don't really need to be dma packets since they will be reffed by
+    // the microcode
+    CDmaPacket VertexBuf0, NormalBuf0, TexCoordBuf0, ColorBuf0;
+    CDmaPacket VertexBuf1, NormalBuf1, TexCoordBuf1, ColorBuf1;
+    CDmaPacket *CurVertexBuf, *CurNormalBuf, *CurTexCoordBuf, *CurColorBuf;
 
-      CGeometryBlock	Geometry;
+    CGeometryBlock Geometry;
 
-      void CommitNewGeom();
+    void CommitNewGeom();
 
-   public:
-      CImmGeomManager( CGLContext &context, int immBufferQwordSize );
-      virtual ~CImmGeomManager();
+public:
+    CImmGeomManager(CGLContext& context, int immBufferQwordSize);
+    virtual ~CImmGeomManager();
 
-      CRendererManager& GetRendererManager() { return RendererManager; }
+    CRendererManager& GetRendererManager() { return RendererManager; }
 
-      void SwapBuffers();
+    void SwapBuffers();
 
-      // state changes / updates
+    // state changes / updates
 
-      void PrimChanged( GLenum primType );
-      void SyncRendererContext( GLenum primType );
-      void SyncRenderer();
-      void SyncGsContext();
-      void SyncColorMaterial( bool pvColorsArePresent );
+    void PrimChanged(GLenum primType);
+    void SyncRendererContext(GLenum primType);
+    void SyncRenderer();
+    void SyncGsContext();
+    void SyncColorMaterial(bool pvColorsArePresent);
 
-      void DrawingLinearArray();
-      void DrawingIndexedArray();
+    void DrawingLinearArray();
+    void DrawingIndexedArray();
 
-      void SyncArrayType( ArrayType::tArrayType type ) {
-	 if (type == ArrayType::kLinear) DrawingLinearArray();
-	 else DrawingIndexedArray();
-      }
+    void SyncArrayType(ArrayType::tArrayType type)
+    {
+        if (type == ArrayType::kLinear)
+            DrawingLinearArray();
+        else
+            DrawingIndexedArray();
+    }
 
-      // for microcode
+    // for microcode
 
-      // microcode needs to be able to request these for storage when no
-      // normal, tex coord or vertex color is supplied for each vertex
-      inline CDmaPacket& GetNormalBuf() { return *CurNormalBuf; }
-      inline CDmaPacket& GetTexCoordBuf() { return *CurTexCoordBuf; }
+    // microcode needs to be able to request these for storage when no
+    // normal, tex coord or vertex color is supplied for each vertex
+    inline CDmaPacket& GetNormalBuf() { return *CurNormalBuf; }
+    inline CDmaPacket& GetTexCoordBuf() { return *CurTexCoordBuf; }
 
-      // user state
+    // user state
 
-      void EnableCustom( tU64 flag ) { RendererManager.EnableCustom(flag); }
-      void DisableCustom( tU64 flag ) { RendererManager.DisableCustom(flag); }
+    void EnableCustom(tU64 flag) { RendererManager.EnableCustom(flag); }
+    void DisableCustom(tU64 flag) { RendererManager.DisableCustom(flag); }
 
-      // geometry specification
+    // geometry specification
 
-      void BeginGeom( GLenum mode );
-      void Vertex( cpu_vec_xyzw newVert );
-      void Normal( cpu_vec_xyz normal );
-      void TexCoord( float u, float v );
-      void Color( cpu_vec_xyzw color );
-      void EndGeom();
-      void DrawArrays( GLenum mode, int first, int count );
-      void DrawIndexedArrays( GLenum primType,
-			      int numIndices, const unsigned char* indices,
-			      int numVertices );
-      void Flush();
+    void BeginGeom(GLenum mode);
+    void Vertex(cpu_vec_xyzw newVert);
+    void Normal(cpu_vec_xyz normal);
+    void TexCoord(float u, float v);
+    void Color(cpu_vec_xyzw color);
+    void EndGeom();
+    void DrawArrays(GLenum mode, int first, int count);
+    void DrawIndexedArrays(GLenum primType,
+        int numIndices, const unsigned char* indices,
+        int numVertices);
+    void Flush();
 };
 
 #endif // ps2gl_immgmanager_h
