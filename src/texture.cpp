@@ -542,12 +542,16 @@ CMMClut::Load( CVifSCDmaPacket &packet )
 
 void glGenTextures( GLsizei numNewTexNames, GLuint *newTexNames )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CTexManager &texManager = pGLContext->GetTexManager();
    texManager.GenTextures( numNewTexNames, newTexNames );
 }
 
 void glBindTexture( GLenum target, GLuint texName )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mErrorIf( target != GL_TEXTURE_2D, "There are only 2D textures in ps2gl" );
 
    CTexManager &texManager = pGLContext->GetTexManager();
@@ -556,6 +560,8 @@ void glBindTexture( GLenum target, GLuint texName )
 
 void glDeleteTextures( GLsizei numToDelete, const GLuint *texNames )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CTexManager &texManager = pGLContext->GetTexManager();
    texManager.DeleteTextures( numToDelete, texNames );
 }
@@ -570,6 +576,8 @@ void glTexImage2D( GLenum target,
 		   GLenum type,
 		   const GLvoid *pixels )
 {
+    //printf("%s\n", __FUNCTION__);
+
    if ( target == GL_PROXY_TEXTURE_2D ) {
       mNotImplemented( );
       return;
@@ -628,6 +636,8 @@ void glColorTable( GLenum target, GLenum internalFormat,
 		   GLsizei width, GLenum format, GLenum type,
 		   const GLvoid *table )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mWarnIf( target != GL_COLOR_TABLE,
 	    "glColorTable only supports GL_COLOR_TABLE" );
    // ignore internalFormat
@@ -647,6 +657,8 @@ void glColorTable( GLenum target, GLenum internalFormat,
 
 void glTexParameteri( GLenum target, GLenum pname, GLint param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    if ( target != GL_TEXTURE_2D ) {
       mNotImplemented( "Sorry, only 2d textures." );
       return;
@@ -657,21 +669,29 @@ void glTexParameteri( GLenum target, GLenum pname, GLint param )
 
 void glTexParameterf( GLenum target, GLenum pname, GLfloat param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glTexParameteri( target, pname, (GLint)param );
 }
 
 void glTexParameteriv( GLenum target, GLenum pname, GLint *param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glTexParameteri( target, pname, *param );
 }
 
 void glTexParameterfv( GLenum target, GLenum pname, const GLfloat *param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glTexParameteri( target, pname, (GLint)*param );
 }
 
 void glTexEnvi( GLenum target, GLenum pname, GLint param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CTexManager &tm = pGLContext->GetTexManager();
 
    switch( param ) {
@@ -691,16 +711,22 @@ void glTexEnvi( GLenum target, GLenum pname, GLint param )
 
 void glTexEnvf( GLenum target, GLenum pname, GLfloat param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glTexEnvi( target, pname, (GLint)param );
 }
 
 void glTexEnvfv( GLenum target, GLenum pname, GLfloat *param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glTexEnvi( target, pname, (GLint)*param );
 }
 
 void glTexEnviv( GLenum target, GLenum pname, GLint *param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glTexEnvi( target, pname, *param );
 }
 
@@ -709,6 +735,8 @@ void glTexSubImage2D( GLenum target, int level,
 		      GLenum format, GLenum type,
 		      const void* pixels )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mNotImplemented( );
 }
 
@@ -717,6 +745,8 @@ void glCopyTexImage2D( GLenum target, int level,
 		       int x, int y, int width, int height,
 		       int border )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mNotImplemented( );
 }
 
@@ -724,6 +754,8 @@ void glCopyTexSubImage2D( GLenum target, int level,
 			  int xoffset, int yoffset, int x, int y,
 			  int width, int height )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mNotImplemented( );
 }
 

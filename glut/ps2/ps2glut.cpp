@@ -8,8 +8,6 @@
 #include <stdio.h>
 
 #include "graph.h"
-//#include "libdev.h"
-//#include "sifdev.h"
 
 #include "GL/glut.h"
 #include "GL/ps2gl.h"

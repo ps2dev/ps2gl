@@ -309,6 +309,8 @@ CGLContext::EndGeometry()
 void
 CGLContext::EndVif1Packet( unsigned short signalNum )
 {
+    //printf("%s(%d)\n", __FUNCTION__, signalNum);
+
    // flush any pending geometry
    GetImmGeomManager().Flush();
 
@@ -345,7 +347,9 @@ CGLContext::EndVif1Packet( unsigned short signalNum )
 void
 CGLContext::RenderGeometry()
 {
+    //printf("%s\n", __FUNCTION__);
 #ifndef PS2_LINUX
+
    // make sure the semaphore we'll signal on completion is zero now
    while ( PollSema(RenderingFinishedSemaId) != -1 );
 #endif
@@ -357,6 +361,8 @@ int
 CGLContext::GsIntHandler( int cause )
 {
    int ret = 0;
+
+    //printf("%s(%d)\n", __FUNCTION__, cause);
 
 #ifndef PS2_LINUX
    tU32 csr = *(volatile tU32*)GS::ControlRegs::csr;
@@ -414,6 +420,8 @@ CGLContext::GsIntHandler( int cause )
 void
 CGLContext::FinishRenderingGeometry( bool forceImmediateStop )
 {
+    //printf("%s(%d)\n", __FUNCTION__, forceImmediateStop);
+
 #ifndef PS2_LINUX
    mWarnIf( forceImmediateStop, "Interrupting currently rendering dma chain not supported yet" );
    WaitSema( RenderingFinishedSemaId );
@@ -425,6 +433,8 @@ CGLContext::FinishRenderingGeometry( bool forceImmediateStop )
 void
 CGLContext::WaitForVSync()
 {
+    //printf("%s\n", __FUNCTION__);
+
    // wait for beginning of v-sync
 #ifndef PS2_LINUX
    WaitSema( VsyncSemaId );
@@ -444,6 +454,8 @@ CGLContext::WaitForVSync()
 void
 CGLContext::SwapBuffers()
 {
+    //printf("%s\n", __FUNCTION__);
+
    // switch packet ptrs
 
    CVifSCDmaPacket *tempPkt = CurPacket;
@@ -475,6 +487,8 @@ CGLContext::SwapBuffers()
 void
 CGLContext::FreeWaitingBuffersAndSwap()
 {
+    //printf("%s\n", __FUNCTION__);
+
    CurBuffer = 1 - CurBuffer;
 
    for ( int i = 0; i < NumBuffersToBeFreed[CurBuffer]; i++ ) {
@@ -694,6 +708,8 @@ pglDisable( GLenum cap )
 
 void glEnable( GLenum cap )
 {
+    //printf("%s(0x%x)\n", __FUNCTION__, cap);
+
    CLighting& lighting = pGLContext->GetLighting();
 
    switch (cap) {
@@ -747,6 +763,8 @@ void glEnable( GLenum cap )
 
 void glDisable( GLenum cap )
 {
+    //printf("%s(0x%x)\n", __FUNCTION__, cap);
+
    switch (cap) {
       case GL_LIGHT0:
       case GL_LIGHT1:
@@ -797,11 +815,15 @@ void glDisable( GLenum cap )
 
 void glHint( GLenum target, GLenum mode )
 {
+    //printf("%s(0x%x,0x%x)\n", __FUNCTION__, target, mode);
+
    mNotImplemented( );
 }
 
 void glGetFloatv( GLenum pname, GLfloat *params )
 {
+    //printf("%s(0x%x,...)\n", __FUNCTION__, pname);
+
    switch (pname) {
       case GL_MODELVIEW_MATRIX:
 	 memcpy( params, & (pGLContext->GetModelViewStack().GetTop()), 16 * 4 );
@@ -817,11 +839,15 @@ void glGetFloatv( GLenum pname, GLfloat *params )
 
 void glGetIntegerv( GLenum pname, int *params )
 {
+    //printf("%s(0x%x,...)\n", __FUNCTION__, pname);
+
    mNotImplemented( );
 }
 
 GLenum glGetError( void )
 {
+    //printf("%s()\n", __FUNCTION__);
+
    mWarn("glGetError does nothing");
 
    return 0;
@@ -829,6 +855,8 @@ GLenum glGetError( void )
 
 const GLubyte *glGetString( GLenum name )
 {
+    //printf("%s(0x%x)\n", __FUNCTION__, name);
+
    mNotImplemented( );
    return (GLubyte*)"not implemented";
 }

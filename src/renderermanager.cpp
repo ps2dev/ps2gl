@@ -257,6 +257,22 @@ CRendererManager::CRendererManager( CGLContext &context)
 						   "linear, tris") );
    }
 
+#if 0
+/*
+ * Compiler warnings:
+ *   dvp-as -o vu1/general_pv_diff_quad.vo vu1/general_pv_diff_quad_vcl.vsm
+ *   vu1/general_pv_diff_quad_vcl.vsm: Assembler messages:
+ *   vu1/general_pv_diff_quad_vcl.vsm:1216: Warning: operand out of range (-1129 not between -1024 and 1023)
+ *
+ *   dvp-as -o vu1/general_pv_diff_tri.vo vu1/general_pv_diff_tri_vcl.vsm
+ *   vu1/general_pv_diff_tri_vcl.vsm: Assembler messages:
+ *   vu1/general_pv_diff_tri_vcl.vsm:1187: Warning: operand out of range (-1100 not between -1024 and 1023)
+ *
+ *   dvp-as -o vu1/general_pv_diff.vo vu1/general_pv_diff_vcl.vsm
+ *   vu1/general_pv_diff_vcl.vsm: Assembler messages:
+ *   vu1/general_pv_diff_vcl.vsm:1202: Warning: operand out of range (-1107 not between -1024 and 1023)
+ */
+
    // linear, per-vertex color renderers
 
    {
@@ -319,6 +335,7 @@ CRendererManager::CRendererManager( CGLContext &context)
 						   kInputStart, kInputBufSize - kInputStart,
 						   "linear, pvc, quads") );
    }
+#endif
 
    // if we don't do this pglGetCurRendererName() will crash if called before rendering
    // any geometry
@@ -644,7 +661,7 @@ CRendererManager::LoadRenderer( CVifSCDmaPacket &packet )
 {
    mAssert( CurrentRenderer != NULL );
 
-//     printf("Loading renderer: %s\n", CurrentRenderer->renderer->GetName() );
+     printf("Loading renderer: %s\n", CurrentRenderer->renderer->GetName() );
 
    CurrentRenderer->renderer->Load();
 

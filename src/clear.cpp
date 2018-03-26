@@ -77,6 +77,8 @@ void glClearColor( GLclampf red,
 		   GLclampf blue,
 		   GLclampf alpha )
 {
+    //printf("%s(%f,%f,%f,%f)\n", __FUNCTION__, red, green, blue, alpha);
+
    CClearEnv& clearEnv = pGLContext->GetImmDrawContext().GetClearEnv();
 
    using namespace Math;
@@ -88,6 +90,8 @@ void glClearColor( GLclampf red,
 
 void glClearDepth( GLclampd depth )
 {
+    //printf("%s(%f)\n", __FUNCTION__, depth);
+
    CClearEnv& clearEnv = pGLContext->GetImmDrawContext().GetClearEnv();
 
    clearEnv.SetClearDepth( (float)depth );
@@ -95,6 +99,8 @@ void glClearDepth( GLclampd depth )
 
 void glClear( GLbitfield mask )
 {
+    //printf("%s(0x%x)\n", __FUNCTION__, mask);
+
    pGLContext->GetImmDrawContext().GetClearEnv().ClearBuffers( mask );
 }
 

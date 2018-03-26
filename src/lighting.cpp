@@ -321,6 +321,8 @@ CDListLighting::SetGlobalAmbient( cpu_vec_xyzw newAmb )
 void
 setPosition( CLight &light, float x, float y, float z, float w )
 {
+    //printf("%s\n", __FUNCTION__);
+
    cpu_vec_xyzw pos(x, y, z, w);
    if ( w == 0.0f )
       light.SetDirection( pos );
@@ -332,6 +334,8 @@ void glLightfv( GLenum lightNum,
 		GLenum pname,
 		const GLfloat *params )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CLighting& lighting = pGLContext->GetLighting();
    CLight& light = lighting.GetLight(0x7 & lightNum);
 
@@ -373,6 +377,8 @@ void glLightfv( GLenum lightNum,
 
 void glLightf( GLenum lightNum, GLenum pname, GLfloat param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CLighting& lighting = pGLContext->GetLighting();
    CLight& light = lighting.GetLight(0x7 & lightNum);
 
@@ -399,6 +405,8 @@ void glLightf( GLenum lightNum, GLenum pname, GLfloat param )
 
 void glLightModelfv( GLenum pname, const GLfloat *params )
 {
+    //printf("%s\n", __FUNCTION__);
+
    switch (pname) {
       case GL_LIGHT_MODEL_AMBIENT:
 	 pGLContext->GetLighting().SetGlobalAmbient( cpu_vec_xyzw( params[0],
@@ -428,20 +436,28 @@ void glLightModelfv( GLenum pname, const GLfloat *params )
 
 void glLightModeli( GLenum pname, int param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mNotImplemented( );
 }
 
 void glGetLightfv( GLenum light, GLenum pname, float *params )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mNotImplemented( );
 }
 
 void glFogf( GLenum pname, GLfloat param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mNotImplemented( );
 }
 
 void glFogfv( GLenum pname, const GLfloat *params )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mNotImplemented( );
 }

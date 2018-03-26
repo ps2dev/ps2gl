@@ -184,6 +184,8 @@ CMaterialManager::SetColorMaterialMode( GLenum mode )
 
 void glMaterialfv( GLenum face, GLenum pname, const GLfloat *params )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CMaterial& material = pGLContext->GetMaterialManager().GetCurMaterial();
 
    switch (face) {
@@ -224,6 +226,8 @@ void glMaterialfv( GLenum face, GLenum pname, const GLfloat *params )
 
 void glMaterialf( GLenum face, GLenum pname, GLfloat param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CMaterial& material = pGLContext->GetMaterialManager().GetCurMaterial();
 
    switch (face) {
@@ -244,6 +248,8 @@ void glMaterialf( GLenum face, GLenum pname, GLfloat param )
 
 void glColorMaterial( GLenum face, GLenum mode )
 {
+    //printf("%s\n", __FUNCTION__);
+
    pGLContext->GetMaterialManager().SetColorMaterialMode( mode );
 }
 

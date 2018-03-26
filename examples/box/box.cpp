@@ -1,5 +1,5 @@
 /*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
+
        	  This file is subject to the terms and conditions of the GNU Lesser
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
@@ -127,7 +127,7 @@ draw_cube(void)
       { 1, -1, 1 },
       { 1, -1, -1 }
    };
-      
+
    static float material_diff_amb[] = { 0.5f, 0.5f, 0.5f, 0 };
    glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, material_diff_amb );
 
@@ -206,9 +206,9 @@ display(void)
 
    glLoadIdentity();
 
-   tsDrawString("Wow!  A cube!\n"
-		"Left D-Pad rotates the camera\n"
-		"R1 and R2 move in and out\n");
+   tsDrawString("Wow! A cube!\n");
+   tsDrawString("Left D-Pad rotates the camera\n");
+   tsDrawString("R1 and R2 move in and out\n");
    glDisable( GL_TEXTURE_2D );
 
    glFlush();

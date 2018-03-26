@@ -88,11 +88,15 @@ CDListMatrixStack::SetTop( const cpu_mat_44 &newMat, const cpu_mat_44 &newInv )
 
 void glMatrixMode( GLenum mode )
 {
+    //printf("%s\n", __FUNCTION__);
+
    pGLContext->SetMatrixMode( mode );
 }
 
 void glLoadIdentity( void )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
 
    cpu_mat_44 ident;
@@ -102,12 +106,16 @@ void glLoadIdentity( void )
 
 void glPushMatrix( void )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
    matStack.Push();
 }
 
 void glPopMatrix( void )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
    matStack.Pop();
 }
@@ -117,6 +125,8 @@ extern void Invert2( float *mat, float *dst );
 
 void glLoadMatrixf( const GLfloat *m )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
    cpu_mat_44 newMat;
 
@@ -135,6 +145,8 @@ void glFrustum( GLdouble left, GLdouble right,
 		GLdouble bottom, GLdouble top,
 		GLdouble zNear, GLdouble zFar )
 {
+    //printf("%s\n", __FUNCTION__);
+
    cpu_mat_44 xform( cpu_vec_xyzw( (2.0f * zNear)
 				   / (right - left),
 				   0.0f,
@@ -191,6 +203,8 @@ void glOrtho( GLdouble left, GLdouble right,
 	      GLdouble bottom, GLdouble top,
 	      GLdouble zNear, GLdouble zFar )
 {
+    //printf("%s\n", __FUNCTION__);
+
    cpu_mat_44 xform( cpu_vec_xyzw( (2.0f)
 				   / (right - left),
 				   0.0f,
@@ -245,6 +259,8 @@ void glOrtho( GLdouble left, GLdouble right,
 
 void glMultMatrixf( const GLfloat *m )
 {
+    //printf("%s\n", __FUNCTION__);
+
    // unfortunately we can't assume the matrix is qword-aligned
    // the casts to float below fix an apparent parse error... something's up here..
    cpu_mat_44 newMatrix( cpu_vec_xyzw( (float)m[0], (float)m[1], (float)m[2], (float)m[3] ),
@@ -282,6 +298,8 @@ void glMultMatrixf( const GLfloat *m )
 void glRotatef( GLfloat angle,
 		GLfloat x, GLfloat y, GLfloat z )
 {
+    //printf("%s\n", __FUNCTION__);
+
    cpu_mat_44 xform, inverse;
    cpu_vec_xyz axis(x,y,z);
    axis.normalize();
@@ -294,6 +312,8 @@ void glRotatef( GLfloat angle,
 
 void glScalef( GLfloat x, GLfloat y, GLfloat z )
 {
+    //printf("%s\n", __FUNCTION__);
+
    cpu_mat_44 xform, inverse;
    xform.set_scale( cpu_vec_xyz(x,y,z) );
    inverse.set_scale( cpu_vec_xyz(1.0f/x, 1.0f/y, 1.0f/z) );
@@ -304,6 +324,8 @@ void glScalef( GLfloat x, GLfloat y, GLfloat z )
 
 void glTranslatef( GLfloat x, GLfloat y, GLfloat z )
 {
+    //printf("%s\n", __FUNCTION__);
+
    cpu_mat_44 xform, inverse;
    cpu_vec_xyz direction(x, y, z);
    xform.set_translate( direction );

@@ -82,6 +82,8 @@ CGeomManager::CGeomManager( CGLContext &context )
 void glVertexPointer( GLint size, GLenum type,
 		      GLsizei stride, const GLvoid *ptr )
 {
+    //printf("%s\n", __FUNCTION__);
+
    if ( stride != 0 ) {
       mNotImplemented( "stride must be 0" );
       return;
@@ -104,6 +106,8 @@ void glVertexPointer( GLint size, GLenum type,
 void glNormalPointer( GLenum type, GLsizei stride,
 		      const GLvoid *ptr )
 {
+    //printf("%s\n", __FUNCTION__);
+
    pglNormalPointer( 3, type, stride, ptr );
 }
 
@@ -116,6 +120,8 @@ void glNormalPointer( GLenum type, GLsizei stride,
 void glTexCoordPointer( GLint size, GLenum type,
 			GLsizei stride, const GLvoid *ptr )
 {
+    //printf("%s\n", __FUNCTION__);
+
    if ( stride != 0 ) {
       mNotImplemented( "stride must be 0" );
       return;
@@ -139,6 +145,8 @@ void glTexCoordPointer( GLint size, GLenum type,
 void glColorPointer( GLint size, GLenum type,
 		     GLsizei stride, const GLvoid *ptr )
 {
+    //printf("%s\n", __FUNCTION__);
+
    if ( stride != 0 ) {
       mNotImplemented( "stride must be 0" );
       return;
@@ -166,6 +174,8 @@ void glColorPointer( GLint size, GLenum type,
  */
 void glDrawArrays( GLenum mode, GLint first, GLsizei count )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager& gmanager = pGLContext->GetGeomManager();
    gmanager.DrawArrays( mode, first, count );
 }
@@ -175,6 +185,8 @@ void glDrawArrays( GLenum mode, GLint first, GLsizei count )
  */
 void glDrawElements( GLenum mode, GLsizei count, GLenum type, const GLvoid *indices )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mError("glDrawElements is a placeholder ATM and should not be called");
 }
 
@@ -183,6 +195,8 @@ void glDrawElements( GLenum mode, GLsizei count, GLenum type, const GLvoid *indi
  */
 void glInterleavedArrays( GLenum format, GLsizei stride, const GLvoid *pointer )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mError("glInterleavedArrays is a placeholder ATM and should not be called");
 }
 
@@ -191,6 +205,8 @@ void glInterleavedArrays( GLenum format, GLsizei stride, const GLvoid *pointer )
  */
 void glArrayElement( GLint i )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mError("glArrayElement is a placeholder ATM and should not be called");
 }
 
@@ -199,6 +215,8 @@ void glArrayElement( GLint i )
  */
 void glFlush( void )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager& gmanager = pGLContext->GetGeomManager();
    gmanager.Flush();
 }
@@ -207,6 +225,8 @@ void glFlush( void )
 
 void glEnableClientState( GLenum cap )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager& gmanager = pGLContext->GetGeomManager();
    CVertArray &vertArray = gmanager.GetVertArray();
 
@@ -225,6 +245,8 @@ void glEnableClientState( GLenum cap )
 
 void glDisableClientState( GLenum cap )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager &gmanager = pGLContext->GetGeomManager();
    CVertArray &vertArray = gmanager.GetVertArray();
 
@@ -245,77 +267,119 @@ void glDisableClientState( GLenum cap )
 
 void glBegin( GLenum mode )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager& gmanager = pGLContext->GetGeomManager();
    gmanager.BeginGeom( mode );
 }
 
 void glNormal3f( GLfloat x, GLfloat y, GLfloat z )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager& gmanager = pGLContext->GetGeomManager();
    gmanager.Normal( cpu_vec_xyz(x, y, z) );
 }
 
 void glNormal3fv( const GLfloat *v )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glNormal3f( v[0], v[1], v[2] );
 }
 
 void glVertex4f( GLfloat x, GLfloat y, GLfloat z, GLfloat w )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager &gmanager = pGLContext->GetGeomManager();
    gmanager.Vertex( cpu_vec_xyzw(x, y, z, w) );
 }
 
 void glVertex4fv( const GLfloat *vertex )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glVertex4f( vertex[0], vertex[1], vertex[2], vertex[3] );
 }
 
 void glVertex3f( GLfloat x, GLfloat y, GLfloat z )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glVertex4f(x, y, z, 1.0f);
 }
 
 void glVertex3fv( const GLfloat *vertex )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glVertex4f( vertex[0], vertex[1], vertex[2], 1.0f );
+}
+
+void glVertex2f( GLfloat x, GLfloat y )
+{
+    //printf("%s\n", __FUNCTION__);
+
+   glVertex4f(x, y, 0.0f, 1.0f);
+}
+
+void glVertex2fv( const GLfloat *vertex )
+{
+    //printf("%s\n", __FUNCTION__);
+
+   glVertex4f( vertex[0], vertex[1], 0.0f, 1.0f );
 }
 
 void glTexCoord2f( GLfloat u, GLfloat v )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager &gmanager = pGLContext->GetGeomManager();
    gmanager.TexCoord( u, v );
 }
 
 void glTexCoord2fv( const GLfloat *texCoord )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glTexCoord2f( texCoord[0], texCoord[1] );
 }
 
 void glColor3f( GLfloat red, GLfloat green, GLfloat blue )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager &gmanager = pGLContext->GetGeomManager();
    gmanager.Color( cpu_vec_xyzw(red, green, blue, 1.0f) );
 }
 
 void glColor3fv( const GLfloat *color )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glColor3f( color[0], color[1], color[2] );
 }
 
 void glColor4f( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager &gmanager = pGLContext->GetGeomManager();
    gmanager.Color( cpu_vec_xyzw(red, green, blue, alpha) );
 }
 
 void glColor4fv( const GLfloat *color )
 {
+    //printf("%s\n", __FUNCTION__);
+
    glColor4f( color[0], color[1], color[2], color[3] );
 }
 
 void glEnd( void )
 {
+    //printf("%s\n", __FUNCTION__);
+
    CGeomManager &gmanager = pGLContext->GetGeomManager();
    gmanager.EndGeom();
 }

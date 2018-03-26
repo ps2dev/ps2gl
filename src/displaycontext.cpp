@@ -119,18 +119,24 @@ pglSetDisplayBuffers( int interlaced, pgl_area_handle_t frame0_mem, pgl_area_han
 
 void glPixelStorei( GLenum pname, int param )
 {
+    //printf("%s\n", __FUNCTION__);
+
    mNotImplemented( );
 }
 
 void glReadPixels( int x, int y, int width, int height,
 		   GLenum format, GLenum type, void *pixels )
 {
+    //printf("%s(%d,%d,%d,%d,...)\n", __FUNCTION__, x, y, width, height);
+
    mNotImplemented( );
 }
 
 void glViewport( GLint x, GLint y,
 		       GLsizei width, GLsizei height )
 {
+    //printf("%s(%d,%d,%d,%d)\n", __FUNCTION__, x, y, width, height);
+
    mNotImplemented( );
 }
 
