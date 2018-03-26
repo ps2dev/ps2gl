@@ -4,3 +4,4 @@ prebuilddone
 *.o
 *.vo
 *.a
+*.elf
