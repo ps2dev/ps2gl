@@ -7,9 +7,9 @@ EE_CFLAGS   += -DNO_VU0_VECTORS
 EE_CXXFLAGS += -DNO_VU0_VECTORS
 
 EE_OBJS = \
-	glut_font_image.o \
-	ps2/pads.o \
-	ps2/ps2glut.o
+	src/glut_font_image.o \
+	src/pads.o \
+	src/ps2glut.o
 
 all: $(EE_LIB)
 
