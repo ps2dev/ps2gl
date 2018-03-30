@@ -413,18 +413,11 @@ void CBaseRenderer::Load()
         unsigned int sendSize64 = (size64 > 256) ? 256 : size64;
 
         // Add send code command (VIF_CMD_MPG)
-        packet.Cnt();
-        {
-            packet.Nop();
-            packet.Mpg((sendSize64 == 256) ? 0 : sendSize64, addr64, 0);
+        packet.Ref(code, sendSize64 / 2);
+        packet.Nop();
+        packet.Mpg(sendSize64 & 0xff, addr64);
 
-            // FIXME: We should Ref to the code instead of copying it
-            for (unsigned int i = 0; i < sendSize64; i++) {
-                packet.Add(*code++);
-            }
-        }
-        packet.CloseTag();
-
+        code += sendSize64;
         size64 -= sendSize64;
         addr64 += sendSize64;
     }
