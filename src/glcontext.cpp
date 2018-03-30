@@ -340,8 +340,6 @@ int CGLContext::GsIntHandler(int cause)
 {
     int ret = 0;
 
-    //printf("%s(%d)\n", __FUNCTION__, cause);
-
     tU32 csr = *(volatile tU32*)GS::ControlRegs::csr;
     // is this a signal interrupt?
     if (csr & 1) {

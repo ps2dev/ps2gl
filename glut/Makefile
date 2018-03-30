@@ -1,7 +1,7 @@
 EE_LIB = libps2glut.a
 
-EE_LDFLAGS  += -L. -L$(PS2SDK)/ports/lib
-EE_INCS     += -I./include -I$(PS2SDK)/ports/include
+EE_LDFLAGS  += -L. -L$(PS2SDK)/ports/lib -L$(PS2DEV)/gsKit/lib
+EE_INCS     += -I./include -I$(PS2SDK)/ports/include -I$(PS2DEV)/gsKit/include
 # VU0 code is broken so disable for now
 EE_CFLAGS   += -DNO_VU0_VECTORS
 EE_CXXFLAGS += -DNO_VU0_VECTORS
@@ -9,7 +9,8 @@ EE_CXXFLAGS += -DNO_VU0_VECTORS
 EE_OBJS = \
 	src/glut_font_image.o \
 	src/pads.o \
-	src/ps2glut.o
+	src/ps2glut.o \
+	src/gsKitInit.o
 
 all: $(EE_LIB)
 
