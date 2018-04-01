@@ -9,8 +9,7 @@ EE_CXXFLAGS += -DNO_VU0_VECTORS
 EE_OBJS = \
 	src/glut_font_image.o \
 	src/pads.o \
-	src/ps2glut.o \
-	src/gsKitInit.o
+	src/ps2glut.o
 
 all: $(EE_LIB)
 
