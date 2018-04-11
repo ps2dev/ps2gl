@@ -100,14 +100,14 @@ void CDListMatrixStack::SetTop(const cpu_mat_44& newMat, const cpu_mat_44& newIn
 
 void glMatrixMode(GLenum mode)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     pGLContext->SetMatrixMode(mode);
 }
 
 void glLoadIdentity(void)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
 
@@ -118,7 +118,7 @@ void glLoadIdentity(void)
 
 void glPushMatrix(void)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
     matStack.Push();
@@ -126,7 +126,7 @@ void glPushMatrix(void)
 
 void glPopMatrix(void)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
     matStack.Pop();
@@ -137,7 +137,7 @@ extern void Invert2(float* mat, float* dst);
 
 void glLoadMatrixf(const GLfloat* m)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
     cpu_mat_44 newMat;
@@ -157,7 +157,7 @@ void glFrustum(GLdouble left, GLdouble right,
     GLdouble bottom, GLdouble top,
     GLdouble zNear, GLdouble zFar)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     cpu_mat_44 xform(cpu_vec_xyzw((2.0f * zNear)
                              / (right - left),
@@ -213,7 +213,7 @@ void glOrtho(GLdouble left, GLdouble right,
     GLdouble bottom, GLdouble top,
     GLdouble zNear, GLdouble zFar)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     cpu_mat_44 xform(cpu_vec_xyzw((2.0f)
                              / (right - left),
@@ -267,7 +267,7 @@ void glOrtho(GLdouble left, GLdouble right,
 
 void glMultMatrixf(const GLfloat* m)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     // unfortunately we can't assume the matrix is qword-aligned
     // the casts to float below fix an apparent parse error... something's up here..
@@ -305,7 +305,7 @@ void glMultMatrixf(const GLfloat* m)
 void glRotatef(GLfloat angle,
     GLfloat x, GLfloat y, GLfloat z)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     cpu_mat_44 xform, inverse;
     cpu_vec_xyz axis(x, y, z);
@@ -319,7 +319,7 @@ void glRotatef(GLfloat angle,
 
 void glScalef(GLfloat x, GLfloat y, GLfloat z)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     cpu_mat_44 xform, inverse;
     xform.set_scale(cpu_vec_xyz(x, y, z));
@@ -331,7 +331,7 @@ void glScalef(GLfloat x, GLfloat y, GLfloat z)
 
 void glTranslatef(GLfloat x, GLfloat y, GLfloat z)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     cpu_mat_44 xform, inverse;
     cpu_vec_xyz direction(x, y, z);

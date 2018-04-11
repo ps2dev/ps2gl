@@ -14,6 +14,9 @@
 
 #include "ps2s/debug_macros.h"
 
-#define mNotImplemented(_msg, _args...) mWarn("not implemented" _msg, ##_args)
+#define mNotImplemented(_msg, _args...) mWarn("(in %s) not implemented" _msg, __FUNCTION__, ##_args)
+
+//#define GL_FUNC_DEBUG printf
+#define GL_FUNC_DEBUG(msg, ...)
 
 #endif // ps2gl_debug_h

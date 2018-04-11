@@ -73,7 +73,7 @@ void glClearColor(GLclampf red,
     GLclampf blue,
     GLclampf alpha)
 {
-    //printf("%s(%f,%f,%f,%f)\n", __FUNCTION__, red, green, blue, alpha);
+    GL_FUNC_DEBUG("%s(%f,%f,%f,%f)\n", __FUNCTION__, red, green, blue, alpha);
 
     CClearEnv& clearEnv = pGLContext->GetImmDrawContext().GetClearEnv();
 
@@ -86,7 +86,7 @@ void glClearColor(GLclampf red,
 
 void glClearDepth(GLclampd depth)
 {
-    //printf("%s(%f)\n", __FUNCTION__, depth);
+    GL_FUNC_DEBUG("%s(%f)\n", __FUNCTION__, depth);
 
     CClearEnv& clearEnv = pGLContext->GetImmDrawContext().GetClearEnv();
 
@@ -95,7 +95,7 @@ void glClearDepth(GLclampd depth)
 
 void glClear(GLbitfield mask)
 {
-    //printf("%s(0x%x)\n", __FUNCTION__, mask);
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, mask);
 
     pGLContext->GetImmDrawContext().GetClearEnv().ClearBuffers(mask);
 }

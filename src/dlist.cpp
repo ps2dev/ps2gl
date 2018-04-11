@@ -189,35 +189,35 @@ void CDListManager::CallList(unsigned int listID)
 
 GLuint glGenLists(GLsizei range)
 {
-    //printf("%s(%d)\n", __FUNCTION__, range);
+    GL_FUNC_DEBUG("%s(%d)\n", __FUNCTION__, range);
 
     return pGLContext->GetDListManager().GenLists(range);
 }
 
 void glDeleteLists(GLuint list, GLsizei range)
 {
-    //printf("%s(%d,%d)\n", __FUNCTION__, list, range);
+    GL_FUNC_DEBUG("%s(%d,%d)\n", __FUNCTION__, list, range);
 
     pGLContext->GetDListManager().DeleteLists(list, range);
 }
 
 void glNewList(GLuint listID, GLenum mode)
 {
-    //printf("%s(%d,%d)\n", __FUNCTION__, listID, mode);
+    GL_FUNC_DEBUG("%s(%d,%d)\n", __FUNCTION__, listID, mode);
 
     pGLContext->BeginDListDef(listID, mode);
 }
 
 void glEndList(void)
 {
-    //printf("%s()\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s()\n", __FUNCTION__);
 
     pGLContext->EndDListDef();
 }
 
 void glCallList(GLuint listID)
 {
-    //printf("%s(%d)\n", __FUNCTION__, listID);
+    GL_FUNC_DEBUG("%s(%d)\n", __FUNCTION__, listID);
 
     pGLContext->GetDListManager().CallList(listID);
 }

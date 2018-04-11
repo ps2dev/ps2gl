@@ -669,21 +669,21 @@ void CDListDrawContext::SetFrameBufferDrawMask(unsigned int mask)
 
 void glDepthFunc(GLenum func)
 {
-    //printf("%s(0x%x)\n", __FUNCTION__, func);
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, func);
 
     mNotImplemented();
 }
 
 void glDrawBuffer(GLenum mode)
 {
-    //printf("%s(0x%x)\n", __FUNCTION__, mode);
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, mode);
 
     mNotImplemented();
 }
 
 void glClipPlane(GLenum plane, const GLdouble* equation)
 {
-    //printf("%s(0x%x,%f)\n", __FUNCTION__, plane, equation);
+    GL_FUNC_DEBUG("%s(0x%x,%f)\n", __FUNCTION__, plane, equation);
 
     mNotImplemented();
 }
@@ -692,7 +692,7 @@ void glClipPlane(GLenum plane, const GLdouble* equation)
 
 void glBlendFunc(GLenum sfactor, GLenum dfactor)
 {
-    //printf("%s(0x%x,0x%x)\n", __FUNCTION__, sfactor, dfactor);
+    GL_FUNC_DEBUG("%s(0x%x,0x%x)\n", __FUNCTION__, sfactor, dfactor);
 
     pGLContext->GetDrawContext().SetBlendMode(sfactor, dfactor);
 }
@@ -701,7 +701,7 @@ void glBlendFunc(GLenum sfactor, GLenum dfactor)
 
 void glAlphaFunc(GLenum func, GLclampf ref)
 {
-    //printf("%s(0x%x,%f)\n", __FUNCTION__, func, ref);
+    GL_FUNC_DEBUG("%s(0x%x,%f)\n", __FUNCTION__, func, ref);
 
     pGLContext->GetDrawContext().SetAlphaFunc(func, ref);
 }
@@ -710,7 +710,7 @@ void glAlphaFunc(GLenum func, GLclampf ref)
 
 void glDepthMask(GLboolean enabled)
 {
-    //printf("%s(%d)\n", __FUNCTION__, enabled);
+    GL_FUNC_DEBUG("%s(%d)\n", __FUNCTION__, enabled);
 
     CImmDrawContext& drawContext = pGLContext->GetImmDrawContext();
     drawContext.SetDepthWriteEnabled(enabled);
@@ -718,7 +718,7 @@ void glDepthMask(GLboolean enabled)
 
 void glShadeModel(GLenum mode)
 {
-    //printf("%s(0x%x)\n", __FUNCTION__, mode);
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, mode);
 
     CImmDrawContext& drawContext = pGLContext->GetImmDrawContext();
     drawContext.SetDoSmoothShading((mode == GL_FLAT) ? false : true);
@@ -726,7 +726,7 @@ void glShadeModel(GLenum mode)
 
 void glCullFace(GLenum mode)
 {
-    //printf("%s(0x%x)\n", __FUNCTION__, mode);
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, mode);
 
     mWarnIf(mode == GL_FRONT_AND_BACK, "GL_FRONT_AND_BACK culling is not supported");
     CImmDrawContext& drawContext = pGLContext->GetImmDrawContext();
@@ -736,7 +736,7 @@ void glCullFace(GLenum mode)
 void glColorMask(GLboolean r_enabled, GLboolean g_enabled,
     GLboolean b_enabled, GLboolean a_enabled)
 {
-    //printf("%s(%d,%d,%d,%d)\n", __FUNCTION__, r_enabled, g_enabled, b_enabled, a_enabled);
+    GL_FUNC_DEBUG("%s(%d,%d,%d,%d)\n", __FUNCTION__, r_enabled, g_enabled, b_enabled, a_enabled);
 
     CImmDrawContext& drawContext = pGLContext->GetImmDrawContext();
     unsigned int mask            = 0;
@@ -753,28 +753,28 @@ void glColorMask(GLboolean r_enabled, GLboolean g_enabled,
 
 void glScissor(int x, int y, int width, int height)
 {
-    //printf("%s(%d,%d,%d,%d)\n", __FUNCTION__, x, y, width, height);
+    GL_FUNC_DEBUG("%s(%d,%d,%d,%d)\n", __FUNCTION__, x, y, width, height);
 
     mNotImplemented();
 }
 
 void glClearAccum(float red, float green, float blue, float alpha)
 {
-    //printf("%s(%f,%f,%f,%f)\n", __FUNCTION__, red, green, blue, alpha);
+    GL_FUNC_DEBUG("%s(%f,%f,%f,%f)\n", __FUNCTION__, red, green, blue, alpha);
 
     mNotImplemented();
 }
 
 void glClearStencil(int s)
 {
-    //printf("%s(%d)\n", __FUNCTION__, s);
+    GL_FUNC_DEBUG("%s(%d)\n", __FUNCTION__, s);
 
     mNotImplemented();
 }
 
 void glPolygonMode(GLenum face, GLenum mode)
 {
-    //printf("%s(0x%x,0x%x)\n", __FUNCTION__, face, mode);
+    GL_FUNC_DEBUG("%s(0x%x,0x%x)\n", __FUNCTION__, face, mode);
 
     CImmDrawContext& drawContext = pGLContext->GetImmDrawContext();
     drawContext.SetPolygonMode(mode);

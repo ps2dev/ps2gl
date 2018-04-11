@@ -641,7 +641,7 @@ void pglDisable(GLenum cap)
 
 void glEnable(GLenum cap)
 {
-    //printf("%s(0x%x)\n", __FUNCTION__, cap);
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, cap);
 
     CLighting& lighting = pGLContext->GetLighting();
 
@@ -696,7 +696,7 @@ void glEnable(GLenum cap)
 
 void glDisable(GLenum cap)
 {
-    //printf("%s(0x%x)\n", __FUNCTION__, cap);
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, cap);
 
     switch (cap) {
     case GL_LIGHT0:
@@ -748,14 +748,14 @@ void glDisable(GLenum cap)
 
 void glHint(GLenum target, GLenum mode)
 {
-    //printf("%s(0x%x,0x%x)\n", __FUNCTION__, target, mode);
+    GL_FUNC_DEBUG("%s(0x%x,0x%x)\n", __FUNCTION__, target, mode);
 
     mNotImplemented();
 }
 
 void glGetFloatv(GLenum pname, GLfloat* params)
 {
-    //printf("%s(0x%x,...)\n", __FUNCTION__, pname);
+    GL_FUNC_DEBUG("%s(0x%x,...)\n", __FUNCTION__, pname);
 
     switch (pname) {
     case GL_MODELVIEW_MATRIX:
@@ -772,14 +772,14 @@ void glGetFloatv(GLenum pname, GLfloat* params)
 
 void glGetIntegerv(GLenum pname, int* params)
 {
-    //printf("%s(0x%x,...)\n", __FUNCTION__, pname);
+    GL_FUNC_DEBUG("%s(0x%x,...)\n", __FUNCTION__, pname);
 
     mNotImplemented();
 }
 
 GLenum glGetError(void)
 {
-    //printf("%s()\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s()\n", __FUNCTION__);
 
     mWarn("glGetError does nothing");
 
@@ -788,7 +788,7 @@ GLenum glGetError(void)
 
 const GLubyte* glGetString(GLenum name)
 {
-    //printf("%s(0x%x)\n", __FUNCTION__, name);
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, name);
 
     mNotImplemented();
     return (GLubyte*)"not implemented";

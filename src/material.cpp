@@ -195,7 +195,7 @@ void CMaterialManager::SetColorMaterialMode(GLenum mode)
 
 void glMaterialfv(GLenum face, GLenum pname, const GLfloat* params)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     CMaterial& material = pGLContext->GetMaterialManager().GetCurMaterial();
 
@@ -237,7 +237,7 @@ void glMaterialfv(GLenum face, GLenum pname, const GLfloat* params)
 
 void glMaterialf(GLenum face, GLenum pname, GLfloat param)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     CMaterial& material = pGLContext->GetMaterialManager().GetCurMaterial();
 
@@ -261,7 +261,7 @@ void glMaterialf(GLenum face, GLenum pname, GLfloat param)
 
 void glColorMaterial(GLenum face, GLenum mode)
 {
-    //printf("%s\n", __FUNCTION__);
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     pGLContext->GetMaterialManager().SetColorMaterialMode(mode);
 }
