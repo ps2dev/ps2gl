@@ -318,6 +318,10 @@ public:
     {
         GsContextChanged |= GsCtxtFlags::DrawEnv;
     }
+    inline void DepthTestFuncChanged()
+    {
+        GsContextChanged |= GsCtxtFlags::DrawEnv;
+    }
     inline void DepthWriteEnabledChanged()
     {
         GsContextChanged |= GsCtxtFlags::DrawEnv;

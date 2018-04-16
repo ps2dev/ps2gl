@@ -365,6 +365,49 @@ void CImmDrawContext::SetAlphaFunc(GLenum func, GLclampf ref)
     GLContext.AlphaTestFuncChanged();
 }
 
+void CImmDrawContext::SetDepthFunc(GLenum func)
+{
+    /*
+     * NOTE:
+     *   The PS2 does not support GL_LESS/GL_LEQUAL
+     *   but this is what 99% of OpenGL programs use.
+     *
+     *   As a result depth is inverted.
+     *   See glDepthFunc/glFrustum/glOrtho
+     */
+    GS::tZTestPassMode ePassMode;
+
+    switch (func) {
+    case GL_NEVER:
+        ePassMode = GS::ZTest::kNever;
+        break;
+
+    case GL_LESS:
+        ePassMode = GS::ZTest::kGreater;
+        break;
+
+    case GL_LEQUAL:
+        ePassMode = GS::ZTest::kGEqual;
+        break;
+
+    case GL_ALWAYS:
+        ePassMode = GS::ZTest::kAlways;
+        break;
+
+    case GL_EQUAL:
+    case GL_GREATER:
+    case GL_NOTEQUAL:
+    case GL_GEQUAL:
+    default:
+        mError("Unknown/unsupported depth test function");
+        return;
+    }
+
+    DrawEnv->SetDepthTestPassMode(ePassMode);
+
+    GLContext.DepthTestFuncChanged();
+}
+
 /********************************************
  * CDListDrawContext methods
  */
@@ -609,6 +652,29 @@ void CDListDrawContext::SetAlphaFunc(GLenum func, GLclampf ref)
     GLContext.AlphaTestFuncChanged();
 }
 
+class CSetDepthFuncCmd : public CDListCmd {
+    GLenum Func;
+
+public:
+    CSetDepthFuncCmd(GLenum func)
+        : Func(func)
+    {
+    }
+    CDListCmd* Play()
+    {
+        pGLContext->GetImmDrawContext().SetDepthFunc(Func);
+        return CDListCmd::GetNextCmd(this);
+    }
+};
+
+void CDListDrawContext::SetDepthFunc(GLenum func)
+{
+    GLContext.GetDListGeomManager().Flush();
+
+    GLContext.GetDListManager().GetOpenDList() += CSetDepthFuncCmd(func);
+    GLContext.DepthTestFuncChanged();
+}
+
 class CSetRescaleNormalsCmd : public CDListCmd {
     bool Rescale;
 
@@ -710,7 +776,7 @@ void glDepthFunc(GLenum func)
 {
     GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, func);
 
-    mNotImplemented();
+    pGLContext->GetDrawContext().SetDepthFunc(func);
 }
 
 void glDrawBuffer(GLenum mode)

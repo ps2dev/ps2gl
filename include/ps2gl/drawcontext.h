@@ -50,6 +50,7 @@ public:
 
     virtual void SetBlendMode(GLenum source, GLenum dest) = 0;
     virtual void SetAlphaFunc(GLenum func, GLclampf ref)  = 0;
+    virtual void SetDepthFunc(GLenum func)                = 0;
 
     virtual void SetDrawBuffers(bool interlaced,
         GS::CMemArea* frame0Mem, GS::CMemArea* frame1Mem,
@@ -121,6 +122,7 @@ public:
 
     void SetBlendMode(GLenum source, GLenum dest);
     void SetAlphaFunc(GLenum func, GLclampf ref);
+    void SetDepthFunc(GLenum func);
 
     inline bool GetDoSmoothShading() const { return DoSmoothShading; }
     void SetDoSmoothShading(bool yesNo);
@@ -172,6 +174,7 @@ public:
 
     void SetBlendMode(GLenum source, GLenum dest);
     void SetAlphaFunc(GLenum func, GLclampf ref);
+    void SetDepthFunc(GLenum func);
 
     void SetDoSmoothShading(bool yesNo);
     void SetDoClipping(bool clip);

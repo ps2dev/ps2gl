@@ -157,53 +157,61 @@ void glFrustum(GLdouble left, GLdouble right,
     GLdouble bottom, GLdouble top,
     GLdouble zNear, GLdouble zFar)
 {
+    /*
+     * NOTE:
+     *   The PS2 does not support GL_LESS/GL_LEQUAL
+     *   but this is what 99% of OpenGL programs use.
+     *
+     *   As a result depth is inverted.
+     *   See glDepthFunc/glFrustum/glOrtho
+     */
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
-    cpu_mat_44 xform(cpu_vec_xyzw((2.0f * zNear)
-                             / (right - left),
-                         0.0f,
-                         0.0f,
-                         0.0f),
-        cpu_vec_xyzw(0.0f,
-            (2.0f * zNear)
-                / (top - bottom),
+    cpu_mat_44 xform(
+        cpu_vec_xyzw(
+            (2.0f * zNear) / (right - left),
+            0.0f,
             0.0f,
             0.0f),
-        cpu_vec_xyzw((right + left)
-                / (right - left),
-            (top + bottom)
-                / (top - bottom),
-            -(zFar + zNear)
-                / (zFar - zNear),
-            -1.0f),
-        cpu_vec_xyzw(0.0f,
+        cpu_vec_xyzw(
             0.0f,
-            (-2.0f * zFar * zNear)
-                / (zFar - zNear),
-            0.0f));
+            (2.0f * zNear) / (top - bottom),
+            0.0f,
+            0.0f),
+        cpu_vec_xyzw(
+            (right + left) / (right - left),
+            (top + bottom) / (top - bottom),
+            -(zFar + zNear) / (zFar - zNear),
+            -1.0f),
+        cpu_vec_xyzw(
+            0.0f,
+            0.0f,
+            (-2.0f * zFar * zNear) / (zFar - zNear),
+            0.0f)
+    );
 
-    cpu_mat_44 inv(cpu_vec_xyzw((right - left)
-                           / (2 * zNear),
-                       0,
-                       0,
-                       0),
-        cpu_vec_xyzw(0,
-            (top - bottom)
-                / (2 * zNear),
+    cpu_mat_44 inv(
+        cpu_vec_xyzw(
+            (right - left) / (2 * zNear),
+            0,
             0,
             0),
-        cpu_vec_xyzw(0,
+        cpu_vec_xyzw(
+            0,
+            (top - bottom) / (2 * zNear),
+            0,
+            0),
+        cpu_vec_xyzw(
             0,
             0,
-            -(zFar - zNear)
-                / (2 * zFar * zNear)),
-        cpu_vec_xyzw((right + left)
-                / (2 * zNear),
-            (top + bottom)
-                / (2 * zNear),
+            0,
+            -(zFar - zNear) / (2 * zFar * zNear)),
+        cpu_vec_xyzw(
+            (right + left) / (2 * zNear),
+            (top + bottom) / (2 * zNear),
             -1,
-            (zFar + zNear)
-                / (2 * zFar * zNear)));
+            (zFar + zNear) / (2 * zFar * zNear))
+    );
 
     CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
     matStack.Concat(xform, inv);
@@ -213,53 +221,61 @@ void glOrtho(GLdouble left, GLdouble right,
     GLdouble bottom, GLdouble top,
     GLdouble zNear, GLdouble zFar)
 {
+    /*
+     * NOTE:
+     *   The PS2 does not support GL_LESS/GL_LEQUAL
+     *   but this is what 99% of OpenGL programs use.
+     *
+     *   As a result depth is inverted.
+     *   See glDepthFunc/glFrustum/glOrtho
+     */
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
-    cpu_mat_44 xform(cpu_vec_xyzw((2.0f)
-                             / (right - left),
-                         0.0f,
-                         0.0f,
-                         0.0f),
-        cpu_vec_xyzw(0.0f,
-            (2.0f)
-                / (top - bottom),
+    cpu_mat_44 xform(
+        cpu_vec_xyzw(
+            (2.0f) / (right - left),
+            0.0f,
             0.0f,
             0.0f),
-        cpu_vec_xyzw(0.0f,
+        cpu_vec_xyzw(
             0.0f,
-            -2
-                / (zFar - zNear),
+            (2.0f) / (top - bottom),
+            0.0f,
             0.0f),
-        cpu_vec_xyzw(-(right + left)
-                / (right - left),
-            -(top + bottom)
-                / (top - bottom),
-            -(zFar + zNear)
-                / (zFar - zNear),
-            1.0f));
+        cpu_vec_xyzw(
+            0.0f,
+            0.0f,
+            -2 / (zFar - zNear),
+            0.0f),
+        cpu_vec_xyzw(
+            -(right + left) / (right - left),
+            -(top + bottom) / (top - bottom),
+            -(zFar + zNear) / (zFar - zNear),
+            1.0f)
+    );
 
-    cpu_mat_44 inv(cpu_vec_xyzw((right - left)
-                           / 2,
-                       0,
-                       0,
-                       0),
-        cpu_vec_xyzw(0,
-            (top - bottom)
-                / 2,
+    cpu_mat_44 inv(
+        cpu_vec_xyzw(
+            (right - left) / 2,
+            0,
             0,
             0),
-        cpu_vec_xyzw(0,
+        cpu_vec_xyzw(
             0,
-            (zFar - zNear)
-                / -2,
+            (top - bottom) / 2,
+            0,
             0),
-        cpu_vec_xyzw((right + left)
-                / 2,
-            (top + bottom)
-                / 2,
-            (zFar + zNear)
-                / 2,
-            1));
+        cpu_vec_xyzw(
+            0,
+            0,
+            (zFar - zNear) / -2,
+            0),
+        cpu_vec_xyzw(
+            (right + left) / 2,
+            (top + bottom) / 2,
+            (zFar + zNear) / 2,
+            1)
+    );
 
     CMatrixStack& matStack = pGLContext->GetCurMatrixStack();
     matStack.Concat(xform, inv);
