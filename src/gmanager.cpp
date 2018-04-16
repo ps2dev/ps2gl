@@ -336,6 +336,13 @@ void glVertex2f(GLfloat x, GLfloat y)
     glVertex4f(x, y, 0.0f, 1.0f);
 }
 
+void glVertex2i(GLint x, GLint y)
+{
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+
+    glVertex4f((GLfloat)x, (GLfloat)y, 0.0f, 1.0f);
+}
+
 void glVertex2fv(const GLfloat* vertex)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
