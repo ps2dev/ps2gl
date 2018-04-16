@@ -32,6 +32,7 @@ CImmDrawContext::CImmDrawContext(CGLContext& context)
     , RescaleNormals(false)
     , BlendIsEnabled(false)
     , AlphaTestIsEnabled(false)
+    , DepthTestIsEnabled(false)
     , DrawInterlaced(true)
     , PolyMode(GL_FILL)
     , IsVertexXformValid(false)
@@ -255,6 +256,21 @@ void CImmDrawContext::SetAlphaTestEnabled(bool enabled)
         }
 
         GLContext.AlphaTestEnabledChanged();
+    }
+}
+
+void CImmDrawContext::SetDepthTestEnabled(bool enabled)
+{
+    if (DepthTestIsEnabled != enabled) {
+        DepthTestIsEnabled = enabled;
+
+        if (enabled) {
+            DrawEnv->EnableDepthTest();
+        } else {
+            DrawEnv->DisableDepthTest();
+        }
+
+        GLContext.DepthTestEnabledChanged();
     }
 }
 
@@ -520,6 +536,29 @@ void CDListDrawContext::SetAlphaTestEnabled(bool enabled)
 
     GLContext.GetDListManager().GetOpenDList() += CSetAlphaTestEnabledCmd(enabled);
     GLContext.AlphaTestEnabledChanged();
+}
+
+class CSetDepthTestEnabledCmd : public CDListCmd {
+    bool Enabled;
+
+public:
+    CSetDepthTestEnabledCmd(bool enabled)
+        : Enabled(enabled)
+    {
+    }
+    CDListCmd* Play()
+    {
+        pGLContext->GetImmDrawContext().SetDepthTestEnabled(Enabled);
+        return CDListCmd::GetNextCmd(this);
+    }
+};
+
+void CDListDrawContext::SetDepthTestEnabled(bool enabled)
+{
+    GLContext.GetDListGeomManager().Flush();
+
+    GLContext.GetDListManager().GetOpenDList() += CSetDepthTestEnabledCmd(enabled);
+    GLContext.DepthTestEnabledChanged();
 }
 
 class CSetInterlacingOffsetCmd : public CDListCmd {

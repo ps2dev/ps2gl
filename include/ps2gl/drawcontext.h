@@ -44,6 +44,7 @@ public:
     virtual void SetDepthWriteEnabled(bool enabled)        = 0;
     virtual void SetFrameBufferDrawMask(unsigned int mask) = 0;
     virtual void SetAlphaTestEnabled(bool enabled)         = 0;
+    virtual void SetDepthTestEnabled(bool enabled)         = 0;
     virtual void SetInterlacingOffset(float yPixels)       = 0;
     virtual void SetPolygonMode(GLenum mode)               = 0;
 
@@ -81,6 +82,7 @@ public:
     bool RescaleNormals;
     bool BlendIsEnabled;
     bool AlphaTestIsEnabled;
+    bool DepthTestIsEnabled;
     bool DrawInterlaced;
     GLenum PolyMode;
     int DepthBits;
@@ -138,6 +140,9 @@ public:
     inline bool GetAlphaTestEnabled() const { return AlphaTestIsEnabled; }
     void SetAlphaTestEnabled(bool enabled);
 
+    inline bool GetDepthTestEnabled() const { return DepthTestIsEnabled; }
+    void SetDepthTestEnabled(bool enabled);
+
     void SetInterlacingOffset(float yPixels);
 
     void SetDepthWriteEnabled(bool enabled);
@@ -175,6 +180,7 @@ public:
     void SetRescaleNormals(bool rescale);
     void SetBlendEnabled(bool enabled);
     void SetAlphaTestEnabled(bool enabled);
+    void SetDepthTestEnabled(bool enabled);
     void SetInterlacingOffset(float yPixels);
     void SetDepthWriteEnabled(bool enabled);
     void SetFrameBufferDrawMask(unsigned int mask);

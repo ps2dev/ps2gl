@@ -306,6 +306,10 @@ public:
     {
         GsContextChanged |= GsCtxtFlags::DrawEnv;
     }
+    inline void DepthTestEnabledChanged()
+    {
+        GsContextChanged |= GsCtxtFlags::DrawEnv;
+    }
     inline void DrawInterlacedChanged()
     {
         GsContextChanged |= GsCtxtFlags::DrawEnv;

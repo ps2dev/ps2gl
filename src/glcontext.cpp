@@ -688,6 +688,9 @@ void glEnable(GLenum cap)
         break;
 
     case GL_DEPTH_TEST:
+        pGLContext->GetDrawContext().SetDepthTestEnabled(true);
+        break;
+
     default:
         mNotImplemented();
         break;
@@ -741,6 +744,9 @@ void glDisable(GLenum cap)
         break;
 
     case GL_DEPTH_TEST:
+        pGLContext->GetDrawContext().SetDepthTestEnabled(false);
+        break;
+
     default:
         mNotImplemented();
     }
