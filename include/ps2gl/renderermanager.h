@@ -36,7 +36,7 @@ typedef struct {
     tU64 capabilities;
     tU64 requirements;
     CRenderer* renderer;
-} tRenderer __attribute__((aligned(8)));
+} tRenderer;
 
 class CRendererManager {
     CGLContext& GLContext;

@@ -12,7 +12,7 @@ EE_CFLAGS   += -DNO_VU0_VECTORS
 EE_CXXFLAGS += -DNO_VU0_VECTORS
 
 all: $(EE_BIN)
-	ee-strip --strip-all $(EE_BIN)
+	$(EE_STRIP) --strip-all $(EE_BIN)
 
 clean:
 	rm -f $(EE_BIN) $(EE_OBJS)
