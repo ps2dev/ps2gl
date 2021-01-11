@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+    types: [run_build]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ${{ github.repository_owner }}/gskit:latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install dependencies
+      run: |
+        apk add build-base git
+
+    - name: Install ps2stuff
+      run: |
+        git clone https://github.com/ps2dev/ps2stuff.git
+        cd ps2stuff && make clean all install
+
+    - name: Compile project
+      run: |
+        make clean all install
+
+    - name: Compile GLUT
+      run: |
+        cd glut && make clean all install
