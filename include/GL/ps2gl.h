@@ -13,8 +13,8 @@
  * types
  */
 
-typedef long pgl64_t;
-typedef unsigned long pglU64_t;
+typedef long long pgl64_t;
+typedef unsigned long long pglU64_t;
 
 #ifdef __cplusplus
 extern "C" {

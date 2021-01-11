@@ -26,7 +26,7 @@ enum MetricsEnum {
     kMetricsCount,
 };
 
-typedef unsigned long Metric_t; // 64-bit integer
+typedef unsigned long long Metric_t; // 64-bit integer
 
 extern Metric_t g_Metrics[kMetricsCount];
 
