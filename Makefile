@@ -2,11 +2,18 @@ EE_LIB = libps2gl.a
 
 EE_LDFLAGS  += -L. -L$(PS2SDK)/ports/lib
 EE_INCS     += -I./include -I./vu1 -I$(PS2SDK)/ports/include
+
+ifeq ($(DEBUG), 1)
+    EE_CFLAGS   += -D_DEBUG
+    EE_CXXFLAGS += -D_DEBUG
+endif
+
+# Disabling warnings
+WARNING_FLAGS = -Wno-strict-aliasing -Wno-conversion-null 
+
 # VU0 code is broken so disable for now
-EE_CFLAGS   += -D_DEBUG
-EE_CXXFLAGS += -D_DEBUG
-EE_CFLAGS   += -DNO_VU0_VECTORS -DNO_ASM
-EE_CXXFLAGS += -DNO_VU0_VECTORS -DNO_ASM
+EE_CFLAGS   += $(WARNING_FLAGS) -DNO_VU0_VECTORS -DNO_ASM
+EE_CXXFLAGS += $(WARNING_FLAGS) -DNO_VU0_VECTORS -DNO_ASM
 
 EE_OBJS = \
 	src/base_renderer.o \

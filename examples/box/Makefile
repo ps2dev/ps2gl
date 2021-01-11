@@ -5,11 +5,17 @@ EE_OBJS      = box.o ../shared_code/text_stuff.o
 EE_LDFLAGS  += -L$(PS2SDK)/ports/lib -L$(PS2DEV)/gsKit/lib
 EE_LIBS      = -lps2glut -lps2gl -lps2stuff -lpad -ldma -lgs -lpacket -lgraph -lgskit -ldmakit
 
-EE_CFLAGS   += -D_DEBUG
-EE_CXXFLAGS += -D_DEBUG
+ifeq ($(DEBUG), 1)
+    EE_CFLAGS   += -D_DEBUG
+    EE_CXXFLAGS += -D_DEBUG
+endif
+
+# Disabling warnings
+WARNING_FLAGS = -Wno-strict-aliasing -Wno-conversion-null 
+
 # VU0 code is broken so disable for now
-EE_CFLAGS   += -DNO_VU0_VECTORS
-EE_CXXFLAGS += -DNO_VU0_VECTORS
+EE_CFLAGS   += $(WARNING_FLAGS) -DNO_VU0_VECTORS
+EE_CXXFLAGS += $(WARNING_FLAGS) -DNO_VU0_VECTORS
 
 all: $(EE_BIN)
 	$(EE_STRIP) --strip-all $(EE_BIN)
