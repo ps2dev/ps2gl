@@ -8,6 +8,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "GL/gl.h"
 #include "GL/glut.h"
