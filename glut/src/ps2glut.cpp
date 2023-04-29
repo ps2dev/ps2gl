@@ -4,26 +4,32 @@
 	  General Public License Version 2.1. See the file "COPYING" in the
 	  main directory of this archive for more details.                             */
 
+/* libc */
 #include <stdio.h>
 #include <stdlib.h>
 
+/* ps2sdk */
+#include "kernel.h"
 #include "graph.h"
+#include "pads.h"
 
+/* GL */
 #include "GL/glut.h"
 #include "GL/ps2gl.h"
 
+/* ps2stuff */
 #include "ps2s/core.h"
 #include "ps2s/displayenv.h"
 #include "ps2s/drawenv.h"
 #include "ps2s/gs.h"
 #include "ps2s/timer.h"
 
+/* ps2gl */
 #include "ps2gl/debug.h"
 #include "ps2gl/displaycontext.h"
 #include "ps2gl/drawcontext.h"
 #include "ps2gl/glcontext.h"
 
-#include "pads.h"
 
 /********************************************
  * some function pointer types
@@ -110,6 +116,7 @@ void glutInit(int* argcp, char** argv)
         *GIF::Registers::ctrl = 1;
 
         //      sceGsResetGraph(0, SCE_GS_INTERLACE, SCE_GS_NTSC, SCE_GS_FRAME);
+    	SetGsCrt(1 /* interlaced */, 2 /* ntsc */, 1 /* frame */);
 
         mWarn("ps2gl library has not been initialized by the user; using default values.");
         int immBufferVertexSize = 64 * 1024;
