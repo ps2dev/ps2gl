@@ -528,7 +528,7 @@ void pglFinish(void)
  */
 void pglWaitForVU1(void)
 {
-    dma_channel_fast_waits(DMAC::Channels::vif1);
+    dma_channel_wait(DMAC::Channels::vif1, 1000000);
 }
 
 /**

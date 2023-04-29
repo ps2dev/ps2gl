@@ -250,85 +250,65 @@ CRendererManager::CRendererManager(CGLContext& context)
             "linear, tris"));
     }
 
-#if 0
-/*
- * Compiler warnings:
- *   dvp-as -o vu1/general_pv_diff_quad.vo vu1/general_pv_diff_quad_vcl.vsm
- *   vu1/general_pv_diff_quad_vcl.vsm: Assembler messages:
- *   vu1/general_pv_diff_quad_vcl.vsm:1216: Warning: operand out of range (-1129 not between -1024 and 1023)
- *
- *   dvp-as -o vu1/general_pv_diff_tri.vo vu1/general_pv_diff_tri_vcl.vsm
- *   vu1/general_pv_diff_tri_vcl.vsm: Assembler messages:
- *   vu1/general_pv_diff_tri_vcl.vsm:1187: Warning: operand out of range (-1100 not between -1024 and 1023)
- *
- *   dvp-as -o vu1/general_pv_diff.vo vu1/general_pv_diff_vcl.vsm
- *   vu1/general_pv_diff_vcl.vsm: Assembler messages:
- *   vu1/general_pv_diff_vcl.vsm:1202: Warning: operand out of range (-1107 not between -1024 and 1023)
- */
+    // linear, per-vertex color renderers
 
-   // linear, per-vertex color renderers
+    {
+        CRendererProps capabilities = {
+            PrimType : kPtsLinesStripsFans,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 1,
+            PerVtxMaterial : kDiffuse,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kPtsLinesStripsFans,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	1,
-	 PerVtxMaterial: kDiffuse,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(GeneralPVDiff), mVsmSize(GeneralPVDiff), capabilities, no_reqs, 4, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear, pvc"));
+    }
+    {
+        CRendererProps capabilities = {
+            PrimType : kTriangles,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 1,
+            PerVtxMaterial : kDiffuse,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralPVDiff), mVsmSize(GeneralPVDiff), capabilities, no_reqs, 4, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear, pvc") );
-   }
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kTriangles,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	1,
-	 PerVtxMaterial: kDiffuse,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(GeneralPVDiffTri), mVsmSize(GeneralPVDiffTri), capabilities, no_reqs, 4, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear, pvc, tris"));
+    }
+    {
+        CRendererProps capabilities = {
+            PrimType : kQuads,
+            Lighting : 1,
+            NumDirLights : k3DirLights | k8DirLights,
+            NumPtLights : k1PtLight | k2PtLights | k8PtLights,
+            Texture : 1,
+            Specular : 1,
+            PerVtxMaterial : kDiffuse,
+            Clipping : kNonClipped | kClipped,
+            CullFace : 1,
+            TwoSidedLighting : 0,
+            ArrayAccess : kLinear
+        };
 
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralPVDiffTri), mVsmSize(GeneralPVDiffTri), capabilities, no_reqs, 4, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear, pvc, tris") );
-   }
-   {
-      CRendererProps capabilities =
-      {
-	 PrimType:	kQuads,
-	 Lighting:	1,
-	 NumDirLights:	k3DirLights | k8DirLights,
-	 NumPtLights:	k1PtLight | k2PtLights | k8PtLights,
-	 Texture:	1,
-	 Specular:	1,
-	 PerVtxMaterial: kDiffuse,
-	 Clipping:	kNonClipped | kClipped,
-	 CullFace:	1,
-	 TwoSidedLighting: 0,
-	 ArrayAccess: kLinear
-      };
-
-      RegisterDefaultRenderer( new CLinearRenderer(mVsmAddr(GeneralPVDiffQuad), mVsmSize(GeneralPVDiffQuad), capabilities, no_reqs, 4, 3,
-						   kInputStart, kInputBufSize - kInputStart,
-						   "linear, pvc, quads") );
-   }
-#endif
+        RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(GeneralPVDiffQuad), mVsmSize(GeneralPVDiffQuad), capabilities, no_reqs, 4, 3,
+            kInputStart, kInputBufSize - kInputStart,
+            "linear, pvc, quads"));
+    }
 
     // if we don't do this pglGetCurRendererName() will crash if called before rendering
     // any geometry

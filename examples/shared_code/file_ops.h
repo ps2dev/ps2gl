@@ -7,21 +7,7 @@
 #ifndef file_ops_h
 #define file_ops_h
 
-#include "sifdev.h"
-#define O_WRONLY SCE_WRONLY
-#define O_RDONLY SCE_RDONLY
-#define O_CREAT SCE_CREAT
-#undef SEEK_END
-#define SEEK_END SCE_SEEK_END
-#undef SEEK_CUR
-#define SEEK_CUR SCE_SEEK_CUR
-#undef SEEK_SET
-#define SEEK_SET SCE_SEEK_SET
-#define open sceOpen
-#define lseek sceLseek
-#define read sceRead
-#define write sceWrite
-#define close sceClose
+#include "stdio.h"
 #ifdef CDROM
 #define FILE_PREFIX "cdrom0:"
 #define FILE_SEP '\\'
