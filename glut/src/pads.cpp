@@ -88,6 +88,10 @@ CPad::CPad(unsigned int port)
 {
     memset(&CurStatus, 0, sizeof(tPadStatus));
     memset(&LastStatus, 0, sizeof(tPadStatus));
+
+    // All buttons released
+    CurStatus.buttons = 0xffff;
+    LastStatus.buttons = 0xffff;
 }
 
 bool CPad::Open(void)
@@ -186,22 +190,32 @@ bool CPad::UpdateStick(tStickData* stickCur, tStickData* stickLast)
     return isChanged;
 }
 
+bool CPad::IsDown(tPadStatus status, unsigned int button)
+{
+    return !IsUp(status, button);
+}
+
+bool CPad::IsUp(tPadStatus status, unsigned int button)
+{
+    return status.buttons & (1 << button);
+}
+
 bool CPad::IsDown(unsigned int button)
 {
-    return CurStatus.buttons & (1 << button);
+    return IsDown(CurStatus, button);
 }
 
 bool CPad::IsUp(unsigned int button)
 {
-    return !(CurStatus.buttons & (1 << button));
+    return IsUp(CurStatus, button);
 }
 
 bool CPad::WasPushed(unsigned int button)
 {
-    return (CurStatus.buttons & (1 << button)) && !(LastStatus.buttons & (1 << button));
+    return IsUp(LastStatus, button) && IsDown(CurStatus, button);
 }
 
 bool CPad::WasReleased(unsigned int button)
 {
-    return !((CurStatus.buttons & (1 << button)) && !(LastStatus.buttons & (1 << button)));
+    return IsDown(LastStatus, button) && IsUp(CurStatus, button);
 }

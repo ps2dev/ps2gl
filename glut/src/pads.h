@@ -104,6 +104,8 @@ private:
         tStickData rightStick, leftStick;
     } tPadStatus;
 
+    bool IsDown(tPadStatus status, unsigned int button);
+    bool IsUp(tPadStatus status, unsigned int button);
     bool UpdateStick(tStickData* stickCur, tStickData* stickLast);
 
     tU128 DmaBuffer[scePadDmaBufferMax] __attribute__((aligned(64)));
