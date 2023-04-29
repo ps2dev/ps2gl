@@ -4,8 +4,8 @@ EE_LDFLAGS  += -L. -L$(PS2SDK)/ports/lib
 EE_INCS     += -I./include -I./vu1 -I$(PS2SDK)/ports/include
 
 ifeq ($(DEBUG), 1)
-    EE_CFLAGS   += -D_DEBUG
-    EE_CXXFLAGS += -D_DEBUG
+    EE_CFLAGS   += -D_DEBUG -g -O0
+    EE_CXXFLAGS += -D_DEBUG -g -O0
 endif
 
 # Disabling warnings
