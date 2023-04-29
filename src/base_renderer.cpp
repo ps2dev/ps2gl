@@ -414,13 +414,17 @@ void CBaseRenderer::Load()
 
         // Add send code command (VIF_CMD_MPG)
         packet.Ref(code, sendSize64 / 2);
-        packet.Nop();
+        packet.Pad96();
         packet.Mpg(sendSize64 & 0xff, addr64);
 
         code += sendSize64;
         size64 -= sendSize64;
         addr64 += sendSize64;
     }
+    packet.Cnt();
+    packet.Mscal(0);
+    packet.Pad128();
+    packet.CloseTag();
 
     pglAddToMetric(kMetricsRendererUpload);
 }
