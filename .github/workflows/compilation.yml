@@ -9,9 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ${{ github.repository_owner }}/gskit:latest
+    container: ps2dev/ps2sdk-ports:latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
     - name: Install dependencies
       run: |
@@ -29,3 +29,16 @@ jobs:
     - name: Compile GLUT
       run: |
         cd glut && make clean all install
+    
+    - name: Compile examples
+      run: |
+        cd examples
+        # For now just box example is compiling
+        cd box && make clean all
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: examples
+        path: |
+          examples/box/box.elf

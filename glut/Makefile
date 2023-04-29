@@ -4,8 +4,8 @@ EE_LDFLAGS  += -L. -L$(PS2SDK)/ports/lib -L$(PS2DEV)/gsKit/lib
 EE_INCS     += -I./include -I$(PS2SDK)/ports/include -I$(PS2DEV)/gsKit/include
 
 ifeq ($(DEBUG), 1)
-    EE_CFLAGS   += -D_DEBUG
-    EE_CXXFLAGS += -D_DEBUG
+    EE_CFLAGS   += -D_DEBUG -g -O0
+    EE_CXXFLAGS += -D_DEBUG -g -O0
 endif
 
 # Disabling warnings
