@@ -7,12 +7,12 @@
 	#include		"billboard_renderer_mem.h"
 
 	; from ps2gl/vu1
-	.include		"db_in_db_out.i"
-	.include		"math.i"
-	.include		"lighting.i"
-	.include		"clip_cull.i"
-	.include		"geometry.i"
-	.include		"io.i"
+	#include		"db_in_db_out.i"
+	#include		"math.i"
+	#include		"lighting.i"
+	#include		"clip_cull.i"
+	#include		"geometry.i"
+	#include		"io.i"
 
 kInputQPerV		.equ			1
 kOutputQPerV		.equ			2
