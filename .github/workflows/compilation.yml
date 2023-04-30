@@ -20,25 +20,37 @@ jobs:
     - name: Install ps2stuff
       run: |
         git clone https://github.com/ps2dev/ps2stuff.git
-        cd ps2stuff && make clean all install
+        cd ps2stuff 
+        make -j $(getconf _NPROCESSORS_ONLN) clean
+        make -j $(getconf _NPROCESSORS_ONLN) all
+        make -j $(getconf _NPROCESSORS_ONLN) install
 
     - name: Compile project
       run: |
-        make clean all install
+        make -j $(getconf _NPROCESSORS_ONLN) clean
+        make -j $(getconf _NPROCESSORS_ONLN) all
+        make -j $(getconf _NPROCESSORS_ONLN) install
 
     - name: Compile GLUT
       run: |
-        cd glut && make clean all install
+        cd glut 
+        make -j $(getconf _NPROCESSORS_ONLN) clean
+        make -j $(getconf _NPROCESSORS_ONLN) all
+        make -j $(getconf _NPROCESSORS_ONLN) install
     
     - name: Compile examples
       run: |
         cd examples
-        # For now just box example is compiling
-        cd box && make clean all
+        # For now just box and logo example is compiling
+        cd box && make clean all && cd ..
+        cd logo && make clean all && cd ..
+
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: examples
         path: |
-          examples/box/box.elf
+          examples/**/*.elf
+          examples/**/*.gl
+          examples/**/*.rtx
