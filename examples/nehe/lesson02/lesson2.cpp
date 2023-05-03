@@ -23,7 +23,7 @@ void init(GLvoid) // Create Some Everyday Functions
     glClearDepth(1.0f);                   // Depth Buffer Setup
     glEnable(GL_DEPTH_TEST);              // Enables Depth Testing
     glDepthFunc(GL_LEQUAL);               // The Type Of Depth Testing To Do
-    glEnable(GL_COLOR_MATERIAL);
+    //glEnable(GL_COLOR_MATERIAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv)                  // Create Main Function For Bri
     glutInit(&argc, argv);                       // Erm Just Write It =)
     init();
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE); // Display Mode
-    glutInitWindowSize(500, 500);                // If glutFullScreen wasn't called this is the window size
+    glutInitWindowSize(640, 448);                // If glutFullScreen wasn't called this is the window size
     glutCreateWindow("NeHe's OpenGL Framework"); // Window Title (argv[0] for current directory as title)
     glutDisplayFunc(display);                    // Matching Earlier Functions To Their Counterparts
     glutReshapeFunc(reshape);
