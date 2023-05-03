@@ -20,6 +20,10 @@ EE_CXXFLAGS += $(WARNING_FLAGS) -DNO_VU0_VECTORS
 all: $(EE_BIN)
 	$(EE_STRIP) --strip-all $(EE_BIN)
 
+testpc:
+	g++ lesson4.cpp -lglut -lGL -o lesson04
+	./lesson04
+
 clean:
 	rm -f $(EE_BIN) $(EE_OBJS)
 
