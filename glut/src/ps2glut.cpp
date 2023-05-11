@@ -31,6 +31,9 @@
 #include "ps2gl/glcontext.h"
 
 
+DISABLE_EXTRA_TIMERS_FUNCTIONS();
+
+
 /********************************************
  * some function pointer types
  */
