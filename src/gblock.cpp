@@ -55,7 +55,7 @@ bool CGeometryBlock::MergeNewIndexed()
 
     if (NewPrimType != PrimType
         || NewArrayType != ArrayType
-        || NumStrips == kMaxNumStrips)
+        || NumStrips >= kMaxNumStrips)
         success = false;
 
     if (success) {

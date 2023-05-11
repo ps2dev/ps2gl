@@ -474,6 +474,8 @@ public:
         , IsCached(false)
         , DList(dlist)
         , RenderPacket(NULL)
+        , RenderContextDependencies(0)
+        , RenderContextDepMask(0)
     {
     }
 
@@ -582,6 +584,8 @@ public:
         , IsCached(false)
         , DList(dlist)
         , RenderPacket(NULL)
+        , IsTexEnabled(false)
+        , IsLightingEnabled(false)
     {
     }
 

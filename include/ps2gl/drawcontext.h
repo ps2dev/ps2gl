@@ -34,6 +34,9 @@ public:
         : GLContext(context)
     {
     }
+    virtual ~CDrawContext()
+    {
+    }
 
     virtual void SetDoSmoothShading(bool yesNo)            = 0;
     virtual void SetDoClipping(bool clip)                  = 0;

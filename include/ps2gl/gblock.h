@@ -39,7 +39,7 @@ private:
 
     static const int kMaxNumStrips          = 40;
     static const unsigned int kContinueFlag = 0x80000000;
-    char NumStrips;
+    unsigned char NumStrips;
     unsigned int StripLengths[kMaxNumStrips];
     const void* IStripLengths[kMaxNumStrips];
     const void* Indices[kMaxNumStrips];

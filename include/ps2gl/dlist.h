@@ -20,6 +20,8 @@
 class CDListCmd {
 public:
     CDListCmd() {}
+    virtual ~CDListCmd() {}
+
     virtual CDListCmd* Play() = 0;
 
     template <class CmdType>
@@ -56,6 +58,10 @@ public:
         mError("Trying to play an empty list!");
         return NULL;
     }
+
+    // round (size of this class) up to nearest quad.. this is temporary so that I
+    // can use the vector classes for a while
+    int filler[3];
 };
 
 class CEndListCmd : public CDListCmd {

@@ -197,6 +197,9 @@ public:
         : GLContext(context)
     {
     }
+    virtual ~CLighting()
+    {
+    }
 
     virtual CLight& GetLight(int num) = 0;
 
