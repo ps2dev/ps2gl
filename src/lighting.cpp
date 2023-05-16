@@ -65,7 +65,7 @@ void CImmLight::SetEnabled(bool enabled)
 void CImmLight::SetSpecular(cpu_vec_xyzw specular)
 {
     cpu_vec_4 zero(0, 0, 0, 0);
-    if (specular == zero ^ Specular == zero) {
+    if ((specular == zero) ^ (Specular == zero)) {
         Specular = specular;
         GLContext.GetImmLighting().SpecularChanged();
     } else

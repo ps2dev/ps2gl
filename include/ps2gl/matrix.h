@@ -34,6 +34,9 @@ public:
         Matrices[0].set_identity();
         InverseMatrices[0].set_identity();
     }
+    virtual ~CMatrixStack()
+    {
+    }
 
     virtual void Pop()  = 0;
     virtual void Push() = 0;

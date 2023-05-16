@@ -440,7 +440,7 @@ void CBaseRenderer::XferVectors(CVifSCDmaPacket& packet, unsigned int* dataStart
     unsigned int* vecDataEnd   = vecDataStart + numVectors * wordsPerVec;
 
     mAssert(numVectors > 0);
-    mErrorIf((unsigned int)vecDataStart & 4 - 1,
+    mErrorIf((unsigned int)vecDataStart & (4 - 1),
         "XferVectors only works with word-aligned data");
 
     int numWordsToPrepend      = 0;

@@ -559,7 +559,7 @@ void display(void)
 
     glFlush();
 
-    strncpy(renderer_name, pglGetCurRendererName(), 64);
+    strncpy(renderer_name, pglGetCurRendererName(), 63);
     //     printf("renderer = %s\n", renderer_name );
 
     draw_text();
