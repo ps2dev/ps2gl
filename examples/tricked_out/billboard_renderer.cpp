@@ -24,13 +24,19 @@
  * code
  */
 
-void* CBillboardRenderer::Microcode = NULL;
+#define VU_FUNCTIONS(name)        \
+    void vsm##name##_CodeStart(); \
+    void vsm##name##_CodeEnd()
 
-extern "C" void vsmBillboards();
-extern "C" void vsmBillboardsEnd();
+#define mVsmAddr(name) ((void*)vsm##name##_CodeStart)
+#define mVsmSize(name) ((u8*)vsm##name##_CodeEnd - (u8*)vsm##name##_CodeStart)
+
+extern "C" {
+VU_FUNCTIONS(Billboards);
+}
 
 CBillboardRenderer::CBillboardRenderer()
-    : CLinearRenderer(Microcode,
+    : CLinearRenderer(mVsmAddr(Billboards), mVsmSize(Billboards),
           1, // 1 input quad per vertex
           0, // the number of output quads per vert doesn't actually matter
           // (it's only used for strips)
@@ -45,8 +51,6 @@ CBillboardRenderer::CBillboardRenderer()
 CBillboardRenderer*
 CBillboardRenderer::Register()
 {
-    Microcode = (void*)vsmBillboards;
-
     // create a renderer and register it
 
     CBillboardRenderer* renderer = new CBillboardRenderer;
@@ -110,7 +114,7 @@ void CBillboardRenderer::InitContext(GLenum primType, tU32 rcChanges, bool userR
 
         bool alpha      = drawContext.GetBlendEnabled();
         bool useTexture = glContext.GetTexManager().GetTexEnabled();
-        GS::tPrim prim  = { PRIM : 6, IIP : 0, TME : useTexture, FGE : 0, ABE : alpha, AA1 : 0, FST : 0, CTXT : 0, FIX : 0 };
+        GS::tPrim prim  = { prim_type : 6, iip : 0, tme : useTexture, fge : 0, abe : alpha, aa1 : 0, fst : 0, ctxt : 0, fix : 0 };
         tGifTag giftag  = { NLOOP : 0, EOP : 1, pad0 : 0, id : 0, PRE : 1, PRIM : *(tU64*)&prim, FLG : 0, NREG : 4, REGS0 : 2, REGS1 : 4, REGS2 : 2, REGS3 : 4 };
 
         packet.Pad96();
