@@ -6,8 +6,8 @@ EE_LDFLAGS  += -L$(PS2SDK)/ports/lib
 EE_LIBS      = -lps2glut -lps2gl -lps2stuff -lpad -ldma
 
 ifeq ($(DEBUG), 1)
-    EE_CFLAGS   += -D_DEBUG -g -O0
-    EE_CXXFLAGS += -D_DEBUG -g -O0
+    EE_CFLAGS   += -D_DEBUG
+    EE_CXXFLAGS += -D_DEBUG
 endif
 
 # Disabling warnings
