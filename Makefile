@@ -4,8 +4,8 @@ EE_LDFLAGS  += -L. -L$(PS2SDK)/ports/lib
 EE_INCS     += -I./include -I./vu1 -I$(PS2SDK)/ports/include
 
 ifeq ($(DEBUG), 1)
-    EE_CFLAGS   += -D_DEBUG -g -O0
-    EE_CXXFLAGS += -D_DEBUG -g -O0
+    EE_CFLAGS   += -D_DEBUG
+    EE_CXXFLAGS += -D_DEBUG
 endif
 
 # Disabling warnings
@@ -37,22 +37,26 @@ EE_OBJS = \
 	src/renderermanager.o \
 	src/texture.o
 
-EE_OBJS += \
-	vu1/fast_nolights.vo \
-	vu1/fast.vo \
-	vu1/general_nospec_quad.vo \
-	vu1/general_nospec_tri.vo \
-	vu1/general_nospec.vo \
-	vu1/general_pv_diff_quad.vo \
-	vu1/general_pv_diff_tri.vo \
-	vu1/general_pv_diff.vo \
-	vu1/general_quad.vo \
-	vu1/general_tri.vo \
-	vu1/general.vo \
-	vu1/indexed.vo \
-	vu1/scei.vo
+RENDERERS = \
+	fast_nolights \
+	fast \
+	general_nospec_quad \
+	general_nospec_tri \
+	general_nospec \
+	general_pv_diff_quad \
+	general_pv_diff_tri \
+	general_pv_diff \
+	general_quad \
+	general_tri \
+	general \
+	indexed \
+	scei
 
-all: $(EE_LIB)
+EE_OBJS += $(addsuffix .vo, $(addprefix vu1/, $(RENDERERS)))
+
+VSM_SOURCES = $(addsuffix _vcl.vsm, $(addprefix vu1/, $(RENDERERS)))
+
+all: $(VSM_SOURCES) $(EE_LIB)
 
 install: all
 	mkdir -p $(PS2SDK)/ports/include
@@ -67,15 +71,28 @@ clean:
 realclean: clean
 	rm -rf $(PS2SDK)/ports/include/ps2gl
 	rm -f  $(PS2SDK)/ports/lib/$(EE_LIB)
+	rm -f  $(VSM_SOURCES)
 
 include $(PS2SDK)/Defs.make
 include $(PS2SDK)/samples/Makefile.eeglobal
 
-#%.vsm: %.pp.vcl
-#	openvcl -o $@ $<
-
-#%.pp.vcl: %.vcl
-#	vclpp $< $@ -j
-
 %.vo: %_vcl.vsm
 	dvp-as -o $@ $<
+
+%_vcl.vsm: %_pp4.vcl
+	vcl -o$@ $<
+
+%indexed_pp4.vcl: %indexed_pp3.vcl
+	cat $< | cc -E -P -imacros vu1/vu1_mem_indexed.h -o $@ -
+
+%_pp4.vcl: %_pp3.vcl
+	cat $< | cc -E -P -imacros vu1/vu1_mem_linear.h -o $@ -
+
+%_pp3.vcl: %_pp2.vcl
+	cat $< | sed 's/\[\([0-9]\)\]/_\1/g ; s/\[\([w-zW-Z]\)\]/\1/g' - > $@
+
+%_pp2.vcl: %_pp1.vcl
+	gasp -c ';' -Ivu1 -o $@ $<
+
+%_pp1.vcl: %.vcl
+	cat $< | sed 's/#include[ 	]\+.\+// ; s/#define[ 	]\+.\+// ; s|\(\.include[ 	]\+\)"\([^/].\+\)"|\1"$(<D)/\2"|' - > $@

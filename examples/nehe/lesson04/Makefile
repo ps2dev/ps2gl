@@ -6,16 +6,16 @@ EE_LDFLAGS  += -L$(PS2SDK)/ports/lib
 EE_LIBS      = -lps2glut -lps2gl -lps2stuff -lpad -ldma
 
 ifeq ($(DEBUG), 1)
-	EE_CFLAGS   += -D_DEBUG -g -O0
-	EE_CXXFLAGS += -D_DEBUG -g -O0
+	EE_CFLAGS   += -D_DEBUG
+	EE_CXXFLAGS += -D_DEBUG
 endif
 
 # Disabling warnings
 WARNING_FLAGS = -Wno-strict-aliasing -Wno-conversion-null
 
 # VU0 code is broken so disable for now
-EE_CFLAGS   += $(WARNING_FLAGS) -DNO_VU0_VECTORS
-EE_CXXFLAGS += $(WARNING_FLAGS) -DNO_VU0_VECTORS
+EE_CFLAGS   += $(WARNING_FLAGS) -DNO_VU0_VECTORS -DNO_ASM
+EE_CXXFLAGS += $(WARNING_FLAGS) -DNO_VU0_VECTORS -DNO_ASM
 
 all: $(EE_BIN)
 	$(EE_STRIP) --strip-all $(EE_BIN)

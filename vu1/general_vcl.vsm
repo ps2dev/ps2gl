@@ -1,1045 +1,771 @@
-; flowMon::Emit() vcl 1.28 produced this code:
-                .vu
-                .align 4
-                .global vsmGeneral_CodeStart
-                .global vsmGeneral_CodeEnd
+; === __LP__ EXPL_vu1_general_pp4_vcl_xform_loop_lid__MAIN_LOOP:
+; ===            ldumb : optimal=22 clid=0 mlid=2 size=(22) 
+; ===          normal1 : optimal=22 clid=0 mlid=2 size=(22) 
+; ===             vuta : optimal=22 clid=0 mlid=2 size=(22) 
+; ===              dUp : optimal=22 clid=0 mlid=2 size=(22) 
+; ===            vuta1 : optimal=22 clid=0 mlid=2 size=(22) 
+; === __LP__ EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__MAIN_LOOP:
+; ===             dumb : optimal=18 clid=10 mlid=10 size=(18) 
+; ===            ldumb : optimal=18 clid=0 mlid=3 size=(18) 
+; ===          normal1 : optimal=18 clid=0 mlid=3 size=(18) 
+; ===            hDown : optimal=18 clid=0 mlid=3 size=(18) 
+; ===             vuta : optimal=18 clid=0 mlid=3 size=(18) 
+; ===           normal : optimal=18 clid=0 mlid=4 size=(18) 
+; ===          another : optimal=18 clid=0 mlid=3 size=(18) 
+; ===            vuta1 : optimal=18 clid=0 mlid=4 size=(18) 
+; ===          normal2 : optimal=18 clid=0 mlid=5 size=(18) 
+; ===            dumb2 : optimal=18 clid=5 mlid=5 size=(18) 
+; === __LP__ EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__MAIN_LOOP:
+; ===          normal1 : optimal=34 clid=0 mlid=4 size=(39) 
+; ===             vuta : optimal=34 clid=0 mlid=3 size=(39) 
+; ===            vuta1 : optimal=34 clid=0 mlid=3 size=(39) 
+; === __LP__ EXPL_vu1_general_pp4_vcl_final_loop_lid__MAIN_LOOP:
+; ===             dumb : optimal=4 clid=3 mlid=3 size=(5) 
+; ===            ldumb : optimal=4 clid=0 mlid=2 size=(5) 
+; ===          normal1 : optimal=4 clid=0 mlid=2 size=(5) 
+; ===            hDown : optimal=4 clid=0 mlid=2 size=(5) 
+; ===             vuta : optimal=4 clid=0 mlid=2 size=(5) 
+; ===              dUp : optimal=4 clid=0 mlid=2 size=(5) 
+; ===           normal : optimal=4 clid=0 mlid=2 size=(5) 
+; ===          another : optimal=4 clid=0 mlid=2 size=(5) 
+; ===            vuta1 : optimal=4 clid=0 mlid=2 size=(5) 
+; ===          normal2 : optimal=4 clid=0 mlid=2 size=(5) 
+; ===            dumb2 : optimal=4 clid=3 mlid=3 size=(5) 
+; =================================================
+; flowMon::Emit() vcl 1.4beta7 produced this code:
+		.vu
+		.align 4
+		.global	vsmGeneral_CodeStart
+		.global	vsmGeneral_CodeEnd
 vsmGeneral_CodeStart:
-__vcl__MMobjs_cross_linux_general2_vcl_3:
-; [0,4) size=4 nU=0 nL=4 ic=4 [lin=4 lp=0]
-              nop lq VF03,(((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1)+2(VI00)
-              nop lq VF02,(((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1)+1(VI00)
-              nop lq VF01,(((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1)+0(VI00)
-              nop lq VF04,(((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1)+3(VI00)
-              nop[E] nop
-              nop nop
+__v_vu1_general_pp4_vcl_4:
+; _LNOPT_w=[ normal2 ] 5 [4 0] 5   [__v_vu1_general_pp4_vcl_4]
+         NOP                                                        lq            VF01,62(VI00)                       
+         NOP                                                        lq            VF02,63(VI00)                       
+         NOP                                                        lq            VF03,64(VI00)                       
+         NOP[E]                                                     lq            VF04,65(VI00)                       
+         NOP                                                        NOP                                               
 main_loop_lid:
-; [0,26) size=26 nU=2 nL=26 ic=28 [lin=26 lp=0]
-              nop xtop VI01
-              nop lq VF06,(((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4)(VI00)
-              nop ilw.x VI05,0(VI01)
-              nop iaddiu VI03,VI01,((0 + 1) + 4)
-              nop iaddiu VI07,VI01,(0 + 1)
-              nop mtir VI11,VF06x
-              nop iadd VI06,VI03,VI05
-              nop iadd VI06,VI06,VI05
-              nop iaddiu VI04,VI01,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))+1
-              nop ior VI11,VI11,VI05
-              nop mfir.x VF06,VI11
-              nop loi 2048.0
-              maxi.w VF05,VF00,I lq.w VF07,((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6)(VI00)
-              nop iadd VI06,VI06,VI05
-              nop sq VF06,-1(VI04)
-              nop loi 2047.5
-              nop mr32.z VF05,VF07
-              addi.xy VF05,VF00,I iaddiu VI11,VI00,0x400
-              nop iaddiu VI10,VI00,0x800
-              nop iaddiu VI09,VI00,0x3ff
-              nop iaddiu VI08,VI07,4
-              nop iaddiu VI01,VI01,((0 + 1) + 4)
-              nop ilw.w VI02,((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1)(VI00)
-              nop lq.xyz VF06,((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1)(VI00)
-              nop fcset 0x000
-              nop iaddiu VI12,VI00,0x20
+; _LNOPT_w=[ normal2 ] 26 [26 0] 26   [main_loop_lid]
+         NOP                                                        loi           0x44fff000                          
+         NOP                                                        lq.w          VF06,57(VI00)                       
+         addi.xy       VF05,VF00,I                                  loi           0x45000000                          
+         NOP                                                        xtop          VI01                                
+         NOP                                                        iaddiu        VI03,VI01,0x00000005                
+         NOP                                                        mr32.z        VF05,VF06                           
+         NOP                                                        iaddiu        VI04,VI01,0                         
+         NOP                                                        ilw.x         VI05,0(VI01)                        
+         NOP                                                        fcset         0                                   
+         NOP                                                        lq            VF08,75(VI00)                       
+         NOP                                                        lq.xyz        VF06,76(VI00)                       
+         NOP                                                        iadd          VI06,VI03,VI05                      
+         NOP                                                        iadd          VI06,VI06,VI05                      
+         NOP                                                        mtir          VI07,VF08x                          
+         NOP                                                        ior           VI07,VI07,VI05                      
+         NOP                                                        mfir.x        VF08,VI07                           
+         NOP                                                        iaddiu        VI07,VI01,0x00000001                
+         NOP                                                        ilw.w         VI02,76(VI00)                       
+         NOP                                                        iadd          VI06,VI06,VI05                      
+         NOP                                                        sq            VF08,236(VI04)                      
+         NOP                                                        iaddiu        VI01,VI01,0x00000005                
+         NOP                                                        iaddiu        VI08,VI07,0x00000004                
+         NOP                                                        iaddiu        VI09,VI00,0x000003ff                
+         NOP                                                        iaddiu        VI10,VI00,0x00000800                
+         NOP                                                        iaddiu        VI11,VI00,0x00000400                
+         maxi.w        VF07,VF00,I                                  iaddiu        VI12,VI00,0x00000020                
 adcLoop_lid:
-; [0,16) size=16 nU=1 nL=4 ic=5 [lin=16 lp=0]
-              nop lq VF07,0(VI07)
-              nop nop
-              nop nop
-              nop nop
-              ftoi0 VF07,VF07 nop
-              nop nop
-              nop nop
-              nop nop
-              nop mtir VI13,VF07x
-              nop nop
-              nop nop
-              nop nop
-              nop iand VI14,VI13,VI11
-              nop nop
-              nop ibeq VI14,VI11,adcLoop_done_lid
-              nop nop
-; [0,10) size=10 nU=0 nL=8 ic=8 [lin=8 lp=0]
-              nop iand VI15,VI13,VI09
-              nop iand VI13,VI13,VI10
-              nop mtir VI14,VF07y
-              nop iadd VI15,VI15,VI01
-              nop isw.w VI12,0(VI15)
-              nop isw.w VI13,3(VI15)
-              nop iand VI13,VI14,VI11
-              nop nop
-              nop ibeq VI13,VI11,adcLoop_done_lid
-              nop nop
-; [0,10) size=10 nU=0 nL=8 ic=8 [lin=8 lp=0]
-              nop iand VI15,VI14,VI09
-              nop iand VI14,VI14,VI10
-              nop mtir VI13,VF07z
-              nop iadd VI15,VI15,VI01
-              nop isw.w VI12,0(VI15)
-              nop isw.w VI14,3(VI15)
-              nop iand VI14,VI13,VI11
-              nop nop
-              nop ibeq VI14,VI11,adcLoop_done_lid
-              nop nop
-; [0,10) size=10 nU=0 nL=8 ic=8 [lin=8 lp=0]
-              nop iand VI15,VI13,VI09
-              nop iand VI13,VI13,VI10
-              nop mtir VI14,VF07w
-              nop iadd VI15,VI15,VI01
-              nop isw.w VI12,0(VI15)
-              nop isw.w VI13,3(VI15)
-              nop iand VI13,VI14,VI11
-              nop nop
-              nop ibeq VI13,VI11,adcLoop_done_lid
-              nop nop
-; [0,7) size=7 nU=0 nL=7 ic=7 [lin=7 lp=0]
-              nop iand VI13,VI14,VI09
-              nop iadd VI13,VI13,VI01
-              nop iand VI14,VI14,VI10
-              nop iaddiu VI07,VI07,1
-              nop isw.w VI12,0(VI13)
-              nop ibne VI07,VI08,adcLoop_lid
-              nop isw.w VI14,3(VI13)
+; _LNOPT_w=[ normal2 ] 7 [13 0] 13   [adcLoop_lid]
+         NOP                                                        lq            VF08,0(VI07)                        
+         ftoi0         VF08,VF08                                    NOP                                                      ;	STALL_LATENCY ?3
+         NOP                                                        mtir          VI13,VF08x                                 ;	STALL_LATENCY ?3
+         NOP                                                        iand          VI14,VI13,VI11                      
+         NOP                                                        NOP                                               
+         NOP                                                        ibeq          VI14,VI11,adcLoop_done_lid          
+         NOP                                                        NOP                                               
+; _LNOPT_w=[ ldumb ] 10 [8 0] 10   [__v_vu1_general_pp4_vcl_8]
+         NOP                                                        iand          VI14,VI13,VI10                      
+         NOP                                                        iand          VI13,VI13,VI09                      
+         NOP                                                        iadd          VI13,VI13,VI01                      
+         NOP                                                        isw.w         VI12,0(VI13)                        
+         NOP                                                        isw.w         VI14,3(VI13)                        
+         NOP                                                        mtir          VI14,VF08y                          
+         NOP                                                        iand          VI13,VI14,VI11                      
+         NOP                                                        NOP                                               
+         NOP                                                        ibeq          VI13,VI11,adcLoop_done_lid          
+         NOP                                                        NOP                                               
+; _LNOPT_w=[ ldumb ] 10 [8 0] 10   [__v_vu1_general_pp4_vcl_9]
+         NOP                                                        iand          VI13,VI14,VI10                      
+         NOP                                                        iand          VI14,VI14,VI09                      
+         NOP                                                        iadd          VI14,VI14,VI01                      
+         NOP                                                        isw.w         VI12,0(VI14)                        
+         NOP                                                        isw.w         VI13,3(VI14)                        
+         NOP                                                        mtir          VI13,VF08z                          
+         NOP                                                        iand          VI14,VI13,VI11                      
+         NOP                                                        NOP                                               
+         NOP                                                        ibeq          VI14,VI11,adcLoop_done_lid          
+         NOP                                                        NOP                                               
+; _LNOPT_w=[ ldumb ] 10 [8 0] 10   [__v_vu1_general_pp4_vcl_10]
+         NOP                                                        iand          VI14,VI13,VI10                      
+         NOP                                                        iand          VI13,VI13,VI09                      
+         NOP                                                        iadd          VI13,VI13,VI01                      
+         NOP                                                        isw.w         VI12,0(VI13)                        
+         NOP                                                        isw.w         VI14,3(VI13)                        
+         NOP                                                        mtir          VI14,VF08w                          
+         NOP                                                        iand          VI13,VI14,VI11                      
+         NOP                                                        NOP                                               
+         NOP                                                        ibeq          VI13,VI11,adcLoop_done_lid          
+         NOP                                                        NOP                                               
+; _LNOPT_w=[ normal2 ] 7 [7 0] 7   [__v_vu1_general_pp4_vcl_11]
+         NOP                                                        iand          VI13,VI14,VI09                      
+         NOP                                                        iaddiu        VI07,VI07,0x00000001                
+         NOP                                                        iand          VI14,VI14,VI10                      
+         NOP                                                        iadd          VI13,VI13,VI01                      
+         NOP                                                        isw.w         VI12,0(VI13)                        
+         NOP                                                        ibne          VI07,VI08,adcLoop_lid               
+         NOP                                                        isw.w         VI14,3(VI13)                        
 adcLoop_done_lid:
-; [0,10) size=10 nU=4 nL=6 ic=10 [lin=9 lp=0]
-              addx.xyz VF09,VF00,VF00x lq.xyz VF10,((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1)(VI00)
-              addx.xyz VF08,VF00,VF00x lq.xyz VF11,((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6)(VI00)
-              nop lq.xyz VF07,(((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1)(VI00)
-              nop ilw.w VI08,(0)(VI00)
-              nop iaddiu VI07,VI00,0x20
-              mul.xyz VF10,VF11,VF10 lq.w VF06,(0)(VI00)
-              nop nop
-              nop nop
-              nop nop
-              add.xyz VF07,VF07,VF10 nop
-; [0,22) size=22 nU=6 nL=7 ic=13 [lin=19 lp=0]
-              nop lq.xyz VF12,0(VI03)
-              nop nop
-              nop nop
-              nop nop
-              mulax ACC,VF01,VF12x iaddiu VI03,VI03,3
-              madday ACC,VF02,VF12y nop
-              maddaz ACC,VF03,VF12z nop
-              maddw VF13,VF04,VF00w sq.xyz VF07,1+0(VI04)
-              nop nop
-              nop lq.xyz VF12,(2+0)-(1*(3))(VI03)
-              nop iaddiu VI04,VI04,3
-              nop div Q,VF00w,VF13w
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              mulq.xyz VF13,VF13,Q nop
-              nop nop
-              mulq.xyz VF10,VF12,Q ibeq VI03,VI06,EXPL_objs_cross_linux_general2_vcl_xform_loop_lid__EPI1
-              nop nop
-; [0,22) size=22 nU=15 nL=18 ic=33 [lin=19 lp=0]
-              sub.xyz VF11,VF09,VF13 lq.xyz VF12,0(VI03)
-              mul.xyz VF15,VF13,VF06 nop
-              add.xyz VF10,VF13,VF05 sq.xyz VF10,(0+0)-(1*(3))(VI04)
-              mulw.xyz VF09,VF13,VF00w nop
-              mulax ACC,VF01,VF12x iaddiu VI03,VI03,3
-              madday ACC,VF02,VF12y nop
-              maddaz ACC,VF03,VF12z nop
-              maddw VF13,VF04,VF00w sq.xyz VF07,1+0(VI04)
-              opmula.xyz ACCxyz,VF11xyz,VF08xyz ilw.w VI10,(0)-(2*(3))(VI03)
-              opmsub.xyz VF00xyz,VF08xyz,VF11xyz lq.xyz VF12,(2+0)-(1*(3))(VI03)
-              clipw.xyz VF15xyz,VF05w iaddiu VI04,VI04,3
-              nop div Q,VF00w,VF13w
-              mulw.xyz VF08,VF11,VF06w iand VI09,VI10,VI08
-              nop fmand VI11,VI08
-              nop isub VI11,VI11,VI07
-              nop iand VI11,VI11,VI08
-              ftoi4.xyz VF14,VF10 fcand VI01,0x003ffff
-              nop iand VI01,VI01,VI02
-              mulq.xyz VF13,VF13,Q ior VI11,VI01,VI11
-              nop ior VI10,VI11,VI10
-              mulq.xyz VF10,VF12,Q ibeq VI03,VI06,EXPL_objs_cross_linux_general2_vcl_xform_loop_lid__EPI0
-              nop iaddiu VI10,VI10,0x7fff
-EXPL_objs_cross_linux_general2_vcl_xform_loop_lid__MAIN_LOOP:
-; [0,22) size=22 nU=15 nL=22 ic=37 [lin=22 lp=22]
-              sub.xyz VF11,VF09,VF13 lq.xyz VF12,0(VI03)
-              mul.xyz VF15,VF13,VF06 mfir.w VF14,VI10
-              add.xyz VF10,VF13,VF05 sq.xyz VF10,(0+0)-(1*(3))(VI04)
-              mulw.xyz VF09,VF13,VF00w isub VI10,VI08,VI07
-              mulax ACC,VF01,VF12x iaddiu VI03,VI03,3
-              madday ACC,VF02,VF12y sq VF14,(2+0)-(2*(3))(VI04)
-              maddaz ACC,VF03,VF12z ior VI07,VI10,VI09
-              maddw VF13,VF04,VF00w sq.xyz VF07,1+0(VI04)
-              opmula.xyz ACCxyz,VF11xyz,VF08xyz ilw.w VI10,(0)-(2*(3))(VI03)
-              opmsub.xyz VF00xyz,VF08xyz,VF11xyz lq.xyz VF12,(2+0)-(1*(3))(VI03)
-              clipw.xyz VF15xyz,VF05w iaddiu VI04,VI04,3
-              nop div Q,VF00w,VF13w
-              mulw.xyz VF08,VF11,VF06w iand VI09,VI10,VI08
-              nop fmand VI11,VI08
-              nop isub VI11,VI11,VI07
-              nop iand VI11,VI11,VI08
-              ftoi4.xyz VF14,VF10 fcand VI01,0x003ffff
-              nop iand VI01,VI01,VI02
-              mulq.xyz VF13,VF13,Q ior VI11,VI01,VI11
-              nop ior VI10,VI11,VI10
-              mulq.xyz VF10,VF12,Q ibne VI03,VI06,EXPL_objs_cross_linux_general2_vcl_xform_loop_lid__MAIN_LOOP
-              nop iaddiu VI10,VI10,0x7fff
-; n>=1 .. t = 67 + 22*(n-2) cycles, so .. t=23+(22*n) :
-EXPL_objs_cross_linux_general2_vcl_xform_loop_lid__EPI0:
-; [0,23) size=23 nU=9 nL=20 ic=29 [lin=20 lp=0]
-              sub.xyz VF11,VF09,VF13 mfir.w VF14,VI10
-              mul.xyz VF15,VF13,VF06 isub VI10,VI08,VI07
-              add.xyz VF10,VF13,VF05 sq.xyz VF10,(0+0)-(1*(3))(VI04)
-              mulw.xyz VF09,VF13,VF00w ior VI07,VI10,VI09
-              opmula.xyz ACCxyz,VF11xyz,VF08xyz sq VF14,(2+0)-(2*(3))(VI04)
-              opmsub.xyz VF00xyz,VF08xyz,VF11xyz ilw.w VI10,(0)-(1*(3))(VI03)
-              clipw.xyz VF15xyz,VF05w nop
-              ftoi4.xyz VF14,VF10 nop
-              mulw.xyz VF08,VF11,VF06w nop
-              nop iand VI09,VI10,VI08
-              nop fmand VI11,VI08
-              nop isub VI11,VI11,VI07
-              nop iand VI11,VI11,VI08
-              nop fcand VI01,0x003ffff
-              nop iand VI01,VI01,VI02
-              nop ior VI11,VI01,VI11
-              nop ior VI10,VI11,VI10
-              nop iaddiu VI10,VI10,0x7fff
-              nop mfir.w VF14,VI10
-              nop isub VI10,VI08,VI07
-              nop ior VI07,VI10,VI09
-              nop b EXPL_objs_cross_linux_general2_vcl_xform_loop_lid__EXIT_POINT
-              nop sq VF14,(2+0)-(1*(3))(VI04)
-; n==1 .. t = 44 cycles = 44.00 per vertex
-EXPL_objs_cross_linux_general2_vcl_xform_loop_lid__EPI1:
-; [0,22) size=22 nU=9 nL=15 ic=24 [lin=20 lp=0]
-              sub.xyz VF11,VF09,VF13 ilw.w VI10,(0)-(1*(3))(VI03)
-              mul.xyz VF15,VF13,VF06 nop
-              add.xyz VF10,VF13,VF05 sq.xyz VF10,(0+0)-(1*(3))(VI04)
-              mulw.xyz VF09,VF13,VF00w nop
-              opmula.xyz ACCxyz,VF11xyz,VF08xyz iand VI09,VI10,VI08
-              opmsub.xyz VF00xyz,VF08xyz,VF11xyz nop
-              clipw.xyz VF15xyz,VF05w nop
-              ftoi4.xyz VF14,VF10 nop
-              mulw.xyz VF08,VF11,VF06w nop
-              nop fmand VI11,VI08
-              nop isub VI11,VI11,VI07
-              nop iand VI11,VI11,VI08
-              nop fcand VI01,0x003ffff
-              nop iand VI01,VI01,VI02
-              nop ior VI11,VI01,VI11
-              nop ior VI10,VI11,VI10
-              nop iaddiu VI10,VI10,0x7fff
-              nop mfir.w VF14,VI10
-              nop isub VI10,VI08,VI07
-              nop ior VI07,VI10,VI09
-              nop nop
-              nop sq VF14,(2+0)-(1*(3))(VI04)
-EXPL_objs_cross_linux_general2_vcl_xform_loop_lid__EXIT_POINT:
-; [0,8) size=8 nU=0 nL=8 ic=8 [lin=8 lp=0]
-              nop ilw.x VI01,(0)(VI00)
-              nop iaddiu VI02,VI00,((0) + 1)
-              nop lq.xyz VF08,((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4)(VI00)
-              nop lq.xyz VF07,((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1)(VI00)
-              nop lq.xyz VF06,(((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1)(VI00)
-              nop lq.xyz VF05,((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1)(VI00)
-              nop ibeq VI01,VI00,pt_lights_lid
-              nop ilw.x VI03,0(VI02)
-; [0,1) size=1 nU=1 nL=0 ic=1 [lin=1 lp=0]
-              maxw.z VF09,VF00,VF00w nop
+; _LNOPT_w=[ normal2 ] 13 [19 0] 21   [adcLoop_done_lid]
+         NOP                                                        lq.xyz        VF12,0(VI03)                        
+         mulax         ACC,VF01,VF12x                               iaddiu        VI07,VI00,0x00000020                       ;	STALL_LATENCY ?3
+         madday        ACC,VF02,VF12y                               lq.xyz        VF10,57(VI00)                       
+         maddaz        ACC,VF03,VF12z                               lq.xyz        VF11,59(VI00)                       
+         maddw         VF12,VF04,VF00w                              lq.w          VF05,0(VI00)                        
+         mul.xyz       VF10,VF10,VF11                               lq.xyz        VF07,58(VI00)                              ;	STALL_LATENCY ?2
+         NOP                                                        div           Q,VF00w,VF12w                       
+         add.xyz       VF07,VF07,VF10                               ilw.w         VI08,0(VI00)                               ;	STALL_LATENCY ?2
+         NOP                                                        iaddiu        VI03,VI03,0x00000003                
+         NOP                                                        lq.xyz        VF11,-1(VI03)                       
+         mulq.xyz      VF12,VF12,Q                                  sq.xyz        VF07,238(VI04)                             ;	STALL_LATENCY ?1
+         max.xyz       VF09,VF00,VF00                               ibeq          VI03,VI06,EXPL_vu1_general_pp4_vcl_xform_loop_lid__EPI1
+         max.xyz       VF08,VF00,VF00                               iaddiu        VI04,VI04,0                         
+; _LNOPT_w=[ ] 21 [19 0] 22   [EXPL_vu1_general_pp4_vcl_xform_loop_lid__PRO1]
+         NOP                                                        NOP                                               
+         add.xyz       VF10,VF12,VF05                               lq.xyz        VF15,0(VI03)                        
+         sub.xyz       VF13,VF09,VF12                               iaddiu        VI04,VI04,0x000000f3                
+         max.xyz       VF09,VF12,VF12                               NOP                                               
+         mul.xyz       VF14,VF12,VF06                               NOP                                               
+         mulax         ACC,VF01,VF15x                               NOP                                               
+         madday        ACC,VF02,VF15y                               NOP                                               
+         maddaz        ACC,VF03,VF15z                               ilw.w         VI09,-3(VI03)                       
+         maddw         VF12,VF04,VF00w                              isub          VI01,VI08,VI07                      
+         mulq.xyz      VF11,VF11,Q                                  sq.xyz        VF07,-2(VI04)                       
+         opmula.xyz    ACCxyz,VF13xyz,VF08xyz                       iaddiu        VI03,VI03,0x00000003                
+         opmsub.xyz    VF16xyz,VF08xyz,VF13xyz                      iand          VI10,VI09,VI08                      
+         NOP                                                        div           Q,VF00w,VF12w                       
+         NOP                                                        sq.xyz        VF11,-6(VI04)                       
+         abs.xyz       VF00,VF16                                    fmand         VI11,VI08                                  ;	STALL_LATENCY ?1
+         NOP                                                        lq.xyz        VF11,-1(VI03)                       
+         clipw.xyz     VF14xyz,VF07w                                isub          VI11,VI11,VI07                      
+         NOP                                                        ior           VI07,VI01,VI10                      
+         mulq.xyz      VF12,VF12,Q                                  iand          VI10,VI11,VI08                      
+         NOP                                                        ibeq          VI03,VI06,EXPL_vu1_general_pp4_vcl_xform_loop_lid__EPI0
+         mulw.xyz      VF08,VF13,VF05w                              fcand         VI01,262143                         
+EXPL_vu1_general_pp4_vcl_xform_loop_lid__MAIN_LOOP:
+; _LPOPT_w=[ ldumb ] 22 [22 22] 22   [EXPL_vu1_general_pp4_vcl_xform_loop_lid__MAIN_LOOP]
+         ftoi4.xyz     VF14,VF10                                    iand          VI01,VI01,VI02                      
+         add.xyz       VF10,VF12,VF05                               lq.xyz        VF16,0(VI03)                        
+         sub.xyz       VF13,VF09,VF12                               ior           VI10,VI01,VI10                      
+         max.xyz       VF09,VF12,VF12                               ior           VI10,VI10,VI09                      
+         mul.xyz       VF15,VF12,VF06                               ilw.w         VI09,-3(VI03)                       
+         mulax         ACC,VF01,VF16x                               iaddiu        VI10,VI10,0x00007fff                
+         madday        ACC,VF02,VF16y                               mfir.w        VF14,VI10                           
+         maddaz        ACC,VF03,VF16z                               isub          VI01,VI08,VI07                      
+         maddw         VF12,VF04,VF00w                              iand          VI10,VI09,VI08                      
+         mulq.xyz      VF11,VF11,Q                                  sq.xyz        VF07,1(VI04)                        
+         opmula.xyz    ACCxyz,VF13xyz,VF08xyz                       sq            VF14,-4(VI04)                       
+         opmsub.xyz    VF00xyz,VF08xyz,VF13xyz                      iaddiu        VI03,VI03,0x00000003                
+         mulw.xyz      VF08,VF13,VF05w                              div           Q,VF00w,VF12w                       
+         clipw.xyz     VF15xyz,VF07w                                sq.xyz        VF11,-3(VI04)                       
+         NOP                                                        iaddiu        VI04,VI04,0x00000003                
+         NOP                                                        fmand         VI11,VI08                           
+         NOP                                                        lq.xyz        VF11,-1(VI03)                       
+         NOP                                                        isub          VI11,VI11,VI07                      
+         NOP                                                        ior           VI07,VI01,VI10                      
+         mulq.xyz      VF12,VF12,Q                                  iand          VI10,VI11,VI08                      
+         NOP                                                        ibne          VI03,VI06,EXPL_vu1_general_pp4_vcl_xform_loop_lid__MAIN_LOOP
+         NOP                                                        fcand         VI01,262143                         
+EXPL_vu1_general_pp4_vcl_xform_loop_lid__EPI0:
+; _LNOPT_w=[ ] 21 [20 0] 23   [EXPL_vu1_general_pp4_vcl_xform_loop_lid__EPI0]
+         NOP                                                        NOP                                               
+         sub.xyz       VF09,VF09,VF12                               NOP                                               
+         mul.xyz       VF07,VF12,VF06                               iand          VI01,VI01,VI02                      
+         opmula.xyz    ACCxyz,VF09xyz,VF08xyz                       ior           VI10,VI01,VI10                             ;	STALL_LATENCY ?2
+         opmsub.xyz    VF14xyz,VF08xyz,VF09xyz                      ior           VI10,VI10,VI09                      
+         NOP                                                        ilw.w         VI09,-3(VI03)                       
+         NOP                                                        iaddiu        VI10,VI10,0x00007fff                
+         clipw.xyz     VF07xyz,VF07w                                mfir.w        VF13,VI10                           
+         abs.xyz       VF00,VF14                                    fmand         VI10,VI08                           
+         NOP                                                        isub          VI07,VI10,VI07                      
+         ftoi4.xyz     VF13,VF10                                    iand          VI10,VI07,VI08                      
+         add.xyz       VF10,VF12,VF05                               fcand         VI01,262143                         
+         NOP                                                        iand          VI01,VI01,VI02                      
+         mulq.xyz      VF11,VF11,Q                                  ior           VI10,VI01,VI10                      
+         NOP                                                        ior           VI10,VI10,VI09                      
+         ftoi4.xyz     VF10,VF10                                    iaddiu        VI10,VI10,0x00007fff                
+         NOP                                                        mfir.w        VF10,VI10                           
+         NOP                                                        sq.xyz        VF11,-3(VI04)                       
+         NOP                                                        sq            VF13,-4(VI04)                       
+         NOP                                                        b             EXPL_vu1_general_pp4_vcl_xform_loop_lid__EXIT_POINT
+         NOP                                                        sq            VF10,-1(VI04)                       
+EXPL_vu1_general_pp4_vcl_xform_loop_lid__EPI1:
+; _LNOPT_w=[ ] 18 [20 0] 24   [EXPL_vu1_general_pp4_vcl_xform_loop_lid__EPI1]
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         sub.xyz       VF09,VF09,VF12                               NOP                                               
+         mul.xyz       VF06,VF12,VF06                               NOP                                               
+         opmula.xyz    ACCxyz,VF09xyz,VF08xyz                       NOP                                                      ;	STALL_LATENCY ?2
+         opmsub.xyz    VF10xyz,VF08xyz,VF09xyz                      NOP                                               
+         clipw.xyz     VF06xyz,VF07w                                ilw.w         VI03,-3(VI03)                       
+         abs.xyz       VF00,VF10                                    fmand         VI01,VI08                                  ;	STALL_LATENCY ?2
+         NOP                                                        isub          VI07,VI01,VI07                      
+         NOP                                                        iand          VI08,VI07,VI08                      
+         add.xyz       VF07,VF12,VF05                               fcand         VI01,262143                         
+         NOP                                                        iand          VI02,VI01,VI02                      
+         NOP                                                        ior           VI02,VI02,VI08                      
+         mulq.xyz      VF11,VF11,Q                                  ior           VI03,VI02,VI03                      
+         ftoi4.xyz     VF07,VF07                                    iaddiu        VI03,VI03,0x00007fff                
+         NOP                                                        mfir.w        VF07,VI03                           
+         NOP                                                        sq.xyz        VF11,237(VI04)                             ;	STALL_LATENCY ?1
+         NOP                                                        sq            VF07,239(VI04)                             ;	STALL_LATENCY ?1
+EXPL_vu1_general_pp4_vcl_xform_loop_lid__EXIT_POINT:
+; _LNOPT_w=[ ] 8 [8 0] 8   [EXPL_vu1_general_pp4_vcl_xform_loop_lid__EXIT_POINT]
+         NOP                                                        ilw.x         VI01,0(VI00)                        
+         NOP                                                        iaddiu        VI02,VI00,0x00000001                
+         NOP                                                        lq.xyz        VF05,59(VI00)                       
+         NOP                                                        lq.xyz        VF06,60(VI00)                       
+         NOP                                                        lq.xyz        VF07,61(VI00)                       
+         NOP                                                        lq.xyz        VF08,66(VI00)                       
+         NOP                                                        ibeq          VI01,VI00,pt_lights_lid             
+         NOP                                                        ilw.x         VI03,0(VI02)                        
+; _LNOPT_w=[ normal2 ] 1 [4 0] 1   [__v_vu1_general_pp4_vcl_16]
+         maxw.z        VF09,VF00,VF00w                              NOP                                               
 dir_light_loop_lid:
-; [0,55) size=55 nU=6 nL=18 ic=24 [lin=52 lp=0]
-              nop lq.xyz VF12,(((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1)+0(VI00)
-              nop lq.xyz VF10,(((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1)+1(VI00)
-              nop lq.xyz VF13,(((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1)+2(VI00)
-              nop lq.xyz VF11,3(VI03)
-              nop xtop VI06
-              nop ilw.x VI05,0(VI06)
-              nop iaddiu VI04,VI06,((0 + 1) + 4)
-              mulax.xyz ACC,VF12,VF11x lq.xyz VF12,2(VI03)
-              madday.xyz ACC,VF10,VF11y lq.xyz VF10,0(VI03)
-              maddz.xyz VF13,VF13,VF11z iadd VI07,VI04,VI05
-              nop iadd VI07,VI07,VI05
-              mul.xyz VF12,VF12,VF07 iadd VI07,VI07,VI05
-              nop iaddiu VI06,VI06,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))+1
-              add.xyz VF14,VF08,VF13 lq.xyz VF11,1(VI03)
-              nop nop
-              nop nop
-              nop nop
-              nop esadd P,VF14
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop mfp.w VF05,P
-              nop nop
-              nop nop
-              nop nop
-              nop ersqrt P,VF05w
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop mfp.w VF05,P
-              nop nop
-              nop nop
-              nop nop
-              mulw.xyz VF14,VF14,VF05w nop
-; [0,18) size=18 nU=7 nL=5 ic=12 [lin=18 lp=0]
-              nop lq.xyz VF15,1+0(VI04)
-              nop nop
-              nop nop
-              nop iaddiu VI06,VI06,3
-              mul.xyz VF18,VF14,VF15 nop
-              mul.xyz VF15,VF13,VF15 nop
-              nop nop
-              nop nop
-              nop mr32.xyw VF09,VF18
-              adday.z ACC,VF15,VF15y nop
-              nop nop
-              nop nop
-              addax.w ACC,VF09,VF09x nop
-              maddy.w VF05,VF00,VF09y nop
-              nop iaddiu VI04,VI04,3
-              nop nop
-              maddx.z VF18,VF09,VF15x ibeq VI04,VI07,EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EPI2
-              maxx.w VF06,VF05,VF00x nop
-; [0,18) size=18 nU=13 nL=5 ic=18 [lin=18 lp=0]
-              nop lq.xyz VF15,1+0(VI04)
-              nop nop
-              maxx.z VF17,VF18,VF00x nop
-              mul.w VF06,VF06,VF06 iaddiu VI06,VI06,3
-              mul.xyz VF18,VF14,VF15 nop
-              mul.xyz VF15,VF13,VF15 nop
-              nop nop
-              mul.w VF05,VF06,VF06 nop
-              nop mr32.xyw VF09,VF18
-              adday.z ACC,VF15,VF15y nop
-              mulz.xyz VF17,VF11,VF17z nop
-              mul.w VF06,VF05,VF05 nop
-              addax.w ACC,VF09,VF09x nop
-              maddy.w VF05,VF00,VF09y nop
-              nop iaddiu VI04,VI04,3
-              mul.w VF07,VF06,VF06 nop
-              maddx.z VF18,VF09,VF15x ibeq VI04,VI07,EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EPI1
-              maxx.w VF06,VF05,VF00x nop
-; [0,18) size=18 nU=18 nL=6 ic=24 [lin=18 lp=0]
-              mula.xyz ACC,VF17,VF06 lq.xyz VF15,1+0(VI04)
-              mul.w VF05,VF07,VF07 nop
-              maxx.z VF17,VF18,VF00x nop
-              mul.w VF06,VF06,VF06 iaddiu VI06,VI06,3
-              mul.xyz VF18,VF14,VF15 nop
-              mul.xyz VF15,VF13,VF15 lq.xyz VF16,(1)-(3*(3))(VI06)
-              maddaw.xyz ACC,VF12,VF05w nop
-              mul.w VF05,VF06,VF06 nop
-              madd.xyz VF18,VF10,VF05 mr32.xyw VF09,VF18
-              adday.z ACC,VF15,VF15y nop
-              mulz.xyz VF17,VF11,VF17z nop
-              mul.w VF06,VF05,VF05 nop
-              addax.w ACC,VF09,VF09x nop
-              maddy.w VF05,VF00,VF09y nop
-              add.xyz VF16,VF16,VF18 iaddiu VI04,VI04,3
-              mul.w VF07,VF06,VF06 nop
-              maddx.z VF18,VF09,VF15x ibeq VI04,VI07,EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EPI0
-              maxx.w VF06,VF05,VF00x nop
-EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__MAIN_LOOP:
-; [0,18) size=18 nU=18 nL=7 ic=25 [lin=18 lp=18]
-              mula.xyz ACC,VF17,VF06 lq.xyz VF15,1+0(VI04)
-              mul.w VF05,VF07,VF07 sq.xyz VF16,(1+0)-(3*(3))(VI06)
-              maxx.z VF17,VF18,VF00x nop
-              mul.w VF06,VF06,VF06 iaddiu VI06,VI06,3
-              mul.xyz VF18,VF14,VF15 nop
-              mul.xyz VF15,VF13,VF15 lq.xyz VF16,(1)-(3*(3))(VI06)
-              maddaw.xyz ACC,VF12,VF05w nop
-              mul.w VF05,VF06,VF06 nop
-              madd.xyz VF18,VF10,VF05 mr32.xyw VF09,VF18
-              adday.z ACC,VF15,VF15y nop
-              mulz.xyz VF17,VF11,VF17z nop
-              mul.w VF06,VF05,VF05 nop
-              addax.w ACC,VF09,VF09x nop
-              maddy.w VF05,VF00,VF09y nop
-              add.xyz VF16,VF16,VF18 iaddiu VI04,VI04,3
-              mul.w VF07,VF06,VF06 nop
-              maddx.z VF18,VF09,VF15x ibne VI04,VI07,EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__MAIN_LOOP
-              maxx.w VF06,VF05,VF00x nop
-; n>=1 .. t = 87 + 18*(n-3) cycles, so .. t=33+(18*n) :
-EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EPI0:
-; [0,33) size=33 nU=16 nL=6 ic=22 [lin=30 lp=0]
-              mula.xyz ACC,VF17,VF06 sq.xyz VF16,(1+0)-(3*(3))(VI06)
-              mul.w VF05,VF07,VF07 lq.xyz VF16,(1)-(2*(3))(VI06)
-              maxx.z VF17,VF18,VF00x nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF05w nop
-              madd.xyz VF18,VF10,VF05 nop
-              mul.w VF05,VF06,VF06 nop
-              mulz.xyz VF17,VF11,VF17z nop
-              nop nop
-              add.xyz VF16,VF16,VF18 nop
-              mul.w VF06,VF05,VF05 nop
-              mula.xyz ACC,VF17,VF06 nop
-              nop nop
-              nop sq.xyz VF16,(1+0)-(2*(3))(VI06)
-              mul.w VF07,VF06,VF06 lq.xyz VF16,(1)-(1*(3))(VI06)
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF05,VF07,VF07 nop
-              nop nop
-              nop nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF05w nop
-              madd.xyz VF18,VF10,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              add.xyz VF16,VF16,VF18 nop
-              nop nop
-              nop nop
-              nop b EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EXIT_POINT
-              nop sq.xyz VF16,(1+0)-(1*(3))(VI06)
-; n==2 .. t = 69 cycles = 34.50 per vertex
-EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EPI1:
-; [0,33) size=33 nU=16 nL=5 ic=21 [lin=30 lp=0]
-              mula.xyz ACC,VF17,VF06 lq.xyz VF16,(1)-(2*(3))(VI06)
-              mul.w VF05,VF07,VF07 nop
-              maxx.z VF17,VF18,VF00x nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF05w nop
-              madd.xyz VF18,VF10,VF05 nop
-              mul.w VF05,VF06,VF06 nop
-              mulz.xyz VF17,VF11,VF17z nop
-              nop nop
-              add.xyz VF16,VF16,VF18 nop
-              mul.w VF06,VF05,VF05 nop
-              mula.xyz ACC,VF17,VF06 nop
-              nop nop
-              nop sq.xyz VF16,(1+0)-(2*(3))(VI06)
-              mul.w VF07,VF06,VF06 lq.xyz VF16,(1)-(1*(3))(VI06)
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF05,VF07,VF07 nop
-              nop nop
-              nop nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF05w nop
-              madd.xyz VF18,VF10,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              add.xyz VF16,VF16,VF18 nop
-              nop nop
-              nop nop
-              nop b EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EXIT_POINT
-              nop sq.xyz VF16,(1+0)-(1*(3))(VI06)
-; n==1 .. t = 51 cycles = 51.00 per vertex
-EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EPI2:
-; [0,33) size=33 nU=11 nL=2 ic=13 [lin=30 lp=0]
-              nop lq.xyz VF16,(1)-(1*(3))(VI06)
-              nop nop
-              maxx.z VF17,VF18,VF00x nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop nop
-              mulz.xyz VF17,VF11,VF17z nop
-              mul.w VF05,VF06,VF06 nop
-              nop nop
-              nop nop
-              mula.xyz ACC,VF17,VF06 nop
-              mul.w VF06,VF05,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF07,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF05,VF07,VF07 nop
-              nop nop
-              nop nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF05w nop
-              madd.xyz VF18,VF10,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              add.xyz VF16,VF16,VF18 nop
-              nop nop
-              nop nop
-              nop nop
-              nop sq.xyz VF16,(1+0)-(1*(3))(VI06)
-EXPL_objs_cross_linux_general2_vcl_dir_light_vert_loop_lid__EXIT_POINT:
-; [0,4) size=4 nU=0 nL=4 ic=4 [lin=4 lp=0]
-              nop isubiu VI01,VI01,1
-              nop iaddiu VI02,VI02,1
-              nop ibne VI01,VI00,dir_light_loop_lid
-              nop ilw.x VI03,0(VI02)
+; _LNOPT_w=[ another ] 27 [64 0] 67   [dir_light_loop_lid]
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        lq.xyz        VF12,67(VI00)                       
+         NOP                                                        lq.xyz        VF13,3(VI03)                        
+         NOP                                                        lq.xyz        VF14,68(VI00)                       
+         NOP                                                        lq.xyz        VF10,69(VI00)                       
+         mulax.xyz     ACC,VF12,VF13x                               xtop          VI06                                       ;	STALL_LATENCY ?1
+         madday.xyz    ACC,VF14,VF13y                               ilw.x         VI05,0(VI06)                        
+         maddz.xyz     VF13,VF10,VF13z                              iaddiu        VI04,VI06,0x00000005                
+         NOP                                                        iadd          VI07,VI04,VI05                             ;	STALL_LATENCY ?2
+         add.xyz       VF14,VF08,VF13                               lq.xyz        VF11,2(VI03)                        
+         NOP                                                        esadd         P,VF14                                     ;	STALL_LATENCY ?3
+         NOP                                                        waitp                                                    ;	STALL_LATENCY ?9
+         NOP                                                        mfp.w         VF05,P                              
+         NOP                                                        ersqrt        P,VF05w                                    ;	STALL_LATENCY ?3
+         NOP                                                        waitp                                                    ;	STALL_LATENCY ?16
+         NOP                                                        mfp.w         VF05,P                              
+         mulw.xyz      VF14,VF14,VF05w                              lq.xyz        VF18,1(VI04)                               ;	STALL_LATENCY ?3
+         mul.xyz       VF15,VF14,VF18                               iadd          VI07,VI07,VI05                             ;	STALL_LATENCY ?3
+         NOP                                                        iadd          VI07,VI07,VI05                      
+         mul.xyz       VF12,VF11,VF07                               lq.xyz        VF11,1(VI03)                        
+         NOP                                                        lq.xyz        VF10,0(VI03)                        
+         NOP                                                        mr32.xyw      VF09,VF15                           
+         NOP                                                        iaddiu        VI04,VI04,0x00000003                
+         mul.xyz       VF18,VF13,VF18                               iaddiu        VI06,VI06,0                         
+         NOP                                                        ibeq          VI04,VI07,EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI2
+         addax.w       ACC,VF09,VF09x                               iaddiu        VI06,VI06,0                         
+; _LNOPT_w=[ ] 13 [17 0] 17   [EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__PRO1]
+         maddy.w       VF07,VF00,VF09y                              lq.xyz        VF17,1(VI04)                        
+         adday.z       ACC,VF18,VF18y                               NOP                                               
+         maddx.z       VF18,VF09,VF18x                              NOP                                               
+         maxx.w        VF05,VF07,VF00x                              NOP                                                      ;	STALL_LATENCY ?1
+         maxx.z        VF15,VF18,VF00x                              NOP                                                      ;	STALL_LATENCY ?1
+         mul.xyz       VF18,VF14,VF17                               NOP                                               
+         mul.w         VF05,VF05,VF05                               NOP                                               
+         NOP                                                        mr32.xyw      VF09,VF18                                  ;	STALL_LATENCY ?2
+         mul.w         VF05,VF05,VF05                               NOP                                               
+         mul.xyz       VF18,VF13,VF17                               iaddiu        VI04,VI04,0x00000003                
+         mulz.xyz      VF17,VF11,VF15z                              NOP                                               
+         addax.w       ACC,VF09,VF09x                               ibeq          VI04,VI07,EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI1
+         mul.w         VF05,VF05,VF05                               iaddiu        VI06,VI06,0                         
+; _LNOPT_w=[ ] 17 [17 0] 18   [EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__PRO2]
+         maddy.w       VF07,VF00,VF09y                              NOP                                               
+         adday.z       ACC,VF18,VF18y                               NOP                                               
+         maddx.z       VF18,VF09,VF18x                              NOP                                               
+         mul.w         VF06,VF05,VF05                               NOP                                               
+         maxx.w        VF05,VF07,VF00x                              NOP                                               
+         mula.xyz      ACC,VF17,VF06                                lq.xyz        VF17,1(VI04)                        
+         maxx.z        VF16,VF18,VF00x                              NOP                                               
+         mul.w         VF06,VF06,VF06                               NOP                                               
+         mul.w         VF05,VF05,VF05                               NOP                                               
+         mul.xyz       VF18,VF14,VF17                               NOP                                               
+         maddaw.xyz    ACC,VF12,VF06w                               NOP                                                      ;	STALL_LATENCY ?1
+         mul.w         VF05,VF05,VF05                               NOP                                               
+         madd.xyz      VF15,VF10,VF05                               mr32.xyw      VF09,VF18                           
+         mul.xyz       VF18,VF13,VF17                               iaddiu        VI04,VI04,0x00000003                
+         mulz.xyz      VF17,VF11,VF16z                              NOP                                               
+         mul.w         VF05,VF05,VF05                               ibeq          VI04,VI07,EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI0
+         addax.w       ACC,VF09,VF09x                               iaddiu        VI06,VI06,0x000000f6                
+EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__MAIN_LOOP:
+; _LPOPT_w=[ ldumb ] 18 [18 18] 18   [EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__MAIN_LOOP]
+         maddy.w       VF07,VF00,VF09y                              iaddiu        VI06,VI06,0x00000003                
+         adday.z       ACC,VF18,VF18y                               NOP                                               
+         maddx.z       VF18,VF09,VF18x                              NOP                                               
+         mul.w         VF06,VF05,VF05                               NOP                                               
+         maxx.w        VF05,VF07,VF00x                              NOP                                               
+         mula.xyz      ACC,VF17,VF06                                lq.xyz        VF17,1(VI04)                        
+         maxx.z        VF16,VF18,VF00x                              lq.xyz        VF18,-11(VI06)                      
+         mul.w         VF06,VF06,VF06                               NOP                                               
+         mul.w         VF05,VF05,VF05                               NOP                                               
+         mul.xyz       VF19,VF14,VF17                               NOP                                               
+         add.xyz       VF18,VF18,VF15                               NOP                                               
+         maddaw.xyz    ACC,VF12,VF06w                               NOP                                               
+         mul.w         VF05,VF05,VF05                               iaddiu        VI04,VI04,0x00000003                
+         madd.xyz      VF15,VF10,VF05                               mr32.xyw      VF09,VF19                           
+         mul.xyz       VF18,VF13,VF17                               sq.xyz        VF18,-11(VI06)                      
+         mulz.xyz      VF17,VF11,VF16z                              NOP                                               
+         mul.w         VF05,VF05,VF05                               ibne          VI04,VI07,EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__MAIN_LOOP
+         addax.w       ACC,VF09,VF09x                               NOP                                               
+EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI0:
+; _LNOPT_w=[ ] 25 [38 0] 38   [EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI0]
+         maddy.w       VF07,VF00,VF09y                              NOP                                               
+         NOP                                                        NOP                                               
+         mul.w         VF06,VF05,VF05                               NOP                                               
+         maxx.w        VF05,VF07,VF00x                              NOP                                                      ;	STALL_LATENCY ?1
+         adday.z       ACC,VF18,VF18y                               NOP                                               
+         maddx.z       VF18,VF09,VF18x                              NOP                                               
+         mul.w         VF06,VF06,VF06                               NOP                                               
+         mul.w         VF05,VF05,VF05                               NOP                                               
+         mula.xyz      ACC,VF17,VF06                                NOP                                               
+         maxx.z        VF17,VF18,VF00x                              lq.xyz        VF18,-8(VI06)                       
+         mul.w         VF05,VF05,VF05                               NOP                                                      ;	STALL_LATENCY ?1
+         add.xyz       VF18,VF18,VF15                               NOP                                                      ;	STALL_LATENCY ?1
+         mul.w         VF05,VF05,VF05                               NOP                                                      ;	STALL_LATENCY ?1
+         maddaw.xyz    ACC,VF12,VF06w                               sq.xyz        VF18,-8(VI06)                              ;	STALL_LATENCY ?1
+         madd.xyz      VF15,VF10,VF05                               lq.xyz        VF18,-5(VI06)                       
+         mul.w         VF06,VF05,VF05                               NOP                                               
+         mulz.xyz      VF17,VF11,VF17z                              NOP                                               
+         add.xyz       VF18,VF18,VF15                               NOP                                                      ;	STALL_LATENCY ?1
+         mul.w         VF06,VF06,VF06                               NOP                                               
+         mula.xyz      ACC,VF17,VF06                                NOP                                               
+         maddaw.xyz    ACC,VF12,VF06w                               sq.xyz        VF18,-5(VI06)                              ;	STALL_LATENCY ?2
+         madd.xyz      VF15,VF10,VF05                               lq.xyz        VF18,-2(VI06)                       
+         add.xyz       VF18,VF18,VF15                               NOP                                                      ;	STALL_LATENCY ?3
+         NOP                                                        b             EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EXIT_POINT
+         NOP                                                        sq.xyz        VF18,-2(VI06)                              ;	STALL_LATENCY ?2
+EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI1:
+; _LNOPT_w=[ ] 25 [38 0] 38   [EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI1]
+         maddy.w       VF07,VF00,VF09y                              NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         mul.w         VF06,VF05,VF05                               NOP                                               
+         maxx.w        VF05,VF07,VF00x                              NOP                                               
+         adday.z       ACC,VF18,VF18y                               NOP                                               
+         mul.w         VF05,VF05,VF05                               NOP                                                      ;	STALL_LATENCY ?2
+         maddx.z       VF18,VF09,VF18x                              NOP                                               
+         mul.w         VF05,VF05,VF05                               NOP                                                      ;	STALL_LATENCY ?2
+         maxx.z        VF18,VF18,VF00x                              NOP                                               
+         mul.w         VF06,VF06,VF06                               NOP                                               
+         mula.xyz      ACC,VF17,VF06                                NOP                                               
+         mul.w         VF05,VF05,VF05                               NOP                                               
+         mulz.xyz      VF17,VF11,VF18z                              NOP                                               
+         maddaw.xyz    ACC,VF12,VF06w                               NOP                                               
+         madd.xyz      VF13,VF10,VF05                               lq.xyz        VF18,238(VI06)                      
+         mul.w         VF06,VF05,VF05                               NOP                                               
+         mula.xyz      ACC,VF17,VF06                                NOP                                               
+         add.xyz       VF18,VF18,VF13                               NOP                                                      ;	STALL_LATENCY ?1
+         mul.w         VF06,VF06,VF06                               NOP                                               
+         maddaw.xyz    ACC,VF12,VF06w                               sq.xyz        VF18,238(VI06)                             ;	STALL_LATENCY ?3
+         madd.xyz      VF10,VF10,VF05                               lq.xyz        VF18,241(VI06)                      
+         add.xyz       VF18,VF18,VF10                               NOP                                                      ;	STALL_LATENCY ?3
+         NOP                                                        b             EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EXIT_POINT
+         NOP                                                        sq.xyz        VF18,241(VI06)                             ;	STALL_LATENCY ?2
+EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI2:
+; _LNOPT_w=[ ] 16 [38 0] 38   [EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EPI2]
+         maddy.w       VF07,VF00,VF09y                              NOP                                               
+         maxx.w        VF05,VF07,VF00x                              NOP                                                      ;	STALL_LATENCY ?3
+         mul.w         VF05,VF05,VF05                               NOP                                                      ;	STALL_LATENCY ?3
+         mul.w         VF05,VF05,VF05                               NOP                                                      ;	STALL_LATENCY ?3
+         adday.z       ACC,VF18,VF18y                               NOP                                               
+         maddx.z       VF18,VF09,VF18x                              NOP                                               
+         mul.w         VF05,VF05,VF05                               NOP                                                      ;	STALL_LATENCY ?1
+         maxx.z        VF18,VF18,VF00x                              NOP                                                      ;	STALL_LATENCY ?1
+         mul.w         VF06,VF05,VF05                               NOP                                                      ;	STALL_LATENCY ?1
+         mulz.xyz      VF11,VF11,VF18z                              NOP                                                      ;	STALL_LATENCY ?1
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?1
+         mula.xyz      ACC,VF11,VF06                                NOP                                                      ;	STALL_LATENCY ?1
+         maddaw.xyz    ACC,VF12,VF06w                               NOP                                                      ;	STALL_LATENCY ?1
+         madd.xyz      VF10,VF10,VF05                               lq.xyz        VF18,238(VI06)                      
+         add.xyz       VF18,VF18,VF10                               NOP                                                      ;	STALL_LATENCY ?3
+         NOP                                                        sq.xyz        VF18,238(VI06)                             ;	STALL_LATENCY ?3
+EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EXIT_POINT:
+; _LNOPT_w=[ ] 4 [4 0] 4   [EXPL_vu1_general_pp4_vcl_dir_light_vert_loop_lid__EXIT_POINT]
+         NOP                                                        isubiu        VI01,VI01,0x00000001                
+         NOP                                                        iaddiu        VI02,VI02,0x00000001                
+         NOP                                                        ibne          VI01,VI00,dir_light_loop_lid        
+         NOP                                                        ilw.x         VI03,0(VI02)                        
 pt_lights_lid:
-; [0,6) size=6 nU=0 nL=4 ic=4 [lin=7 lp=0]
-              nop ilw.y VI01,(0)(VI00)
-              nop iaddiu VI02,VI00,((0) + 1)
-              nop ilw.y VI03,0(VI02)
-              nop nop
-              nop ibeq VI01,VI00,done_lid
-              nop nop
-; [0,1) size=1 nU=1 nL=0 ic=1 [lin=1 lp=0]
-              maxw.z VF09,VF00,VF00w nop
+; _LNOPT_w=[ normal2 ] 4 [6 0] 6   [pt_lights_lid]
+         NOP                                                        ilw.y         VI01,0(VI00)                        
+         NOP                                                        iaddiu        VI02,VI00,0x00000001                
+         NOP                                                        ibeq          VI01,VI00,done_lid                         ;	STALL_LATENCY ?2
+         NOP                                                        ilw.y         VI03,0(VI02)                        
+; _LNOPT_w=[ normal2 ] 1 [4 0] 1   [__v_vu1_general_pp4_vcl_22]
+         maxw.z        VF09,VF00,VF00w                              NOP                                               
 pt_light_loop_lid:
-; [0,16) size=16 nU=5 nL=16 ic=21 [lin=16 lp=0]
-              nop xtop VI06
-              nop lq.xyz VF10,((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4)+0(VI00)
-              nop ilw.x VI05,0(VI06)
-              nop lq.xyz VF11,3(VI03)
-              nop iaddiu VI04,VI06,((0 + 1) + 4)
-              nop lq.xyz VF13,((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4)+1(VI00)
-              nop iadd VI07,VI04,VI05
-              nop iadd VI07,VI07,VI05
-              mulax.xyz ACC,VF10,VF11x lq.xyz VF12,((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4)+2(VI00)
-              madday.xyz ACC,VF13,VF11y lq.xyz VF10,2(VI03)
-              nop iadd VI07,VI07,VI05
-              nop lq.xyz VF13,((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4)+3(VI00)
-              maddaz.xyz ACC,VF12,VF11z lq.xyz VF11,1(VI03)
-              mul.xyz VF12,VF10,VF07 lq.xyz VF10,0(VI03)
-              nop iaddiu VI06,VI06,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))+1
-              maddw.xyz VF14,VF13,VF00w lq.xyz VF13,5(VI03)
-; [0,39) size=39 nU=8 nL=6 ic=14 [lin=36 lp=0]
-              nop lq.xyz VF21,0(VI04)
-              nop nop
-              nop iaddiu VI06,VI06,3
-              nop nop
-              sub.xyz VF19,VF14,VF21 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.xyz VF21,VF19,VF19 nop
-              nop nop
-              nop nop
-              nop nop
-              adday.z ACC,VF21,VF21y nop
-              maddx.z VF21,VF09,VF21x nop
-              nop nop
-              nop nop
-              nop nop
-              nop sqrt Q,VF21z
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              addw.x VF21,VF00,VF00w nop
-              nop nop
-              addq.y VF21,VF00,Q nop
-              nop nop
-              nop nop
-              nop nop
-              mul.xyz VF15,VF21,VF13 div Q,VF00w,VF21y
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop iaddiu VI04,VI04,3
-              mulq.xyz VF16,VF19,Q nop
-              nop nop
-              nop ibeq VI04,VI07,EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EPI2
-              nop nop
-; [0,39) size=39 nU=12 nL=13 ic=25 [lin=38 lp=0]
-              add.xyz VF17,VF08,VF16 lq.xyz VF21,0(VI04)
-              nop nop
-              nop iaddiu VI06,VI06,3
-              nop nop
-              sub.xyz VF19,VF14,VF21 esadd P,VF17
-              nop nop
-              nop nop
-              nop nop
-              mul.xyz VF21,VF19,VF19 nop
-              nop nop
-              nop nop
-              nop nop
-              adday.z ACC,VF21,VF21y nop
-              maddx.z VF21,VF09,VF21x nop
-              nop nop
-              nop mfp.w VF06,P
-              nop nop
-              nop sqrt Q,VF21z
-              nop nop
-              nop ersqrt P,VF06w
-              nop nop
-              nop nop
-              addw.x VF21,VF00,VF00w nop
-              nop nop
-              addq.y VF21,VF00,Q nop
-              nop nop
-              nop move.xyz VF18,VF15
-              nop lq.xyz VF20,(1+0)-(1*(3))(VI04)
-              mul.xyz VF15,VF21,VF13 div Q,VF00w,VF21y
-              nop nop
-              nop nop
-              nop nop
-              mul.xyz VF22,VF16,VF20 nop
-              nop nop
-              nop iaddiu VI04,VI04,3
-              mulq.xyz VF16,VF19,Q nop
-              nop move.xyz VF19,VF17
-              mulax.w ACC,VF00,VF22x ibeq VI04,VI07,EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EPI1
-              madday.w ACC,VF00,VF22y mfp.w VF06,P
-; [0,39) size=39 nU=29 nL=14 ic=43 [lin=38 lp=0]
-              add.xyz VF17,VF08,VF16 lq.xyz VF21,0(VI04)
-              nop nop
-              maddz.w VF05,VF00,VF22z iaddiu VI06,VI06,3
-              mulw.xyz VF22,VF19,VF06w nop
-              sub.xyz VF19,VF14,VF21 esadd P,VF17
-              nop nop
-              maxx.w VF06,VF05,VF00x nop
-              mul.xyz VF24,VF22,VF20 nop
-              mul.xyz VF21,VF19,VF19 nop
-              nop nop
-              mulw.xyz VF22,VF11,VF06w nop
-              mulax.w ACC,VF00,VF24x nop
-              adday.z ACC,VF21,VF21y nop
-              maddx.z VF21,VF09,VF21x nop
-              madday.w ACC,VF00,VF24y nop
-              maddz.w VF05,VF00,VF24z mfp.w VF06,P
-              nop nop
-              mulax.w ACC,VF00,VF18x sqrt Q,VF21z
-              madday.w ACC,VF00,VF18y nop
-              maxx.w VF06,VF05,VF00x ersqrt P,VF06w
-              maddz.w VF05,VF00,VF18z nop
-              nop nop
-              addw.x VF21,VF00,VF00w nop
-              mul.w VF06,VF06,VF06 nop
-              addq.y VF21,VF00,Q nop
-              mula.xyz ACC,VF22,VF06 nop
-              nop move.xyz VF18,VF15
-              mul.w VF06,VF06,VF06 lq.xyz VF20,(1+0)-(1*(3))(VI04)
-              mul.xyz VF15,VF21,VF13 div Q,VF00w,VF21y
-              nop nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              mul.xyz VF22,VF16,VF20 nop
-              nop nop
-              nop iaddiu VI04,VI04,3
-              mulq.xyz VF16,VF19,Q div Q,VF00w,VF05w
-              mul.w VF05,VF06,VF06 move.xyz VF19,VF17
-              mulax.w ACC,VF00,VF22x ibeq VI04,VI07,EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EPI0
-              madday.w ACC,VF00,VF22y mfp.w VF06,P
-EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__MAIN_LOOP:
-; [0,39) size=39 nU=34 nL=16 ic=50 [lin=38 lp=34]
-              add.xyz VF17,VF08,VF16 lq.xyz VF21,0(VI04)
-              mul.w VF07,VF05,VF05 nop
-              maddz.w VF05,VF00,VF22z iaddiu VI06,VI06,3
-              mulw.xyz VF22,VF19,VF06w nop
-              sub.xyz VF19,VF14,VF21 esadd P,VF17
-              maddaw.xyz ACC,VF12,VF07w nop
-              maxx.w VF06,VF05,VF00x nop
-              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(4*(3))(VI06)
-              mul.xyz VF21,VF19,VF19 nop
-              madd.xyz VF23,VF10,VF05 nop
-              mulw.xyz VF22,VF11,VF06w nop
-              mulax.w ACC,VF00,VF24x nop
-              adday.z ACC,VF21,VF21y nop
-              maddx.z VF21,VF09,VF21x nop
-              madday.w ACC,VF00,VF24y nop
-              maddz.w VF05,VF00,VF24z mfp.w VF06,P
-              nop nop
-              mulax.w ACC,VF00,VF18x sqrt Q,VF21z
-              madday.w ACC,VF00,VF18y nop
-              maxx.w VF06,VF05,VF00x ersqrt P,VF06w
-              maddz.w VF05,VF00,VF18z nop
-              mulq.xyz VF18,VF23,Q nop
-              addw.x VF21,VF00,VF00w nop
-              mul.w VF06,VF06,VF06 nop
-              addq.y VF21,VF00,Q nop
-              mula.xyz ACC,VF22,VF06 nop
-              add.xyz VF22,VF20,VF18 move.xyz VF18,VF15
-              mul.w VF06,VF06,VF06 lq.xyz VF20,(1+0)-(1*(3))(VI04)
-              mul.xyz VF15,VF21,VF13 div Q,VF00w,VF21y
-              nop nop
-              nop sq.xyz VF22,(1+0)-(4*(3))(VI06)
-              mul.w VF06,VF06,VF06 nop
-              mul.xyz VF22,VF16,VF20 nop
-              nop nop
-              nop iaddiu VI04,VI04,3
-              mulq.xyz VF16,VF19,Q div Q,VF00w,VF05w
-              mul.w VF05,VF06,VF06 move.xyz VF19,VF17
-              mulax.w ACC,VF00,VF22x ibne VI04,VI07,EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__MAIN_LOOP
-              madday.w ACC,VF00,VF22y mfp.w VF06,P
-; n>=1 .. t = 210 + 39*(n-3) cycles, so .. t=93+(39*n) :
-EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EPI0:
-; [0,93) size=93 nU=53 nL=16 ic=69 [lin=93 lp=0]
-              add.xyz VF17,VF08,VF16 nop
-              mul.w VF07,VF05,VF05 nop
-              maddz.w VF05,VF00,VF22z nop
-              mulw.xyz VF22,VF19,VF06w nop
-              nop esadd P,VF17
-              maddaw.xyz ACC,VF12,VF07w move.xyz VF19,VF17
-              maxx.w VF06,VF05,VF00x nop
-              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(3*(3))(VI06)
-              madd.xyz VF23,VF10,VF05 nop
-              nop nop
-              mulw.xyz VF22,VF11,VF06w nop
-              mulax.w ACC,VF00,VF24x nop
-              madday.w ACC,VF00,VF24y nop
-              maddz.w VF05,VF00,VF24z nop
-              mulax.w ACC,VF00,VF18x nop
-              madday.w ACC,VF00,VF18y mfp.w VF06,P
-              mula.xyz ACC,VF22,VF06 nop
-              nop nop
-              nop nop
-              maxx.w VF06,VF05,VF00x ersqrt P,VF06w
-              maddz.w VF05,VF00,VF18z nop
-              mulq.xyz VF18,VF23,Q nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop div Q,VF00w,VF05w
-              add.xyz VF22,VF20,VF18 move.xyz VF18,VF15
-              nop lq.xyz VF20,(1+0)-(1*(3))(VI04)
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop sq.xyz VF22,(1+0)-(3*(3))(VI06)
-              mul.xyz VF22,VF16,VF20 nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop nop
-              mulax.w ACC,VF00,VF22x nop
-              mul.w VF05,VF06,VF06 nop
-              madday.w ACC,VF00,VF22y nop
-              nop mfp.w VF06,P
-              nop nop
-              mul.w VF07,VF05,VF05 nop
-              maddz.w VF05,VF00,VF22z nop
-              mulw.xyz VF22,VF19,VF06w nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF07w nop
-              maxx.w VF06,VF05,VF00x nop
-              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(2*(3))(VI06)
-              madd.xyz VF23,VF10,VF05 nop
-              nop nop
-              mulw.xyz VF22,VF11,VF06w nop
-              mulax.w ACC,VF00,VF24x nop
-              madday.w ACC,VF00,VF24y nop
-              maddz.w VF05,VF00,VF24z nop
-              mulax.w ACC,VF00,VF18x nop
-              madday.w ACC,VF00,VF18y nop
-              mula.xyz ACC,VF22,VF06 nop
-              maxx.w VF06,VF05,VF00x nop
-              maddz.w VF05,VF00,VF18z nop
-              mulq.xyz VF18,VF23,Q nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop div Q,VF00w,VF05w
-              add.xyz VF22,VF20,VF18 lq.xyz VF20,(1)-(1*(3))(VI06)
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop sq.xyz VF22,(1+0)-(2*(3))(VI06)
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF05,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF07,VF05,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF07w nop
-              madd.xyz VF23,VF10,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              mulq.xyz VF18,VF23,Q nop
-              nop nop
-              nop nop
-              nop nop
-              add.xyz VF22,VF20,VF18 nop
-              nop nop
-              nop nop
-              nop b EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EXIT_POINT
-              nop sq.xyz VF22,(1+0)-(1*(3))(VI06)
-; n==2 .. t = 171 cycles = 85.50 per vertex
-EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EPI1:
-; [0,93) size=93 nU=48 nL=14 ic=62 [lin=93 lp=0]
-              add.xyz VF17,VF08,VF16 nop
-              maddz.w VF05,VF00,VF22z nop
-              nop nop
-              mulw.xyz VF22,VF19,VF06w nop
-              nop esadd P,VF17
-              maxx.w VF06,VF05,VF00x move.xyz VF19,VF17
-              nop nop
-              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1+0)-(1*(3))(VI04)
-              nop nop
-              mulw.xyz VF22,VF11,VF06w nop
-              nop nop
-              mulax.w ACC,VF00,VF24x nop
-              madday.w ACC,VF00,VF24y nop
-              maddz.w VF05,VF00,VF24z nop
-              mulax.w ACC,VF00,VF18x nop
-              madday.w ACC,VF00,VF18y mfp.w VF06,P
-              mula.xyz ACC,VF22,VF06 nop
-              mul.xyz VF22,VF16,VF20 nop
-              nop nop
-              maxx.w VF06,VF05,VF00x ersqrt P,VF06w
-              maddz.w VF05,VF00,VF18z move.xyz VF18,VF15
-              mulax.w ACC,VF00,VF22x nop
-              madday.w ACC,VF00,VF22y nop
-              mul.w VF06,VF06,VF06 nop
-              nop div Q,VF00w,VF05w
-              nop nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF05,VF06,VF06 nop
-              nop nop
-              nop mfp.w VF06,P
-              nop nop
-              mul.w VF07,VF05,VF05 nop
-              maddz.w VF05,VF00,VF22z nop
-              mulw.xyz VF22,VF19,VF06w nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF07w nop
-              maxx.w VF06,VF05,VF00x nop
-              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(2*(3))(VI06)
-              madd.xyz VF23,VF10,VF05 nop
-              nop nop
-              mulw.xyz VF22,VF11,VF06w nop
-              mulax.w ACC,VF00,VF24x nop
-              madday.w ACC,VF00,VF24y nop
-              maddz.w VF05,VF00,VF24z nop
-              mulax.w ACC,VF00,VF18x nop
-              madday.w ACC,VF00,VF18y nop
-              mula.xyz ACC,VF22,VF06 nop
-              maxx.w VF06,VF05,VF00x nop
-              maddz.w VF05,VF00,VF18z nop
-              mulq.xyz VF18,VF23,Q nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop div Q,VF00w,VF05w
-              add.xyz VF22,VF20,VF18 lq.xyz VF20,(1)-(1*(3))(VI06)
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop sq.xyz VF22,(1+0)-(2*(3))(VI06)
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF05,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF07,VF05,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF07w nop
-              madd.xyz VF23,VF10,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              mulq.xyz VF18,VF23,Q nop
-              nop nop
-              nop nop
-              nop nop
-              add.xyz VF22,VF20,VF18 nop
-              nop nop
-              nop nop
-              nop b EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EXIT_POINT
-              nop sq.xyz VF22,(1+0)-(1*(3))(VI06)
-; n==1 .. t = 132 cycles = 132.00 per vertex
-EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EPI2:
-; [0,93) size=93 nU=26 nL=10 ic=36 [lin=93 lp=0]
-              add.xyz VF17,VF08,VF16 move.xyz VF18,VF15
-              nop lq.xyz VF20,(1+0)-(1*(3))(VI04)
-              nop nop
-              nop nop
-              nop esadd P,VF17
-              mul.xyz VF22,VF16,VF20 move.xyz VF19,VF17
-              nop nop
-              nop nop
-              nop nop
-              mulax.w ACC,VF00,VF22x nop
-              madday.w ACC,VF00,VF22y nop
-              maddz.w VF05,VF00,VF22z nop
-              nop nop
-              nop nop
-              nop nop
-              nop mfp.w VF06,P
-              nop nop
-              nop nop
-              nop nop
-              nop ersqrt P,VF06w
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop nop
-              nop mfp.w VF06,P
-              nop nop
-              nop nop
-              nop nop
-              mulw.xyz VF22,VF19,VF06w nop
-              maxx.w VF06,VF05,VF00x nop
-              nop nop
-              nop nop
-              mul.xyz VF24,VF22,VF20 lq.xyz VF20,(1)-(1*(3))(VI06)
-              mulw.xyz VF22,VF11,VF06w nop
-              nop nop
-              nop nop
-              mulax.w ACC,VF00,VF24x nop
-              madday.w ACC,VF00,VF24y nop
-              maddz.w VF05,VF00,VF24z nop
-              mulax.w ACC,VF00,VF18x nop
-              madday.w ACC,VF00,VF18y nop
-              mula.xyz ACC,VF22,VF06 nop
-              maxx.w VF06,VF05,VF00x nop
-              maddz.w VF05,VF00,VF18z nop
-              nop nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop div Q,VF00w,VF05w
-              nop nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF06,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF05,VF06,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              mul.w VF07,VF05,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              maddaw.xyz ACC,VF12,VF07w nop
-              madd.xyz VF23,VF10,VF05 nop
-              nop nop
-              nop nop
-              nop nop
-              mulq.xyz VF18,VF23,Q nop
-              nop nop
-              nop nop
-              nop nop
-              add.xyz VF22,VF20,VF18 nop
-              nop nop
-              nop nop
-              nop nop
-              nop sq.xyz VF22,(1+0)-(1*(3))(VI06)
-EXPL_objs_cross_linux_general2_vcl_pt_light_vert_loop_lid__EXIT_POINT:
-; [0,4) size=4 nU=0 nL=4 ic=4 [lin=4 lp=0]
-              nop isubiu VI01,VI01,1
-              nop iaddiu VI02,VI02,1
-              nop ibne VI01,VI00,pt_light_loop_lid
-              nop ilw.y VI03,0(VI02)
+; _LNOPT_w=[ another ] 35 [43 0] 51   [pt_light_loop_lid]
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        lq.xyz        VF10,71(VI00)                       
+         NOP                                                        lq.xyz        VF11,3(VI03)                        
+         NOP                                                        lq.xyz        VF14,72(VI00)                       
+         mulax.xyz     ACC,VF10,VF11x                               lq.xyz        VF13,73(VI00)                              ;	STALL_LATENCY ?2
+         madday.xyz    ACC,VF14,VF11y                               lq.xyz        VF14,74(VI00)                       
+         NOP                                                        xtop          VI06                                
+         maddaz.xyz    ACC,VF13,VF11z                               iaddiu        VI04,VI06,0x00000005                       ;	STALL_LATENCY ?1
+         maddw.xyz     VF14,VF14,VF00w                              lq.xyz        VF17,0(VI04)                        
+         sub.xyz       VF17,VF14,VF17                               ilw.x         VI05,0(VI06)                               ;	STALL_LATENCY ?3
+         mul.xyz       VF16,VF17,VF17                               lq.xyz        VF12,2(VI03)                               ;	STALL_LATENCY ?3
+         adday.z       ACC,VF16,VF16y                               lq.xyz        VF11,1(VI03)                               ;	STALL_LATENCY ?3
+         maddx.z       VF16,VF09,VF16x                              iadd          VI07,VI04,VI05                      
+         NOP                                                        iadd          VI07,VI07,VI05                      
+         NOP                                                        iadd          VI07,VI07,VI05                      
+         NOP                                                        sqrt          Q,VF16z                                    ;	STALL_LATENCY ?1
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         addq.y        VF16,VF00,Q                                  lq.xyz        VF10,0(VI03)                        
+         NOP                                                        div           Q,VF00w,VF16y                              ;	STALL_LATENCY ?3
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         addw.x        VF16,VF00,VF00w                              lq.xyz        VF13,5(VI03)                        
+         mulq.xyz      VF17,VF17,Q                                  iaddiu        VI04,VI04,0x00000003                
+         NOP                                                        iaddiu        VI06,VI06,0                         
+         mul.xyz       VF12,VF12,VF07                               ibeq          VI04,VI07,EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI2
+         mul.xyz       VF16,VF16,VF13                               iaddiu        VI06,VI06,0                         
+; _LNOPT_w=[ ] 21 [38 0] 39   [EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__PRO1]
+         add.xyz       VF18,VF08,VF17                               lq.xyz        VF19,0(VI04)                        
+         sub.xyz       VF19,VF14,VF19                               esadd         P,VF18                                     ;	STALL_LATENCY ?3
+         mul.xyz       VF21,VF19,VF19                               lq.xyz        VF20,-2(VI04)                              ;	STALL_LATENCY ?3
+         adday.z       ACC,VF21,VF21y                               NOP                                                      ;	STALL_LATENCY ?3
+         maddx.z       VF21,VF09,VF21x                              NOP                                               
+         NOP                                                        waitp                                             
+         addw.x        VF21,VF00,VF00w                              mfp.w         VF06,P                              
+         NOP                                                        sqrt          Q,VF21z                                    ;	STALL_LATENCY ?1
+         NOP                                                        ersqrt        P,VF06w                                    ;	STALL_LATENCY ?1
+         addq.y        VF21,VF00,Q                                  waitq                                                    ;	STALL_LATENCY ?4
+         NOP                                                        div           Q,VF00w,VF21y                              ;	STALL_LATENCY ?3
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         mul.xyz       VF16,VF21,VF13                               move.xyz      VF15,VF16                           
+         mul.xyz       VF21,VF17,VF20                               iaddiu        VI06,VI06,0                         
+         mulq.xyz      VF17,VF19,Q                                  iaddiu        VI04,VI04,0x00000003                
+         NOP                                                        move.xyz      VF19,VF18                           
+         NOP                                                        ibeq          VI04,VI07,EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI1
+         mulax.w       ACC,VF00,VF21x                               mfp.w         VF06,P                              
+; _LNOPT_w=[ ] 32 [38 0] 39   [EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__PRO2]
+         add.xyz       VF18,VF08,VF17                               lq.xyz        VF23,0(VI04)                        
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         mulw.xyz      VF22,VF19,VF06w                              NOP                                               
+         sub.xyz       VF19,VF14,VF23                               NOP                                               
+         madday.w      ACC,VF00,VF21y                               esadd         P,VF18                              
+         maddz.w       VF06,VF00,VF21z                              NOP                                               
+         mul.xyz       VF20,VF22,VF20                               NOP                                               
+         mul.xyz       VF21,VF19,VF19                               NOP                                               
+         mulax.w       ACC,VF00,VF20x                               NOP                                                      ;	STALL_LATENCY ?2
+         adday.z       ACC,VF21,VF21y                               NOP                                               
+         maddx.z       VF21,VF09,VF21x                              NOP                                               
+         madday.w      ACC,VF00,VF20y                               NOP                                               
+         maddz.w       VF07,VF00,VF20z                              waitp                                             
+         maxx.w        VF05,VF06,VF00x                              mfp.w         VF06,P                              
+         mulax.w       ACC,VF00,VF15x                               sqrt          Q,VF21z                             
+         madday.w      ACC,VF00,VF15y                               NOP                                               
+         maxx.w        VF07,VF07,VF00x                              NOP                                               
+         mulw.xyz      VF20,VF11,VF05w                              ersqrt        P,VF06w                             
+         mul.w         VF06,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?2
+         addq.y        VF21,VF00,Q                                  waitq                                             
+         mul.w         VF06,VF06,VF06                               div           Q,VF00w,VF21y                              ;	STALL_LATENCY ?3
+         addw.x        VF21,VF00,VF00w                              NOP                                               
+         mula.xyz      ACC,VF20,VF06                                lq.xyz        VF20,-2(VI04)                       
+         maddz.w       VF05,VF00,VF15z                              NOP                                               
+         mul.w         VF06,VF06,VF06                               NOP                                               
+         mul.xyz       VF16,VF21,VF13                               move.xyz      VF15,VF16                           
+         mul.xyz       VF21,VF17,VF20                               iaddiu        VI06,VI06,0x000000f6                
+         mulq.xyz      VF17,VF19,Q                                  iaddiu        VI04,VI04,0x00000003                
+         mul.w         VF07,VF06,VF06                               move.xyz      VF19,VF18                           
+         NOP                                                        ibeq          VI04,VI07,EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI0
+         mulax.w       ACC,VF00,VF21x                               mfp.w         VF06,P                              
+EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__MAIN_LOOP:
+; _LPOPT_w=[ vuta ] 39 [38 34] 39   [EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__MAIN_LOOP]
+         add.xyz       VF18,VF08,VF17                               lq.xyz        VF23,0(VI04)                        
+         mul.w         VF07,VF07,VF07                               iaddiu        VI06,VI06,0x00000003                
+         madday.w      ACC,VF00,VF21y                               NOP                                               
+         mulw.xyz      VF22,VF19,VF06w                              NOP                                               
+         sub.xyz       VF19,VF14,VF23                               esadd         P,VF18                              
+         maddaw.xyz    ACC,VF12,VF07w                               NOP                                               
+         maddz.w       VF06,VF00,VF21z                              NOP                                               
+         mul.xyz       VF20,VF22,VF20                               NOP                                               
+         mul.xyz       VF21,VF19,VF19                               NOP                                               
+         madd.xyz      VF22,VF10,VF05                               div           Q,VF00w,VF05w                       
+         maxx.w        VF05,VF06,VF00x                              NOP                                               
+         mulax.w       ACC,VF00,VF20x                               NOP                                               
+         adday.z       ACC,VF21,VF21y                               NOP                                               
+         maddx.z       VF21,VF09,VF21x                              NOP                                               
+         madday.w      ACC,VF00,VF20y                               NOP                                               
+         maddz.w       VF07,VF00,VF20z                              mfp.w         VF06,P                              
+         mulq.xyz      VF23,VF22,Q                                  lq.xyz        VF22,-11(VI06)                      
+         mulax.w       ACC,VF00,VF15x                               sqrt          Q,VF21z                             
+         madday.w      ACC,VF00,VF15y                               NOP                                               
+         maxx.w        VF07,VF07,VF00x                              NOP                                               
+         mulw.xyz      VF20,VF11,VF05w                              ersqrt        P,VF06w                             
+         add.xyz       VF22,VF22,VF23                               NOP                                               
+         addw.x        VF21,VF00,VF00w                              NOP                                               
+         mul.w         VF06,VF07,VF07                               NOP                                               
+         addq.y        VF21,VF00,Q                                  NOP                                               
+         mula.xyz      ACC,VF20,VF06                                sq.xyz        VF22,-11(VI06)                      
+         maddz.w       VF05,VF00,VF15z                              move.xyz      VF15,VF16                           
+         mul.w         VF06,VF06,VF06                               lq.xyz        VF20,-2(VI04)                       
+         mul.xyz       VF16,VF21,VF13                               div           Q,VF00w,VF21y                       
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         mul.w         VF06,VF06,VF06                               NOP                                               
+         mul.xyz       VF21,VF17,VF20                               NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         mulq.xyz      VF17,VF19,Q                                  iaddiu        VI04,VI04,0x00000003                
+         mul.w         VF07,VF06,VF06                               move.xyz      VF19,VF18                           
+         NOP                                                        ibne          VI04,VI07,EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__MAIN_LOOP
+         mulax.w       ACC,VF00,VF21x                               mfp.w         VF06,P                              
+EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI0:
+; _LNOPT_w=[ ] 60 [93 0] 93   [EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI0]
+         add.xyz       VF13,VF08,VF17                               NOP                                               
+         mulw.xyz      VF19,VF19,VF06w                              esadd         P,VF13                                     ;	STALL_LATENCY ?3
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         mul.w         VF07,VF07,VF07                               NOP                                               
+         madday.w      ACC,VF00,VF21y                               NOP                                               
+         maddz.w       VF06,VF00,VF21z                              NOP                                               
+         mul.xyz       VF20,VF19,VF20                               NOP                                               
+         maddaw.xyz    ACC,VF12,VF07w                               NOP                                               
+         madd.xyz      VF21,VF10,VF05                               NOP                                               
+         maxx.w        VF05,VF06,VF00x                              div           Q,VF00w,VF05w                       
+         mulax.w       ACC,VF00,VF20x                               mfp.w         VF06,P                              
+         madday.w      ACC,VF00,VF20y                               NOP                                               
+         maddz.w       VF07,VF00,VF20z                              NOP                                               
+         mulw.xyz      VF20,VF11,VF05w                              NOP                                               
+         mulax.w       ACC,VF00,VF15x                               ersqrt        P,VF06w                             
+         madday.w      ACC,VF00,VF15y                               NOP                                               
+         maxx.w        VF07,VF07,VF00x                              NOP                                               
+         mul.w         VF06,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?3
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?3
+         mulq.xyz      VF19,VF21,Q                                  lq.xyz        VF21,-8(VI06)                       
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?2
+         mula.xyz      ACC,VF20,VF06                                lq.xyz        VF20,-2(VI04)                       
+         add.xyz       VF21,VF21,VF19                               move.xyz      VF19,VF13                           
+         mul.w         VF07,VF06,VF06                               mfp.w         VF06,P                                     ;	STALL_LATENCY ?1
+         mul.xyz       VF21,VF17,VF20                               sq.xyz        VF21,-8(VI06)                              ;	STALL_LATENCY ?1
+         mulw.xyz      VF13,VF19,VF06w                              NOP                                                      ;	STALL_LATENCY ?1
+         maddz.w       VF05,VF00,VF15z                              move.xyz      VF15,VF16                           
+         mul.w         VF07,VF07,VF07                               NOP                                               
+         mulax.w       ACC,VF00,VF21x                               NOP                                               
+         mul.xyz       VF20,VF13,VF20                               NOP                                               
+         madday.w      ACC,VF00,VF21y                               NOP                                               
+         maddaw.xyz    ACC,VF12,VF07w                               NOP                                               
+         maddz.w       VF06,VF00,VF21z                              NOP                                               
+         mulax.w       ACC,VF00,VF20x                               NOP                                               
+         madday.w      ACC,VF00,VF20y                               NOP                                               
+         maddz.w       VF07,VF00,VF20z                              NOP                                               
+         maxx.w        VF07,VF07,VF00x                              NOP                                                      ;	STALL_LATENCY ?3
+         maxx.w        VF05,VF06,VF00x                              div           Q,VF00w,VF05w                       
+         mul.w         VF06,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?2
+         mulw.xyz      VF20,VF11,VF05w                              NOP                                               
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?2
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?3
+         mulax.w       ACC,VF00,VF15x                               NOP                                               
+         madday.w      ACC,VF00,VF15y                               NOP                                               
+         mul.w         VF07,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?1
+         maddz.w       VF05,VF00,VF15z                              NOP                                               
+         mul.w         VF07,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?2
+         madd.xyz      VF13,VF10,VF05                               div           Q,VF00w,VF05w                       
+         mula.xyz      ACC,VF20,VF06                                NOP                                               
+         maddaw.xyz    ACC,VF12,VF07w                               NOP                                                      ;	STALL_LATENCY ?1
+         madd.xyz      VF10,VF10,VF05                               NOP                                               
+         mulq.xyz      VF17,VF13,Q                                  lq.xyz        VF13,-5(VI06)                       
+         mulq.xyz      VF12,VF10,Q                                  lq.xyz        VF10,-2(VI06)                              ;	STALL_LATENCY ?2
+         add.xyz       VF11,VF13,VF17                               NOP                                               
+         add.xyz       VF10,VF10,VF12                               NOP                                                      ;	STALL_LATENCY ?2
+         NOP                                                        sq.xyz        VF11,-5(VI06)                       
+         NOP                                                        b             EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EXIT_POINT
+         NOP                                                        sq.xyz        VF10,-2(VI06)                              ;	STALL_LATENCY ?1
+EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI1:
+; _LNOPT_w=[ ] 53 [93 0] 93   [EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI1]
+         add.xyz       VF13,VF08,VF17                               NOP                                               
+         mulw.xyz      VF19,VF19,VF06w                              esadd         P,VF13                                     ;	STALL_LATENCY ?3
+         mul.xyz       VF20,VF19,VF20                               move.xyz      VF19,VF13                                  ;	STALL_LATENCY ?3
+         madday.w      ACC,VF00,VF21y                               NOP                                               
+         maddz.w       VF06,VF00,VF21z                              NOP                                               
+         maxx.w        VF05,VF06,VF00x                              waitp                                                    ;	STALL_LATENCY ?3
+         mulax.w       ACC,VF00,VF20x                               mfp.w         VF06,P                              
+         madday.w      ACC,VF00,VF20y                               NOP                                               
+         maddz.w       VF07,VF00,VF20z                              NOP                                               
+         mulw.xyz      VF20,VF11,VF05w                              NOP                                               
+         mulax.w       ACC,VF00,VF15x                               ersqrt        P,VF06w                             
+         madday.w      ACC,VF00,VF15y                               NOP                                               
+         maxx.w        VF07,VF07,VF00x                              NOP                                               
+         mul.w         VF06,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?3
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?3
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?3
+         mula.xyz      ACC,VF20,VF06                                lq.xyz        VF20,-2(VI04)                       
+         NOP                                                        waitp                                                    ;	STALL_LATENCY ?1
+         mul.w         VF07,VF06,VF06                               mfp.w         VF06,P                              
+         mul.xyz       VF21,VF17,VF20                               NOP                                               
+         mulw.xyz      VF13,VF19,VF06w                              NOP                                                      ;	STALL_LATENCY ?2
+         maddz.w       VF05,VF00,VF15z                              move.xyz      VF15,VF16                           
+         mul.w         VF07,VF07,VF07                               NOP                                               
+         mulax.w       ACC,VF00,VF21x                               NOP                                               
+         mul.xyz       VF20,VF13,VF20                               NOP                                               
+         madday.w      ACC,VF00,VF21y                               NOP                                               
+         maddaw.xyz    ACC,VF12,VF07w                               NOP                                               
+         maddz.w       VF06,VF00,VF21z                              NOP                                               
+         mulax.w       ACC,VF00,VF20x                               NOP                                               
+         madday.w      ACC,VF00,VF20y                               NOP                                               
+         maddz.w       VF07,VF00,VF20z                              NOP                                               
+         maxx.w        VF07,VF07,VF00x                              NOP                                                      ;	STALL_LATENCY ?3
+         maxx.w        VF05,VF06,VF00x                              div           Q,VF00w,VF05w                       
+         mul.w         VF06,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?2
+         mulw.xyz      VF20,VF11,VF05w                              NOP                                               
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?2
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?3
+         mulax.w       ACC,VF00,VF15x                               NOP                                               
+         madday.w      ACC,VF00,VF15y                               NOP                                               
+         mul.w         VF07,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?1
+         maddz.w       VF05,VF00,VF15z                              NOP                                               
+         mul.w         VF07,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?2
+         madd.xyz      VF13,VF10,VF05                               div           Q,VF00w,VF05w                       
+         mula.xyz      ACC,VF20,VF06                                NOP                                               
+         maddaw.xyz    ACC,VF12,VF07w                               NOP                                                      ;	STALL_LATENCY ?1
+         madd.xyz      VF10,VF10,VF05                               NOP                                               
+         mulq.xyz      VF17,VF13,Q                                  lq.xyz        VF13,238(VI06)                      
+         mulq.xyz      VF12,VF10,Q                                  lq.xyz        VF10,241(VI06)                             ;	STALL_LATENCY ?2
+         add.xyz       VF11,VF13,VF17                               NOP                                               
+         add.xyz       VF10,VF10,VF12                               NOP                                                      ;	STALL_LATENCY ?2
+         NOP                                                        sq.xyz        VF11,238(VI06)                      
+         NOP                                                        b             EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EXIT_POINT
+         NOP                                                        sq.xyz        VF10,241(VI06)                             ;	STALL_LATENCY ?1
+EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI2:
+; _LNOPT_w=[ ] 49 [93 0] 93   [EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EPI2]
+         add.xyz       VF13,VF08,VF17                               lq.xyz        VF14,-2(VI04)                       
+         mul.xyz       VF17,VF17,VF14                               esadd         P,VF13                                     ;	STALL_LATENCY ?3
+         mulax.w       ACC,VF00,VF17x                               move.xyz      VF16,VF16                                  ;	STALL_LATENCY ?3
+         madday.w      ACC,VF00,VF17y                               NOP                                               
+         NOP                                                        waitp                                                    ;	STALL_LATENCY ?4
+         NOP                                                        mfp.w         VF06,P                              
+         NOP                                                        ersqrt        P,VF06w                                    ;	STALL_LATENCY ?3
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        move.xyz      VF13,VF13                           
+         NOP                                                        mfp.w         VF06,P                              
+         mulw.xyz      VF13,VF13,VF06w                              NOP                                                      ;	STALL_LATENCY ?3
+         maddz.w       VF06,VF00,VF17z                              NOP                                               
+         mul.xyz       VF17,VF13,VF14                               NOP                                                      ;	STALL_LATENCY ?2
+         maxx.w        VF05,VF06,VF00x                              NOP                                               
+         mulax.w       ACC,VF00,VF17x                               NOP                                                      ;	STALL_LATENCY ?2
+         madday.w      ACC,VF00,VF17y                               NOP                                               
+         maddz.w       VF07,VF00,VF17z                              NOP                                               
+         mulw.xyz      VF11,VF11,VF05w                              NOP                                               
+         maxx.w        VF07,VF07,VF00x                              NOP                                                      ;	STALL_LATENCY ?2
+         mula.xyz      ACC,VF11,VF06                                NOP                                               
+         mul.w         VF06,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?2
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?3
+         mul.w         VF06,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?3
+         mulax.w       ACC,VF00,VF16x                               NOP                                               
+         madday.w      ACC,VF00,VF16y                               NOP                                               
+         mul.w         VF07,VF06,VF06                               NOP                                                      ;	STALL_LATENCY ?1
+         maddz.w       VF05,VF00,VF16z                              NOP                                               
+         mul.w         VF07,VF07,VF07                               NOP                                                      ;	STALL_LATENCY ?2
+         NOP                                                        div           Q,VF00w,VF05w                       
+         maddaw.xyz    ACC,VF12,VF07w                               NOP                                                      ;	STALL_LATENCY ?2
+         madd.xyz      VF10,VF10,VF05                               NOP                                               
+         mulq.xyz      VF12,VF10,Q                                  lq.xyz        VF10,238(VI06)                             ;	STALL_LATENCY ?3
+         add.xyz       VF10,VF10,VF12                               NOP                                                      ;	STALL_LATENCY ?3
+         NOP                                                        sq.xyz        VF10,238(VI06)                             ;	STALL_LATENCY ?3
+EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EXIT_POINT:
+; _LNOPT_w=[ ] 4 [4 0] 4   [EXPL_vu1_general_pp4_vcl_pt_light_vert_loop_lid__EXIT_POINT]
+         NOP                                                        isubiu        VI01,VI01,0x00000001                
+         NOP                                                        iaddiu        VI02,VI02,0x00000001                
+         NOP                                                        ibne          VI01,VI00,pt_light_loop_lid         
+         NOP                                                        ilw.y         VI03,0(VI02)                        
 done_lid:
-; [0,13) size=13 nU=3 nL=8 ic=11 [lin=13 lp=0]
-              nop lq.w VF05,(((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1)(VI00)
-              nop xtop VI01
-              nop loi 128.0
-              nop iaddiu VI02,VI01,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))+1
-              muli.w VF05,VF05,I iadd VI03,VI02,VI05
-              nop iadd VI03,VI03,VI05
-              nop iadd VI03,VI03,VI05
-              nop loi 255.0
-              minii.w VF05,VF05,I nop
-              nop nop
-              nop nop
-              nop nop
-              ftoi0.w VF05,VF05 nop
-; [0,5) size=5 nU=1 nL=3 ic=4 [lin=5 lp=0]
-              nop lq.xyz VF07,1+0(VI02)
-              nop iaddiu VI02,VI02,3
-              nop nop
-              nop ibeq VI02,VI03,EXPL_objs_cross_linux_general2_vcl_final_loop_lid__EPI1
-              minii.xyz VF06,VF07,I nop
-; [0,5) size=5 nU=2 nL=3 ic=5 [lin=5 lp=0]
-              nop lq.xyz VF07,1+0(VI02)
-              nop iaddiu VI02,VI02,3
-              nop nop
-              ftoi0.xyz VF05,VF06 ibeq VI02,VI03,EXPL_objs_cross_linux_general2_vcl_final_loop_lid__EPI0
-              minii.xyz VF06,VF07,I nop
-EXPL_objs_cross_linux_general2_vcl_final_loop_lid__MAIN_LOOP:
-; [0,5) size=5 nU=2 nL=4 ic=6 [lin=5 lp=4]
-              nop lq.xyz VF07,1+0(VI02)
-              nop iaddiu VI02,VI02,3
-              nop sq VF05,(1+0)-(3*(3))(VI02)
-              ftoi0.xyz VF05,VF06 ibne VI02,VI03,EXPL_objs_cross_linux_general2_vcl_final_loop_lid__MAIN_LOOP
-              minii.xyz VF06,VF07,I nop
-; n>=1 .. t = 18 + 5*(n-2) cycles, so .. t=8+(5*n) :
-EXPL_objs_cross_linux_general2_vcl_final_loop_lid__EPI0:
-; [0,8) size=8 nU=1 nL=3 ic=4 [lin=5 lp=0]
-              nop nop
-              nop nop
-              nop sq VF05,(1+0)-(2*(3))(VI02)
-              ftoi0.xyz VF05,VF06 nop
-              nop nop
-              nop nop
-              nop b EXPL_objs_cross_linux_general2_vcl_final_loop_lid__EXIT_POINT
-              nop sq VF05,(1+0)-(1*(3))(VI02)
-; n==1 .. t = 13 cycles = 13.00 per vertex
-EXPL_objs_cross_linux_general2_vcl_final_loop_lid__EPI1:
-; [0,8) size=8 nU=1 nL=1 ic=2 [lin=5 lp=0]
-              nop nop
-              nop nop
-              nop nop
-              ftoi0.xyz VF05,VF06 nop
-              nop nop
-              nop nop
-              nop nop
-              nop sq VF05,(1+0)-(1*(3))(VI02)
-EXPL_objs_cross_linux_general2_vcl_final_loop_lid__EXIT_POINT:
-; [0,2) size=2 nU=0 nL=2 ic=2 [lin=2 lp=0]
-              nop iaddiu VI01,VI01,(0 + (((1024 - (0 + (((((((((((((((((((((((((((((0) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 6) + 1) + 1) + 1) + 1) + 1) + 4) + 1) + 4) + 4) + 1) - 0 + 1)))/2)/2))
-              nop xgkick VI01
-              nop[E] nop
-              nop nop
-; [0,2) size=2 nU=0 nL=1 ic=1 [lin=3 lp=0]
-              nop b main_loop_lid
-              nop nop
-                .align 4
+; _LNOPT_w=[ another ] 12 [13 0] 13   [done_lid]
+         NOP                                                        lq.w          VF05,60(VI00)                       
+         NOP                                                        xtop          VI01                                
+         NOP                                                        iaddiu        VI02,VI01,0x000000ed                
+         NOP                                                        loi           0x43000000                          
+         muli.w        VF05,VF05,I                                  iadd          VI03,VI02,VI05                      
+         NOP                                                        iadd          VI03,VI03,VI05                      
+         NOP                                                        loi           0x437f0000                          
+         NOP                                                        lq.xyz        VF05,1(VI02)                        
+         minii.w       VF05,VF05,I                                  iadd          VI03,VI03,VI05                      
+         NOP                                                        iaddiu        VI02,VI02,0x00000003                
+         minii.xyz     VF06,VF05,I                                  ibeq          VI02,VI03,EXPL_vu1_general_pp4_vcl_final_loop_lid__EPI1       ;	STALL_LATENCY ?1
+         ftoi0.w       VF05,VF05                                    NOP                                               
+; _LNOPT_w=[ ] 5 [5 0] 5   [EXPL_vu1_general_pp4_vcl_final_loop_lid__PRO1]
+         NOP                                                        lq.xyz        VF07,1(VI02)                        
+         NOP                                                        iaddiu        VI02,VI02,0x00000003                
+         NOP                                                        NOP                                               
+         ftoi0.xyz     VF05,VF06                                    ibeq          VI02,VI03,EXPL_vu1_general_pp4_vcl_final_loop_lid__EPI0
+         minii.xyz     VF06,VF07,I                                  NOP                                               
+EXPL_vu1_general_pp4_vcl_final_loop_lid__MAIN_LOOP:
+; _LPOPT_w=[ ldumb ] 5 [5 4] 5   [EXPL_vu1_general_pp4_vcl_final_loop_lid__MAIN_LOOP]
+         NOP                                                        lq.xyz        VF07,1(VI02)                        
+         NOP                                                        iaddiu        VI02,VI02,0x00000003                
+         NOP                                                        sq            VF05,-8(VI02)                       
+         ftoi0.xyz     VF05,VF06                                    ibne          VI02,VI03,EXPL_vu1_general_pp4_vcl_final_loop_lid__MAIN_LOOP
+         minii.xyz     VF06,VF07,I                                  NOP                                               
+EXPL_vu1_general_pp4_vcl_final_loop_lid__EPI0:
+; _LNOPT_w=[ ] 6 [5 0] 8   [EXPL_vu1_general_pp4_vcl_final_loop_lid__EPI0]
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         ftoi0.xyz     VF05,VF06                                    sq            VF05,-5(VI02)                       
+         NOP                                                        b             EXPL_vu1_general_pp4_vcl_final_loop_lid__EXIT_POINT
+         NOP                                                        sq            VF05,-2(VI02)                              ;	STALL_LATENCY ?2
+EXPL_vu1_general_pp4_vcl_final_loop_lid__EPI1:
+; _LNOPT_w=[ ] 4 [5 0] 7   [EXPL_vu1_general_pp4_vcl_final_loop_lid__EPI1]
+         NOP                                                        NOP                                               
+         NOP                                                        NOP                                               
+         ftoi0.xyz     VF05,VF06                                    NOP                                               
+         NOP                                                        sq            VF05,-2(VI02)                              ;	STALL_LATENCY ?3
+EXPL_vu1_general_pp4_vcl_final_loop_lid__EXIT_POINT:
+; _LNOPT_w=[ ] 4 [2 0] 4   [EXPL_vu1_general_pp4_vcl_final_loop_lid__EXIT_POINT]
+         NOP                                                        iaddiu        VI01,VI01,0x000000ec                
+         NOP                                                        xgkick        VI01                                
+         NOP[E]                                                     NOP                                               
+         NOP                                                        NOP                                               
+; _LNOPT_w=[ normal2 ] 2 [2 0] 2   [__v_vu1_general_pp4_vcl_30]
+         NOP                                                        b             main_loop_lid                       
+         NOP                                                        NOP                                               
+		.align 4
 vsmGeneral_CodeEnd:
-; iCount=953
+;	iCount=660
+; register stats:
+;  15 VU User integer
+;  24 VU User floating point

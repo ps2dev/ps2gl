@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "GL/gl.h"
 #include "GL/glut.h"
@@ -243,7 +245,7 @@ void display(void)
     glPolygonMode(GL_FRONT, GL_FILL);
     glDisable(GL_ALPHA_TEST);
 
-    strncpy(renderer_name, pglGetCurRendererName(), 64);
+    strncpy(renderer_name, pglGetCurRendererName(), 63);
 
     draw_text();
 

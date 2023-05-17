@@ -1,21 +1,21 @@
 EE_BIN       = tricked_out.elf
-EE_CFLAGS   := -I$(PS2SDK)/ports/include -I../shared_code/ $(EE_CFLAGS)
-EE_CXXFLAGS := -I$(PS2SDK)/ports/include -I../shared_code/ $(EE_CXXFLAGS)
-EE_OBJS      = tricked_out.o bollboard_renderer.o ../shared_code/text_stuff.o
+EE_CFLAGS   := -I$(PS2SDK)/ports/include -I../shared_code/ -I../../vu1 $(EE_CFLAGS)
+EE_CXXFLAGS := -I$(PS2SDK)/ports/include -I../shared_code/ -I../../vu1 $(EE_CXXFLAGS)
+EE_OBJS      = tricked_out.o billboard_renderer.o ../shared_code/text_stuff.o billboard_renderer.vo
 EE_LDFLAGS  += -L$(PS2SDK)/ports/lib
 EE_LIBS      = -lps2glut -lps2gl -lps2stuff -lpad -ldma
 
 ifeq ($(DEBUG), 1)
-	EE_CFLAGS   += -D_DEBUG -g -O0
-	EE_CXXFLAGS += -D_DEBUG -g -O0
+	EE_CFLAGS   += -D_DEBUG
+	EE_CXXFLAGS += -D_DEBUG
 endif
 
 # Disabling warnings
 WARNING_FLAGS = -Wno-strict-aliasing -Wno-conversion-null 
 
 # VU0 code is broken so disable for now
-EE_CFLAGS   += $(WARNING_FLAGS) -DNO_VU0_VECTORS
-EE_CXXFLAGS += $(WARNING_FLAGS) -DNO_VU0_VECTORS
+EE_CFLAGS   += $(WARNING_FLAGS) -DNO_VU0_VECTORS -DNO_ASM
+EE_CXXFLAGS += $(WARNING_FLAGS) -DNO_VU0_VECTORS -DNO_ASM
 
 all: $(EE_BIN)
 	$(EE_STRIP) --strip-all $(EE_BIN)
@@ -34,3 +34,6 @@ sim: $(EE_BIN)
 
 include $(PS2SDK)/samples/Makefile.pref
 include $(PS2SDK)/samples/Makefile.eeglobal_cpp
+
+%.vo: %_vcl.vsm
+	dvp-as -o $@ $<
