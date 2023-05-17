@@ -41,9 +41,9 @@ jobs:
     - name: Compile examples
       run: |
         cd examples
-        # For now just box, logo and nehe examples are compiling
         cd box && make clean all && cd ..
         cd logo && make clean all && cd ..
+        cd tricked_out && make clean all && cd ..
         cd nehe/lesson02 && make clean all && cd ../..
         cd nehe/lesson03 && make clean all && cd ../..
         cd nehe/lesson04 && make clean all && cd ../..
@@ -58,3 +58,4 @@ jobs:
           examples/**/*.elf
           examples/**/*.gl
           examples/**/*.rtx
+          examples/**/*.bin
