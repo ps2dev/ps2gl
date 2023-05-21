@@ -46,7 +46,7 @@ bool CGeomManager::DoNormalize = false;
 
 CGeomManager::CGeomManager(CGLContext& context)
     : GLContext(context)
-    , CurNormal(0.0f, 0.0f, 0.0f)
+    , CurNormal(0.0f, 0.0f, 1.0f)
     , Prim(GL_INVALID_VALUE)
     , InsideBeginEnd(false)
     , LastArrayAccessWasIndexed(false)
