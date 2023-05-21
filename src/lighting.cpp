@@ -232,6 +232,10 @@ CImmLighting::CImmLighting(CGLContext& context)
     Lights[5] = &Light5;
     Lights[6] = &Light6;
     Lights[7] = &Light7;
+
+    // Light0 has different initial values
+    Light0.SetDiffuse(cpu_vec_xyzw(1.0f, 1.0f, 1.0f, 1.0f));
+    Light0.SetSpecular(cpu_vec_xyzw(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 void CImmLighting::SpecularChanged()
