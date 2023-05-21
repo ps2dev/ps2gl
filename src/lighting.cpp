@@ -33,6 +33,11 @@ CImmLight::CImmLight(CGLContext& context, int lightNum)
     , bIsEnabled(false)
     , Type(kDirectional)
 {
+    if (lightNum == 0) {
+        // Light0 has different initial values
+        Diffuse  = cpu_vec_xyzw(1.0f, 1.0f, 1.0f, 1.0f);
+        Specular = cpu_vec_xyzw(1.0f, 1.0f, 1.0f, 1.0f);
+    }
 }
 
 void CImmLight::CheckTypeChange(tLightType oldType)
