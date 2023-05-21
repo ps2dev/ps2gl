@@ -62,10 +62,12 @@ xform_loop_lid:		--LoopCS 1,3
 	mfir.w		gs_vert_2, adc_bit
 	store_xyzf	gs_vert_2, kOutputQPerV
 
+	; We are loading the 4th vertex of the quad, as the 3rd vertex of the triangle strip
 	do_bfc_vert	kInputQPerV+kInputQPerV+kInputQPerV, kOutputQPerV+kOutputQPerV,
 +				xformed_vert_3, gs_vert_3
 	clip_vert		xformed_vert_3
 
+	; We are loading the 3rd vertex of the quad, as the 4th vertex of the triangle strip
 	do_bfc_vert	kInputQPerV+kInputQPerV, kOutputQPerV+kOutputQPerV+kOutputQPerV,
 +				xformed_vert_4, gs_vert_4
 	clip_vert		xformed_vert_4
@@ -87,6 +89,12 @@ xform_loop_lid:		--LoopCS 1,3
 
 	mfir.w		gs_vert_4, new_adc_bit
 	store_xyzf	gs_vert_4, kOutputQPerV+kOutputQPerV+kOutputQPerV
+
+	; Swap normals of vertex 3 and 4
+	lq.xyz		tmp3, 1+kInputQPerV+kInputQPerV(next_input)
+	lq.xyz		tmp4, 1+kInputQPerV+kInputQPerV+kInputQPerV(next_input)
+	sq.xyz		tmp3, 1+kInputQPerV+kInputQPerV+kInputQPerV(next_input)
+	sq.xyz		tmp4, 1+kInputQPerV+kInputQPerV(next_input)
 
 	next_io		4
 
