@@ -1,187 +1,187 @@
-/*	  Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
-       	  
-       	  This file is subject to the terms and conditions of the GNU Lesser
-	  General Public License Version 2.1. See the file "COPYING" in the
-	  main directory of this archive for more details.                             */
+/*     Copyright (C) 2000,2001,2002  Sony Computer Entertainment America
 
-	#include		"vu1_mem_linear.h"
+            This file is subject to the terms and conditions of the GNU Lesser
+       General Public License Version 2.1. See the file "COPYING" in the
+       main directory of this archive for more details.                             */
 
-	.include		"db_in_db_out.i"
-	.include		"math.i"
-	.include		"lighting.i"
-	.include		"clip_cull.i"
-	.include		"geometry.i"
-	.include		"io.i"
-	.include		"general.i"
+     #include       "vu1_mem_linear.h"
 
-kInputQPerV		.equ			3
-kOutputQPerV		.equ			3
+     .include       "db_in_db_out.i"
+     .include       "math.i"
+     .include       "lighting.i"
+     .include       "clip_cull.i"
+     .include       "geometry.i"
+     .include       "io.i"
+     .include       "general.i"
 
-	.init_vf_all
-	.init_vi_all
+kInputQPerV         .equ           3
+kOutputQPerV        .equ           3
 
-	.name		vsmGeneralNoSpec
+     .init_vf_all
+     .init_vi_all
 
-	--enter
-	--endenter
+     .name          vsmGeneralNoSpec
 
-	; ------------------------ initialization ---------------------------------
+     --enter
+     --endenter
 
-	load_vert_xfrm	vert_xform
+     ; ------------------------ initialization ---------------------------------
 
-	--cont
+     load_vert_xfrm vert_xform
 
-	; -------------------- transform & texture loop ---------------------------
+     --cont
 
-main_loop_lid:	
+     ; -------------------- transform & texture loop ---------------------------
 
-	init_constants
-	init_clip_cnst
+main_loop_lid:
 
-	init_io_loop
-	init_out_buf
+     init_constants
+     init_clip_cnst
 
-	set_strip_adcs
+     init_io_loop
+     init_out_buf
 
-	get_cnst_color	const_color
+     set_strip_adcs
 
-	init_bfc_strip
+     get_cnst_color const_color
 
-xform_loop_lid:		--LoopCS 1,3
+     init_bfc_strip
 
-	; xform/clip vertex
+xform_loop_lid:          --LoopCS 1,3
 
-	load_vert		vert
+     ; xform/clip vertex
 
-	xform_vert	xformed_vert, vert_xform, vert
-	vert_to_gs	gs_vert, xformed_vert
+     load_vert      vert
 
-	load_strip_adc	strip_adc
-	bfc_strip_vert	xformed_vert, strip_adc
-	clip_vert		xformed_vert
-	fcand		vi01, 0x003ffff
-	iand			vi01, vi01, do_clipping
-	set_adc_fbs	gs_vert, strip_adc
+     xform_vert     xformed_vert, vert_xform, vert
+     vert_to_gs     gs_vert, xformed_vert
 
-	store_xyzf	gs_vert
+     load_strip_adc strip_adc
+     bfc_strip_vert xformed_vert, strip_adc
+     clip_vert      xformed_vert
+     fcand          vi01, 0x003ffff
+     iand           vi01, vi01, do_clipping
+     set_adc_fbs    gs_vert, strip_adc
 
-	; constant color
+     store_xyzf     gs_vert
 
-	store_rgb		const_color
+     ; constant color
 
-	; texture coords
+     store_rgb      const_color
 
-	load_stq		tex_stq
-	xform_tex_stq	tex_stq, tex_stq, q ; q is from normalize_3
-	store_stq		tex_stq
+     ; texture coords
 
-	next_io
-	loop_io		xform_loop_lid
+     load_stq       tex_stq
+     xform_tex_stq  tex_stq, tex_stq, q ; q is from normalize_3
+     store_stq      tex_stq
 
-	; -------------------- lighting -------------------------------
+     next_io
+     loop_io        xform_loop_lid
 
-lighting_lid:	
+     ; -------------------- lighting -------------------------------
 
-	load_mat_amb	material_amb
-	load_mat_diff	material_diff
+lighting_lid:
 
-	; ---------- directional lights -----------------
+     load_mat_amb   material_amb
+     load_mat_diff  material_diff
 
-	init_dlt_loop
-	ibeq			num_dir_lights, vi00, pt_lights_lid
-	get_ones_vec	ones
+     ; ---------- directional lights -----------------
+
+     init_dlt_loop
+     ibeq           num_dir_lights, vi00, pt_lights_lid
+     get_ones_vec   ones
 
 dir_light_loop_lid:
 
-	init_io_loop
+     init_io_loop
 
-	load_lt_amb	light_amb
-	load_lt_diff	light_diff
+     load_lt_amb    light_amb
+     load_lt_diff   light_diff
 
-	; transform light direction into object space
-	load_lt_pos	vert_to_light
-	load_o2wt		obj_to_world_transpose
-	mul_vec_mat_33	vert_to_light, obj_to_world_transpose, vert_to_light
+     ; transform light direction into object space
+     load_lt_pos    vert_to_light
+     load_o2wt      obj_to_world_transpose
+     mul_vec_mat_33 vert_to_light, obj_to_world_transpose, vert_to_light
 
-dir_light_vert_loop_lid: --LoopCS	1,3
+dir_light_vert_loop_lid: --LoopCS  1,3
 
-	load_normal	normal
+     load_normal    normal
 
-	get_diff_term	acc, vert_to_light, normal, light_diff, material_diff, dot3_to_z, z, ones
-	add_amb_term	vert_color, light_amb, material_amb
+     get_diff_term  acc, vert_to_light, normal, light_diff, material_diff, dot3_to_z, z, ones
+     add_amb_term   vert_color, light_amb, material_amb
 
-	; add to previous lighting calculations (other lights, global amb + emission)
-	accum_rgb		vert_color, vert_color
+     ; add to previous lighting calculations (other lights, global amb + emission)
+     accum_rgb      vert_color, vert_color
 
-	store_rgb		vert_color
+     store_rgb      vert_color
 
-	next_io
-	loop_io		dir_light_vert_loop_lid
+     next_io
+     loop_io        dir_light_vert_loop_lid
 
-	; loop over lights
+     ; loop over lights
 
-	next_dir_light
-	loop_dir_lts	dir_light_loop_lid
+     next_dir_light
+     loop_dir_lts   dir_light_loop_lid
 
-	; ---------- point lights -----------------
+     ; ---------- point lights -----------------
 
 pt_lights_lid:
 
-	init_plt_loop
-	ibeq			num_pt_lights, vi00, done_lid
-	get_ones_vec	ones
+     init_plt_loop
+     ibeq           num_pt_lights, vi00, done_lid
+     get_ones_vec   ones
 
-pt_light_loop_lid:	
+pt_light_loop_lid:
 
-	init_io_loop
+     init_io_loop
 
-	load_lt_amb	light_amb
-	load_lt_diff	light_diff
-	load_lt_atten	atten_coeff
+     load_lt_amb    light_amb
+     load_lt_diff   light_diff
+     load_lt_atten  atten_coeff
 
-	; transform light position to object space
-	load_lt_pos	light_pos
-	load_w2o		world_to_obj
-	mul_pt_mat_34	light_pos, world_to_obj, light_pos
+     ; transform light position to object space
+     load_lt_pos    light_pos
+     load_w2o       world_to_obj
+     mul_pt_mat_34  light_pos, world_to_obj, light_pos
 
-pt_light_vert_loop_lid:				
+pt_light_vert_loop_lid:
 
-	--LoopCS	1,3
-	--LoopExtra 5
+     --LoopCS  1,3
+     --LoopExtra 5
 
-	load_normal	normal
-	load_vert		vert
+     load_normal    normal
+     load_vert      vert
 
-	get_v2l_atten	vert_to_light, light_pos, vert, atten, atten_coeff, ones
-	get_diff_term	acc, vert_to_light, normal, light_diff, material_diff, dot3_to_w, w
+     get_v2l_atten  vert_to_light, light_pos, vert, atten, atten_coeff, ones
+     get_diff_term  acc, vert_to_light, normal, light_diff, material_diff, dot3_to_w, w
 
-	add_amb_term	vert_color, light_amb, material_amb
+     add_amb_term   vert_color, light_amb, material_amb
 
-	atten_color	vert_color, vert_color, atten
+     atten_color    vert_color, vert_color, atten
 
-	accum_rgb		vert_color, vert_color
+     accum_rgb      vert_color, vert_color
 
-	store_rgb		vert_color
+     store_rgb      vert_color
 
-	next_io
-	loop_io		pt_light_vert_loop_lid
+     next_io
+     loop_io        pt_light_vert_loop_lid
 
-	next_pt_light
-	loop_pt_lts	pt_light_loop_lid
+     next_pt_light
+     loop_pt_lts    pt_light_loop_lid
 
-	; -------------------- done! -------------------------------
+     ; -------------------- done! -------------------------------
 
-done_lid:	
+done_lid:
 
-	; clamp and convert to fixed-point
-	finish_colors
+     ; clamp and convert to fixed-point
+     finish_colors
 
-	; ---------------- kick packet to GS -----------------------
+     ; ---------------- kick packet to GS -----------------------
 
-	kick_to_gs
+     kick_to_gs
 
-	--cont
-	
-	b	main_loop_lid
+     --cont
 
-.END	; for gasp
+     b    main_loop_lid
+
+.END ; for gasp
