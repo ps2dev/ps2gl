@@ -1,3 +1,3 @@
 
-_in_buffer	.assignc		"_double"
-_out_buffer	.assignc		"_single"
+_in_buffer     .assignc       "_double"
+_out_buffer    .assignc       "_single"
