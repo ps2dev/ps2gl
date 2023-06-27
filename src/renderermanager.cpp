@@ -622,7 +622,7 @@ void CRendererManager::LoadRenderer(CVifSCDmaPacket& packet)
 {
     mAssert(CurrentRenderer != NULL);
 
-    printf("Loading renderer: %s\n", CurrentRenderer->renderer->GetName());
+    GL_FUNC_DEBUG("Loading renderer: %s\n", CurrentRenderer->renderer->GetName());
 
     CurrentRenderer->renderer->Load();
 
