@@ -34,7 +34,7 @@ public:
     CDListGeomManager(CGLContext& context);
     virtual ~CDListGeomManager() {}
 
-    void PrimChanged(unsigned char prim);
+    void PrimChanged(GLenum prim);
 
     // user state
 

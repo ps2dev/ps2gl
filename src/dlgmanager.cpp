@@ -338,10 +338,10 @@ public:
 };
 
 class CUpdatePrimCmd : public CDListCmd {
-    unsigned char Prim;
+    GLenum Prim;
 
 public:
-    CUpdatePrimCmd(unsigned char prim)
+    CUpdatePrimCmd(GLenum prim)
         : Prim(prim)
     {
     }
@@ -352,7 +352,7 @@ public:
     }
 };
 
-void CDListGeomManager::PrimChanged(unsigned char prim)
+void CDListGeomManager::PrimChanged(GLenum prim)
 {
     GLContext.PrimChanged();
     GLContext.GetDListManager().GetOpenDList() += CUpdatePrimCmd(prim);
