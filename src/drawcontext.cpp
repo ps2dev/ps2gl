@@ -786,6 +786,13 @@ void glDrawBuffer(GLenum mode)
     mNotImplemented();
 }
 
+void glReadBuffer(GLenum mode)
+{
+    GL_FUNC_DEBUG("%s(0x%x)\n", __FUNCTION__, mode);
+
+    mNotImplemented();
+}
+
 void glClipPlane(GLenum plane, const GLdouble* equation)
 {
     GL_FUNC_DEBUG("%s(0x%x,%f)\n", __FUNCTION__, plane, equation);
@@ -883,6 +890,20 @@ void glPolygonMode(GLenum face, GLenum mode)
 
     CImmDrawContext& drawContext = pGLContext->GetImmDrawContext();
     drawContext.SetPolygonMode(mode);
+}
+
+void glPolygonOffset(GLfloat factor, GLfloat units)
+{
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+
+    mNotImplemented();
+}
+
+void glGetPolygonStipple(GLubyte* mask)
+{
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+
+    mNotImplemented();
 }
 
 /********************************************
