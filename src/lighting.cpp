@@ -457,6 +457,13 @@ void glGetLightfv(GLenum light, GLenum pname, float* params)
     mNotImplemented();
 }
 
+void glFogi(GLenum pname, GLfloat param)
+{
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+
+    mNotImplemented();
+}
+
 void glFogf(GLenum pname, GLfloat param)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
@@ -465,6 +472,13 @@ void glFogf(GLenum pname, GLfloat param)
 }
 
 void glFogfv(GLenum pname, const GLfloat* params)
+{
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+
+    mNotImplemented();
+}
+
+void glFogiv(GLenum pname, const GLint* params)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
