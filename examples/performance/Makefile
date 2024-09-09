@@ -2,8 +2,8 @@ EE_BIN       = performance.elf
 EE_CFLAGS   := -I$(PS2SDK)/ports/include -I../shared_code/ $(EE_CFLAGS)
 EE_CXXFLAGS := -I$(PS2SDK)/ports/include -I../shared_code/ $(EE_CXXFLAGS)
 EE_OBJS      = performance.o ../shared_code/text_stuff.o
-EE_LDFLAGS  += -L$(PS2SDK)/ports/lib -L$(PS2DEV)/gsKit/lib
-EE_LIBS      = -lps2glut -lps2gl -lps2stuff -lpad -ldma -lgs -lpacket -lgraph -lgskit -ldmakit
+EE_LDFLAGS  += -L$(PS2SDK)/ports/lib
+EE_LIBS      = -lps2glut -lps2gl -lps2stuff -lpad -ldma -lgs -lpacket -lgraph
 
 ifeq ($(DEBUG), 1)
     EE_CFLAGS   += -D_DEBUG

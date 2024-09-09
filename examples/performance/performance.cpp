@@ -571,6 +571,8 @@ void display(void)
     //     printf("\n");
 
     display_ticks = timer1->GetTicks();
+
+    glutSwapBuffers();
 }
 
 void perspective(float fov, float aspect, float nearClip, float farClip)
