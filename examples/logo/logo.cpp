@@ -76,12 +76,7 @@ GLint ps2_list, gl_list, wet_list, circle_list, tri_list, square_list, x_list;
 
 int main(int argc, char** argv)
 {
-    int dummy_argc         = 1;
-    char iop_module_path[] = "iop_module_path=host0:/usr/local/sce/iop/modules";
-    char* dummy_argv[1];
-    dummy_argv[0] = iop_module_path;
-
-    glutInit(&dummy_argc, (char**)dummy_argv);
+    glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutCreateWindow(argv[0]);
 
