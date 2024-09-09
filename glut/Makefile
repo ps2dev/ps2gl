@@ -1,7 +1,7 @@
 EE_LIB = libps2glut.a
 
-EE_LDFLAGS  += -L. -L$(PS2SDK)/ports/lib -L$(PS2DEV)/gsKit/lib
-EE_INCS     += -I./include -I$(PS2SDK)/ports/include -I$(PS2DEV)/gsKit/include
+EE_LDFLAGS  += -L. -L$(PS2SDK)/ports/lib
+EE_INCS     += -I./include -I$(PS2SDK)/ports/include
 
 ifeq ($(DEBUG), 1)
     EE_CFLAGS   += -D_DEBUG

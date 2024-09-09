@@ -9,9 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ps2dev/ps2sdk-ports:latest
+    container: ps2dev/ps2sdk:latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Install dependencies
       run: |
@@ -43,6 +43,7 @@ jobs:
         cd examples
         cd box && make clean all && cd ..
         cd logo && make clean all && cd ..
+        cd performance && make clean all && cd ..
         cd tricked_out && make clean all && cd ..
         cd nehe/lesson02 && make clean all && cd ../..
         cd nehe/lesson03 && make clean all && cd ../..
@@ -51,7 +52,7 @@ jobs:
 
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: examples
         path: |
