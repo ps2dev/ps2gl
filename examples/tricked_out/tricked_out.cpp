@@ -18,7 +18,6 @@
 #include "ps2s/eetimer.h"
 #include "ps2s/math.h"
 
-#include "file_ops.h"
 #include "text_stuff.h"
 
 #include "billboard_renderer.h"
@@ -189,7 +188,7 @@ void init_billboards()
 void load_bb_texture()
 {
     // the texture file is just an rgba image with no header info
-    int tex_fd = open(FILE_PREFIX "car.bin", O_RDONLY);
+    int tex_fd = open("car.bin", O_RDONLY);
     assert(tex_fd != -1);
 
     int image_size = 128 * 128 * 4; // 128x128 32-bit image
