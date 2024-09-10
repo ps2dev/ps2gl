@@ -14,9 +14,6 @@
 #include "GL/gl.h"
 #include "GL/glut.h"
 
-// in 'shared_code'
-#include "file_ops.h"
-
 #include "ps2glmesh.h"
 
 /********************************************
@@ -79,12 +76,7 @@ GLint ps2_list, gl_list, wet_list, circle_list, tri_list, square_list, x_list;
 
 int main(int argc, char** argv)
 {
-    int dummy_argc         = 1;
-    char iop_module_path[] = "iop_module_path=host0:/usr/local/sce/iop/modules";
-    char* dummy_argv[1];
-    dummy_argv[0] = iop_module_path;
-
-    glutInit(&dummy_argc, (char**)dummy_argv);
+    glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutCreateWindow(argv[0]);
 
@@ -128,8 +120,8 @@ void init_models(void)
     // ps2
 
     ps2_list = glGenLists(7);
-    mesh     = LoadMesh(FILE_PREFIX "ps2.gl");
-    LoadRTexFile(FILE_PREFIX "plywd_b.rtx", tex_ids[0]);
+    mesh     = LoadMesh("ps2.gl");
+    LoadRTexFile("plywd_b.rtx", tex_ids[0]);
     glNewList(ps2_list, GL_COMPILE);
     {
         glPushMatrix();
@@ -142,8 +134,8 @@ void init_models(void)
     // gl
 
     gl_list = ps2_list + 1;
-    mesh    = LoadMesh(FILE_PREFIX "gl.gl");
-    LoadRTexFile(FILE_PREFIX "plywd_y.rtx", tex_ids[1]);
+    mesh    = LoadMesh("gl.gl");
+    LoadRTexFile("plywd_y.rtx", tex_ids[1]);
     glNewList(gl_list, GL_COMPILE);
     {
         glBindTexture(GL_TEXTURE_2D, tex_ids[1]);
@@ -154,8 +146,8 @@ void init_models(void)
     // wet paint
 
     wet_list = ps2_list + 2;
-    mesh     = LoadMesh(FILE_PREFIX "note.gl");
-    LoadRTexFile(FILE_PREFIX "wetpaint.rtx", tex_ids[2]);
+    mesh     = LoadMesh("note.gl");
+    LoadRTexFile("wetpaint.rtx", tex_ids[2]);
     glNewList(wet_list, GL_COMPILE);
     {
         glBindTexture(GL_TEXTURE_2D, tex_ids[2]);
@@ -167,7 +159,7 @@ void init_models(void)
     // circle
 
     circle_list = ps2_list + 3;
-    mesh        = LoadMesh(FILE_PREFIX "cir.gl");
+    mesh        = LoadMesh("cir.gl");
     glNewList(circle_list, GL_COMPILE);
     {
         DrawMesh(mesh);
@@ -177,7 +169,7 @@ void init_models(void)
     // square
 
     square_list = ps2_list + 4;
-    mesh        = LoadMesh(FILE_PREFIX "sq.gl");
+    mesh        = LoadMesh("sq.gl");
     glNewList(square_list, GL_COMPILE);
     {
         DrawMesh(mesh);
@@ -187,7 +179,7 @@ void init_models(void)
     // triangle
 
     tri_list = ps2_list + 5;
-    mesh     = LoadMesh(FILE_PREFIX "tri.gl");
+    mesh     = LoadMesh("tri.gl");
     glNewList(tri_list, GL_COMPILE);
     {
         DrawMesh(mesh);
@@ -197,7 +189,7 @@ void init_models(void)
     // x
 
     x_list = ps2_list + 6;
-    mesh   = LoadMesh(FILE_PREFIX "x.gl");
+    mesh   = LoadMesh("x.gl");
     glNewList(x_list, GL_COMPILE);
     {
         DrawMesh(mesh);

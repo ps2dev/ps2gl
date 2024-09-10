@@ -35,6 +35,9 @@ void init(GLvoid) // Create Some Everyday Functions
     glEnable(GL_LIGHT0);
 }
 
+void idle(void) {
+}
+
 void display(void)                                      // Create The Display Function
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear Screen And Depth Buffer
@@ -92,7 +95,7 @@ int main(int argc, char **argv)                  // Create Main Function For Bri
     glutCreateWindow("NeHe's OpenGL Framework"); // Window Title (argv[0] for current directory as title)
     glutDisplayFunc(display);                    // Matching Earlier Functions To Their Counterparts
     glutReshapeFunc(reshape);
-    glutIdleFunc(display);
+    glutIdleFunc(idle);
     glutMainLoop(); // Initialize The Main Loop
 
     return 0;
