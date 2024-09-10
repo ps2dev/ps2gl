@@ -1,0 +1,20 @@
+var gsmemory_8cpp =
+[
+    [ "pglPrintGsMemAllocation", "group__gs__mem.html#gab885a9ecd83a994e215703584be1731e", null ],
+    [ "pglHasGsMemBeenInitted", "group__gs__mem.html#ga9caf0b55d9e9c41773bf2512ecd16659", null ],
+    [ "pglAddGsMemSlot", "group__gs__mem__slots.html#gab8c35b45aa5aaf7bc84c3d87696f13bc", null ],
+    [ "pglLockGsMemSlot", "group__gs__mem__slots.html#gacfb16d5676a001f49d9c4d860e6112f3", null ],
+    [ "pglUnlockGsMemSlot", "group__gs__mem__slots.html#gac13343490b8bdeca3311b17680a15380", null ],
+    [ "pglRemoveAllGsMemSlots", "group__gs__mem__slots.html#ga47310b5954ac9b60a0e70cd84b948787", null ],
+    [ "pglCreateGsMemArea", "group__gs__mem__areas.html#gacae09e8de61c34d1711e59208eb57e29", null ],
+    [ "pglDestroyGsMemArea", "group__gs__mem__areas.html#ga042e72f982408c108ee5100f4f0c13f6", null ],
+    [ "pglAllocGsMemArea", "group__gs__mem__areas.html#gadb0406c2388be474c63532b5b2b926f2", null ],
+    [ "pglFreeGsMemArea", "group__gs__mem__areas.html#gab1b4458a3804f3b582e5b11c1ca2ca65", null ],
+    [ "pglSetGsMemAreaWordAddr", "group__gs__mem__areas.html#ga06bea44b089fb411559d957f0a9d3f96", null ],
+    [ "pglBindGsMemAreaToSlot", "group__gs__mem__areas.html#ga73bb8bfb077f991b5c81e4c5d51ccb27", null ],
+    [ "pglUnbindGsMemArea", "group__gs__mem__areas.html#gac1dde9c6ba27a261f4b55af1a01bfa95", null ],
+    [ "pglLockGsMemArea", "group__gs__mem__areas.html#ga10f36c641cc0e1cc0b249d4b4094a559", null ],
+    [ "pglUnlockGsMemArea", "group__gs__mem__areas.html#ga85b57d37c15f008477c294be52a4696c", null ],
+    [ "pglGsMemAreaIsAllocated", "group__gs__mem__areas.html#ga2521f5ccd610ee70c183f4b221d8f2d7", null ],
+    [ "pglGetGsMemAreaWordAddr", "group__gs__mem__areas.html#gaba239669de4da03081a301d7c1edd3f3", null ]
+];
