@@ -57,7 +57,7 @@ public:
     {
     }
 
-    virtual void InitContext(GLenum primType, tU32 rcChanges, bool userRcChanged);
+    virtual void InitContext(GLenum primType, uint32_t rcChanges, bool userRcChanged);
     virtual void DrawLinearArrays(CGeometryBlock& block);
     virtual int GetPacketQwordSize(const CGeometryBlock& geometry);
     virtual CRendererProps GetRenderContextDeps();

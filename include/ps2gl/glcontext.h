@@ -108,9 +108,9 @@ class CGLContext {
 
     // state changes
 
-    tU32 RendererContextChanged, SavedRendererContextChanges;
-    tU32 GsContextChanged, SavedGsContextChanges;
-    tU32 RendererPropsChanged, SavedRendererPropsChanges;
+    uint32_t RendererContextChanged, SavedRendererContextChanges;
+    uint32_t GsContextChanged, SavedGsContextChanges;
+    uint32_t RendererPropsChanged, SavedRendererPropsChanges;
     bool StateChangesArePushed;
 
     inline void PushStateChanges()
@@ -162,7 +162,7 @@ class CGLContext {
 
     /// this value will be written to the signal register as the last
     /// item in the dma chain.  The method to query its value is below.
-    static const tU64 Ps2glSignalId = 0xffffffff00000000 | (tU32)'G' << 24 | (tU32)'L' << 16;
+    static const uint64_t Ps2glSignalId = 0xffffffff00000000 | (uint32_t)'G' << 24 | (uint32_t)'L' << 16;
 
     /// Semaphores signaled by the gs int handler
     static int RenderingFinishedSemaId, ImmediateRenderingFinishedSemaId, VsyncSemaId;
@@ -234,7 +234,7 @@ public:
        * This is the upper 16 bits of the 32-bit values written to the signal
        * register by ps2gl.  (The lower 16 bits are used to differentiate signals.)
        */
-    static tU16 GetPs2glSignalId() { return (tU16)(Ps2glSignalId >> 16); }
+    static uint16_t GetPs2glSignalId() { return (uint16_t)(Ps2glSignalId >> 16); }
 
     /**
        * util - add a block of memory to a list to be freed at the end of the
@@ -374,19 +374,19 @@ public:
 
     // ps2 rendering
 
-    inline tU32 GetRendererContextChanged() const { return RendererContextChanged; }
+    inline uint32_t GetRendererContextChanged() const { return RendererContextChanged; }
     inline void SetRendererContextChanged(bool changed)
     {
         RendererContextChanged = (changed) ? 0xff : 0;
     }
 
-    inline tU32 GetGsContextChanged() const { return GsContextChanged; }
+    inline uint32_t GetGsContextChanged() const { return GsContextChanged; }
     inline void SetGsContextChanged(bool changed)
     {
         GsContextChanged = (changed) ? 0xff : 0;
     }
 
-    inline tU32 GetRendererPropsChanged() const { return RendererPropsChanged; }
+    inline uint32_t GetRendererPropsChanged() const { return RendererPropsChanged; }
     inline void SetRendererPropsChanged(bool changed)
     {
         RendererPropsChanged = (changed) ? 0xff : 0;

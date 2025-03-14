@@ -466,7 +466,7 @@ class CDrawArraysCmd : public CDListCmd {
     bool IsCached;
     CDList& DList;
     CVifSCDmaPacket* RenderPacket;
-    tU64 RenderContextDependencies, RenderContextDepMask;
+    uint64_t RenderContextDependencies, RenderContextDepMask;
 
 public:
     CDrawArraysCmd(CGeometryBlock& block, CDList& dlist)
@@ -492,9 +492,9 @@ public:
         // the packet is called in a context different from that in which it was
         // first created.
 
-        tU64 curRenderContext     = (tU64)pGLContext->GetImmGeomManager().GetRendererManager().GetRendererReqs();
-        tU64 curRenderContextDeps = curRenderContext & RenderContextDepMask;
-        bool rebuildPacket        = (curRenderContextDeps != RenderContextDependencies);
+        uint64_t curRenderContext     = (uint64_t)pGLContext->GetImmGeomManager().GetRendererManager().GetRendererReqs();
+        uint64_t curRenderContextDeps = curRenderContext & RenderContextDepMask;
+        bool rebuildPacket            = (curRenderContextDeps != RenderContextDependencies);
 
         // [re]build cached dma packet
 
@@ -678,10 +678,10 @@ void CDListGeomManager::DrawBlock(CGeometryBlock& block)
 }
 
 class CEnableCustomCmd : public CDListCmd {
-    tU64 Flag;
+    uint64_t Flag;
 
 public:
-    CEnableCustomCmd(tU64 flag)
+    CEnableCustomCmd(uint64_t flag)
         : Flag(flag)
     {
     }
@@ -692,16 +692,16 @@ public:
     }
 };
 
-void CDListGeomManager::EnableCustom(tU64 flag)
+void CDListGeomManager::EnableCustom(uint64_t flag)
 {
     *CurDList += CEnableCustomCmd(flag);
 }
 
 class CDisableCustomCmd : public CDListCmd {
-    tU64 Flag;
+    uint64_t Flag;
 
 public:
-    CDisableCustomCmd(tU64 flag)
+    CDisableCustomCmd(uint64_t flag)
         : Flag(flag)
     {
     }
@@ -712,7 +712,7 @@ public:
     }
 };
 
-void CDListGeomManager::DisableCustom(tU64 flag)
+void CDListGeomManager::DisableCustom(uint64_t flag)
 {
     *CurDList += CDisableCustomCmd(flag);
 }

@@ -98,7 +98,7 @@ protected:
     // used by XferBlock
     void XferVectors(CVifSCDmaPacket& packet, unsigned int* dataStart,
         int startOffset, int numVectors, int wordsPerVec,
-        Vifs::tMask unpackMask, tU32 unpackMode,
+        Vifs::tMask unpackMask, uint32_t unpackMode,
         int vu1MemOffset);
 
     // used by InitContext

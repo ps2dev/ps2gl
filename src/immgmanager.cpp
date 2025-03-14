@@ -377,7 +377,7 @@ void CImmGeomManager::SyncRendererContext(GLenum primType)
 
 void CImmGeomManager::SyncGsContext()
 {
-    if (tU32 changed = GLContext.GetGsContextChanged()) {
+    if (uint32_t changed = GLContext.GetGsContextChanged()) {
         // has the texture changed?
         bool texEnabled         = GLContext.GetTexManager().GetTexEnabled();
         CVifSCDmaPacket& packet = GLContext.GetVif1Packet();
@@ -398,7 +398,7 @@ void CImmGeomManager::SyncGsContext()
             packet.Flush().Nop();
             packet.CloseTag();
             // FIXME
-            GLContext.AddingDrawEnvToPacket((tU128*)GLContext.GetVif1Packet().GetNextPtr() + 1);
+            GLContext.AddingDrawEnvToPacket((uint128_t*)GLContext.GetVif1Packet().GetNextPtr() + 1);
             GLContext.GetImmDrawContext().GetDrawEnv().SendSettings(GLContext.GetVif1Packet());
         }
 

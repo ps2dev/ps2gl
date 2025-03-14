@@ -38,8 +38,8 @@ public:
 
     // user state
 
-    void EnableCustom(tU64 flag);
-    void DisableCustom(tU64 flag);
+    void EnableCustom(uint64_t flag);
+    void DisableCustom(uint64_t flag);
 
     void SetUserRenderContextChanged() { mError("not implemented yet"); }
 

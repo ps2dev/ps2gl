@@ -252,7 +252,7 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
             packet += numPts;
             packet += numSpots;
         } else {
-            packet += (tU64)0;
+            packet += (uint64_t)0;
             packet += 0;
         }
 
@@ -302,7 +302,7 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
             globalAmb = lighting.GetGlobalAmbient() * maxColorValue;
         else
             globalAmb = cpu_vec_4(0, 0, 0, 0);
-        packet.Add((tU32*)&globalAmb, 3);
+        packet.Add((uint32_t*)&globalAmb, 3);
 
         // stick in the offset to convert clip space depth value to GS
         float depthClipToGs = (float)((1 << drawContext.GetDepthBits()) - 1) / 2.0f;
@@ -387,7 +387,7 @@ CBaseRenderer::BuildGiftag(GLenum primType)
     unsigned int nreg            = OutputQuadsPerVert;
 
     GS::tPrim prim = { prim_type : primType, iip : smoothShading, tme : useTexture, fge : 0, abe : alpha, aa1 : 0, fst : 0, ctxt : 0, fix : 0 };
-    tGifTag giftag = { NLOOP : 0, EOP : 1, pad0 : 0, id : 0, PRE : 1, PRIM : *(tU64*)&prim, FLG : 0, NREG : nreg, REGS0 : 2, REGS1 : 1, REGS2 : 4 };
+    tGifTag giftag = { NLOOP : 0, EOP : 1, pad0 : 0, id : 0, PRE : 1, PRIM : *(uint64_t*)&prim, FLG : 0, NREG : nreg, REGS0 : 2, REGS1 : 1, REGS2 : 4 };
     return giftag;
 }
 
@@ -431,7 +431,7 @@ void CBaseRenderer::Load()
 
 void CBaseRenderer::XferVectors(CVifSCDmaPacket& packet, unsigned int* dataStart,
     int startOffset, int numVectors, int wordsPerVec,
-    Vifs::tMask unpackMask, tU32 unpackMode,
+    Vifs::tMask unpackMask, uint32_t unpackMode,
     int vu1MemOffset)
 {
     // find number of words to prepend with a cnt

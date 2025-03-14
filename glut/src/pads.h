@@ -63,44 +63,44 @@ public:
 
 private:
     typedef struct {
-        tU16 select : 1;
-        tU16 i : 1;
-        tU16 j : 1;
-        tU16 start : 1;
+        uint16_t select : 1;
+        uint16_t i : 1;
+        uint16_t j : 1;
+        uint16_t start : 1;
 
-        tU16 leftUp : 1;
-        tU16 leftRight : 1;
-        tU16 leftDown : 1;
-        tU16 leftLeft : 1;
+        uint16_t leftUp : 1;
+        uint16_t leftRight : 1;
+        uint16_t leftDown : 1;
+        uint16_t leftLeft : 1;
 
-        tU16 l2 : 1;
-        tU16 r2 : 1;
-        tU16 l1 : 1;
-        tU16 r1 : 1;
+        uint16_t l2 : 1;
+        uint16_t r2 : 1;
+        uint16_t l1 : 1;
+        uint16_t r1 : 1;
 
-        tU16 rightUp : 1;
-        tU16 rightRight : 1;
-        tU16 rightDown : 1;
-        tU16 rightLeft : 1;
+        uint16_t rightUp : 1;
+        uint16_t rightRight : 1;
+        uint16_t rightDown : 1;
+        uint16_t rightLeft : 1;
     } tButtonsPressed;
 
     typedef struct {
-        tU8 xVal, yVal;
-        tU8 xCenter, yCenter;
+        uint8_t xVal, yVal;
+        uint8_t xCenter, yCenter;
         float xPos, yPos;
         bool isCentered;
     } tStickData;
 
     typedef struct {
-        tU8 success;
-        tU8 statLen;
-        tU16 buttons; /* 16 buttons */
-        tU8 r3h;
-        tU8 r3v;
-        tU8 l3h;
-        tU8 l3v;
-        tU8 kanAtsu[12];  // deal with this crap later
-        tU8 whoKnows[12]; // make the structure 32 bytes long
+        uint8_t success;
+        uint8_t statLen;
+        uint16_t buttons; /* 16 buttons */
+        uint8_t r3h;
+        uint8_t r3v;
+        uint8_t l3h;
+        uint8_t l3v;
+        uint8_t kanAtsu[12];  // deal with this crap later
+        uint8_t whoKnows[12]; // make the structure 32 bytes long
         tStickData rightStick, leftStick;
     } tPadStatus;
 
@@ -108,7 +108,7 @@ private:
     bool IsUp(tPadStatus status, unsigned int button);
     bool UpdateStick(tStickData* stickCur, tStickData* stickLast);
 
-    tU128 DmaBuffer[scePadDmaBufferMax] __attribute__((aligned(64)));
+    uint128_t DmaBuffer[scePadDmaBufferMax] __attribute__((aligned(64)));
     tPadStatus CurStatus __attribute__((aligned(16)));
     tPadStatus LastStatus __attribute__((aligned(16)));
     unsigned int uiPort;

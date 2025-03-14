@@ -59,7 +59,7 @@ void CClearEnv::ClearBuffers(unsigned int bitMask)
         pDrawEnv->SetFrameBufferDrawMask(0xffffffff);
 
     CVifSCDmaPacket& packet = pGLContext->GetVif1Packet();
-    pGLContext->AddingDrawEnvToPacket((tU128*)pGLContext->GetVif1Packet().GetNextPtr() + 1);
+    pGLContext->AddingDrawEnvToPacket((uint128_t*)pGLContext->GetVif1Packet().GetNextPtr() + 1);
     pDrawEnv->SendSettings(packet);
     pSprite->Draw(packet);
 }

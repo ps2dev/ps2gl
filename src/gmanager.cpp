@@ -489,7 +489,7 @@ void pglRegisterCustomPrimType(GLenum primType,
  */
 void pglEnableCustom(pglU64_t flag)
 {
-    flag &= ~(tU64)0xffffffff;
+    flag &= ~(uint64_t)0xffffffff;
     pGLContext->GetGeomManager().EnableCustom(flag);
 }
 
@@ -501,7 +501,7 @@ void pglEnableCustom(pglU64_t flag)
  */
 void pglDisableCustom(pglU64_t flag)
 {
-    flag &= ~(tU64)0xffffffff;
+    flag &= ~(uint64_t)0xffffffff;
     pGLContext->GetGeomManager().DisableCustom(flag);
 }
 

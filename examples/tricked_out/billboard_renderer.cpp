@@ -60,7 +60,7 @@ CBillboardRenderer::Register()
 
     pglRegisterCustomPrimType(kBillboardPrimType, // the prim type we will pass to ps2gl (glBegin...)
         kBillboardPrimTypeFlag,                   // the corresponding renderer requirement
-        ~(tU64)0xffffffff,                        // we only care about the custom stuff (upper 32 bits)
+        ~(uint64_t)0xffffffff,                    // we only care about the custom stuff (upper 32 bits)
         true);                                    // ok to merge multiple calls when possible
 
     return renderer;
@@ -99,7 +99,7 @@ void CBillboardRenderer::DrawLinearArrays(CGeometryBlock& block)
     DrawBlock(packet, block, maxVertsPerBuffer);
 }
 
-void CBillboardRenderer::InitContext(GLenum primType, tU32 rcChanges, bool userRcChanged)
+void CBillboardRenderer::InitContext(GLenum primType, uint32_t rcChanges, bool userRcChanged)
 {
     CGLContext& glContext        = *pGLContext;
     CVifSCDmaPacket& packet      = glContext.GetVif1Packet();
@@ -115,7 +115,7 @@ void CBillboardRenderer::InitContext(GLenum primType, tU32 rcChanges, bool userR
         bool alpha      = drawContext.GetBlendEnabled();
         bool useTexture = glContext.GetTexManager().GetTexEnabled();
         GS::tPrim prim  = { prim_type : 6, iip : 0, tme : useTexture, fge : 0, abe : alpha, aa1 : 0, fst : 0, ctxt : 0, fix : 0 };
-        tGifTag giftag  = { NLOOP : 0, EOP : 1, pad0 : 0, id : 0, PRE : 1, PRIM : *(tU64*)&prim, FLG : 0, NREG : 4, REGS0 : 2, REGS1 : 4, REGS2 : 2, REGS3 : 4 };
+        tGifTag giftag  = { NLOOP : 0, EOP : 1, pad0 : 0, id : 0, PRE : 1, PRIM : *(uint64_t*)&prim, FLG : 0, NREG : 4, REGS0 : 2, REGS1 : 4, REGS2 : 2, REGS3 : 4 };
 
         packet.Pad96();
         packet.OpenUnpack(Vifs::UnpackModes::v4_32, kGifTag, Packet::kSingleBuff);

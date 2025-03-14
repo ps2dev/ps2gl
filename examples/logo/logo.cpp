@@ -536,12 +536,12 @@ void DrawMesh(const void* header)
 #define RTEX_FORMAT_RGBA8 1
 #define RTEX_FORMAT_INDEX8 2 // 256 colour palette
 
-#include "ps2s/types.h" // for tU128
+#include "ps2s/types.h" // for uint128_t
 
 void reorderClut(unsigned int* clut)
 {
-    tU128 buffer, *entries_1, *entries_2;
-    entries_1 = (tU128*)clut + 2;
+    uint128_t buffer, *entries_1, *entries_2;
+    entries_1 = (uint128_t*)clut + 2;
     entries_2 = entries_1 + 2;
     unsigned int i;
     for (i = 0; i < 8; i++) {

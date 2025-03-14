@@ -18,38 +18,38 @@
 
 class CRendererProps {
 public:
-    tU64 PrimType : 3;
-    tU64 Lighting : 1;
-    tU64 NumDirLights : 2;
-    tU64 NumPtLights : 3;
-    tU64 Texture : 1;
-    tU64 Specular : 1;
-    tU64 PerVtxMaterial : 3;
-    tU64 Clipping : 2;
-    tU64 CullFace : 1;
-    tU64 TwoSidedLighting : 1;
-    tU64 ArrayAccess : 2;
+    uint64_t PrimType : 3;
+    uint64_t Lighting : 1;
+    uint64_t NumDirLights : 2;
+    uint64_t NumPtLights : 3;
+    uint64_t Texture : 1;
+    uint64_t Specular : 1;
+    uint64_t PerVtxMaterial : 3;
+    uint64_t Clipping : 2;
+    uint64_t CullFace : 1;
+    uint64_t TwoSidedLighting : 1;
+    uint64_t ArrayAccess : 2;
 
-    tU64 unused : 12;
+    uint64_t unused : 12;
 
-    tU64 UserProps : 32;
+    uint64_t UserProps : 32;
 
     // convert to unsigned 64-bit value
 
-    inline operator tU64() const
+    inline operator uint64_t() const
     {
         // this hack doesn't work on linux since the compiler thinks this is a 32-bit
         // machine..
         // asm (" ### CRendererProps to uint ### " : "=r" (value) : "0" (*this) );
 
-        tU64* value = (tU64*)this;
+        uint64_t* value = (uint64_t*)this;
         return *value;
     }
 
-    inline void operator=(tU64 value)
+    inline void operator=(uint64_t value)
     {
         // see above..
-        // asm(" ### CRendererProps assign from u64 ### " : "=r" (*(tU64*)this) : "0" (value) );
+        // asm(" ### CRendererProps assign from u64 ### " : "=r" (*(uint64_t*)this) : "0" (value) );
 
         *this = *(CRendererProps*)&value;
     }
@@ -88,23 +88,23 @@ class CVertArray;
  */
 class CRenderer {
 protected:
-    tU64 Capabilities;
-    tU64 Requirements;
+    uint64_t Capabilities;
+    uint64_t Requirements;
 
     // this class can't be instantiated
     CRenderer() {}
-    CRenderer(tU64 caps, tU64 reqs)
+    CRenderer(uint64_t caps, uint64_t reqs)
         : Capabilities(caps)
         , Requirements(reqs)
     {
     }
 
-    void SetCapabilities(tU64 caps) { Capabilities = caps; }
-    void SetRequirements(tU64 reqs) { Requirements = reqs; }
+    void SetCapabilities(uint64_t caps) { Capabilities = caps; }
+    void SetRequirements(uint64_t reqs) { Requirements = reqs; }
 
 public:
-    virtual tU64 GetCapabilities() const { return Capabilities; }
-    virtual tU64 GetRequirements() const { return Requirements; }
+    virtual uint64_t GetCapabilities() const { return Capabilities; }
+    virtual uint64_t GetRequirements() const { return Requirements; }
 
     /// called by the geometry manager when the default renderer context has changed,
     /// when the user context has changed, or after the renderer has been loaded
@@ -116,7 +116,7 @@ public:
     /// @param rcChanges changed in the rendering context as returned by
     /// CGLContext::GetRendererContextChanged().
     /// @param userRcChanged whether the user (custom) rendering context has changed
-    virtual void InitContext(GLenum primType, tU32 rcChanges, bool userRcChanged) = 0;
+    virtual void InitContext(GLenum primType, uint32_t rcChanges, bool userRcChanged) = 0;
 
     /// Load the renderer into vu0/vu1 memory.
     virtual void Load() = 0;

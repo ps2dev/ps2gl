@@ -28,7 +28,7 @@ CIndexedRenderer::CIndexedRenderer(void* packet, int packetSize, CRendererProps 
         kGifTag, kContextLength, kContextLength);
 }
 
-void CIndexedRenderer::InitContext(GLenum primType, tU32 rcChanges, bool userRcChanged)
+void CIndexedRenderer::InitContext(GLenum primType, uint32_t rcChanges, bool userRcChanged)
 {
     CGLContext& glContext   = *pGLContext;
     CVifSCDmaPacket& packet = glContext.GetVif1Packet();
@@ -81,7 +81,7 @@ CRendererProps
 CIndexedRenderer::GetRenderContextDeps()
 {
     CRendererProps deps;
-    deps                = (tU64)0;
+    deps                = (uint64_t)0;
     deps.Lighting       = 1;
     deps.Texture        = 1;
     deps.PerVtxMaterial = 1;
