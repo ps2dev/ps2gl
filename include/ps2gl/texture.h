@@ -110,7 +110,7 @@ public:
     ~CMMTexture();
 
     void SetImage(const GS::CMemArea& area);
-    void SetImage(uint128_t* imagePtr, uint32_t w, uint32_t h, GS::tPSM psm);
+    void SetImage(uint128_t* imagePtr, uint32_t w, uint32_t h, GS::tPSM psm, uint32_t* clutPtr = NULL);
 
     void SetClut(const CMMClut& clut)
     {

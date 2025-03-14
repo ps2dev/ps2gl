@@ -379,7 +379,7 @@ CMMTexture::~CMMTexture()
 /**
  * Use the given image in main ram as the texture.
  */
-void CMMTexture::SetImage(uint128_t* imagePtr, uint32_t w, uint32_t h, GS::tPSM psm)
+void CMMTexture::SetImage(uint128_t* imagePtr, uint32_t w, uint32_t h, GS::tPSM psm, uint32_t* clutPtr)
 {
     if (pImageMem) {
         // we are being re-initialized
@@ -387,7 +387,7 @@ void CMMTexture::SetImage(uint128_t* imagePtr, uint32_t w, uint32_t h, GS::tPSM 
         CTexture::Reset();
     }
 
-    CTexture::SetImage(imagePtr, w, h, psm, NULL);
+    CTexture::SetImage(imagePtr, w, h, psm, clutPtr);
 
     // create a memarea for the image
     uint32_t bufWidth = gsrTex0.tb_width * 64;
