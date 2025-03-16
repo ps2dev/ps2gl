@@ -102,7 +102,7 @@ bool CPad::Open(void)
 
 void CPad::Read(void)
 {
-    t32 padState = padGetState(kPort0, kSlot0);
+    int32_t padState = padGetState(kPort0, kSlot0);
     if (padState != PAD_STATE_STABLE)
         return;
 
@@ -121,7 +121,7 @@ void CPad::Read(void)
             padStatus.leftStick  = CurStatus.leftStick;
             CurStatus            = padStatus;
 
-            //	 t32 id = padInfoMode( uiPort, kSlot0, PAD_MODECURID, 0 );
+            //	 int32_t id = padInfoMode( uiPort, kSlot0, PAD_MODECURID, 0 );
             //	 if ( id == kPadModeStandard || id == kPadModeAnalog ) {
             //				// flip the sense of the bit field (1 = pressed)
             //	    CurStatus.buttons ^= 0xffff;
@@ -144,7 +144,7 @@ void CPad::Read(void)
 
 bool CPad::UpdateStick(tStickData* stickCur, tStickData* stickLast)
 {
-    t8 temp;
+    int8_t temp;
     bool isChanged = false;
 
     using namespace Math;

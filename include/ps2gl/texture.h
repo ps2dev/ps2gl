@@ -61,7 +61,7 @@ public:
     void SetTexMode(GS::tTexMode mode);
 
     void SetCurTexParam(GLenum pname, GLint param);
-    void SetCurTexImage(tU128* imagePtr, tU32 w, tU32 h,
+    void SetCurTexImage(uint128_t* imagePtr, uint32_t w, uint32_t h,
         GS::tPSM psm);
     void SetGsTexture(GS::CMemArea& area);
     void SetCurClut(const void* clut, int numEntries);
@@ -110,7 +110,7 @@ public:
     ~CMMTexture();
 
     void SetImage(const GS::CMemArea& area);
-    void SetImage(tU128* imagePtr, tU32 w, tU32 h, GS::tPSM psm);
+    void SetImage(uint128_t* imagePtr, uint32_t w, uint32_t h, GS::tPSM psm, uint32_t* clutPtr = NULL);
 
     void SetClut(const CMMClut& clut)
     {

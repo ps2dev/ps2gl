@@ -7,10 +7,10 @@
 // lights
 
 typedef struct {
-    tU32 dir;
-    tU32 point;
-    tU32 spot;
-    tU32 dummy;
+    uint32_t dir;
+    uint32_t point;
+    uint32_t spot;
+    uint32_t dummy;
 } tLightPtrs;
 
 #define kNumLights (kContextStart)            // x = directional, y = point, z = spot

@@ -319,7 +319,7 @@ void CGLContext::EndVif1Packet(unsigned short signalNum)
     {
         *Vif1Packet += giftag;
         *Vif1Packet += Ps2glSignalId | signalNum;
-        *Vif1Packet += (tU64)0x60; // signal
+        *Vif1Packet += (uint64_t)0x60; // signal
     }
     Vif1Packet->CloseDirect();
     Vif1Packet->CloseTag();
@@ -340,12 +340,12 @@ int CGLContext::GsIntHandler(int cause)
 {
     int ret = 0;
 
-    tU32 csr = *(volatile tU32*)GS::ControlRegs::csr;
+    uint32_t csr = *(volatile uint32_t*)GS::ControlRegs::csr;
     // is this a signal interrupt?
     if (csr & 1) {
         // is it one of ours?
-        tU64 sigLblId = *(volatile tU64*)GS::ControlRegs::siglblid;
-        if ((tU16)(sigLblId >> 16) == GetPs2glSignalId()) {
+        uint64_t sigLblId = *(volatile uint64_t*)GS::ControlRegs::siglblid;
+        if ((uint16_t)(sigLblId >> 16) == GetPs2glSignalId()) {
             switch (sigLblId & 0xffff) {
             case 1:
                 iSignalSema(RenderingFinishedSemaId);
@@ -361,7 +361,7 @@ int CGLContext::GsIntHandler(int cause)
 
             // clear our signal id
             sigLblId &= ~0xffffffff;
-            *(volatile tU64*)GS::ControlRegs::siglblid = sigLblId;
+            *(volatile uint64_t*)GS::ControlRegs::siglblid = sigLblId;
             // clear the exception and wait for the next
             *(volatile unsigned int*)GS::ControlRegs::csr = 1;
 
@@ -412,7 +412,7 @@ void CGLContext::WaitForVSync()
     while (PollSema(VsyncSemaId) != -1)
         ;
     // sceGsSyncV(0);
-    tU32 csr           = *(volatile tU32*)GS::ControlRegs::csr;
+    uint32_t csr       = *(volatile uint32_t*)GS::ControlRegs::csr;
     IsCurrentFieldEven = (bool)((csr >> 13) & 1);
 }
 

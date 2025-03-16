@@ -33,8 +33,8 @@ typedef enum { kDirectional,
     kSpot } tLightType;
 
 typedef struct {
-    tU64 capabilities;
-    tU64 requirements;
+    uint64_t capabilities;
+    uint64_t requirements;
     CRenderer* renderer;
 } tRenderer;
 
@@ -43,7 +43,7 @@ class CRendererManager {
 
     CRendererProps RendererRequirements;
     bool RendererReqsHaveChanged;
-    tU64 CurUserPrimReqs, CurUserPrimReqMask;
+    uint64_t CurUserPrimReqs, CurUserPrimReqMask;
 
     static const int kMaxDefaultRenderers = 64;
     static const int kMaxUserRenderers    = PGL_MAX_CUSTOM_RENDERERS;
@@ -66,12 +66,12 @@ public:
     CRenderer& GetCurRenderer() { return *(CurrentRenderer->renderer); }
     CRendererProps GetRendererReqs() const { return RendererRequirements; }
 
-    bool IsCurRendererCustom() const { return ((tU32)CurrentRenderer >= (tU32)UserRenderers); }
+    bool IsCurRendererCustom() const { return ((uint32_t)CurrentRenderer >= (uint32_t)UserRenderers); }
 
     // state updates
 
-    void EnableCustom(tU64 flag);
-    void DisableCustom(tU64 flag);
+    void EnableCustom(uint64_t flag);
+    void DisableCustom(uint64_t flag);
 
     void NumLightsChanged(tLightType type, int num);
     void PrimChanged(unsigned int prim);

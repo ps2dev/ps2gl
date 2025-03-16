@@ -46,7 +46,7 @@ CRendererManager::CRendererManager(CGLContext& context)
     RendererRequirements.UserProps        = 0;
 
     CRendererProps no_reqs;
-    no_reqs = (tU64)0;
+    no_reqs = (uint64_t)0;
 
     // indexed array renderer
     {
@@ -338,23 +338,23 @@ void CRendererManager::RegisterUserRenderer(CRenderer* renderer)
 
 // state updates
 
-void CRendererManager::EnableCustom(tU64 flag)
+void CRendererManager::EnableCustom(uint64_t flag)
 {
-    tU64 newState = RendererRequirements;
+    uint64_t newState = RendererRequirements;
     newState |= flag;
 
-    if (newState != (tU64)RendererRequirements)
+    if (newState != (uint64_t)RendererRequirements)
         RendererReqsHaveChanged = true;
 
     RendererRequirements = newState;
 }
 
-void CRendererManager::DisableCustom(tU64 flag)
+void CRendererManager::DisableCustom(uint64_t flag)
 {
-    tU64 newState = RendererRequirements;
+    uint64_t newState = RendererRequirements;
     newState &= ~flag;
 
-    if (newState != (tU64)RendererRequirements)
+    if (newState != (uint64_t)RendererRequirements)
         RendererReqsHaveChanged = true;
 
     RendererRequirements = newState;
@@ -406,7 +406,7 @@ void CRendererManager::PrimChanged(unsigned int prim)
     if (CGeomManager::IsUserPrimType(prim)) {
         // user-defined
 
-        tU64 newState = RendererRequirements;
+        uint64_t newState = RendererRequirements;
 
         // clear the current user prim flags (if any)
         newState &= ~CurUserPrimReqs;
@@ -419,7 +419,7 @@ void CRendererManager::PrimChanged(unsigned int prim)
 
         CurUserPrimReqMask = CGeomManager::GetUserPrimReqMask(prim);
 
-        if ((tU64)RendererRequirements != newState) {
+        if ((uint64_t)RendererRequirements != newState) {
             RendererRequirements    = newState;
             RendererReqsHaveChanged = true;
         }
@@ -431,11 +431,11 @@ void CRendererManager::PrimChanged(unsigned int prim)
         if (CurUserPrimReqs) {
             RendererReqsHaveChanged = true;
             // clear any requirements set by a user prim type
-            newState        = (tU64)newState & ~CurUserPrimReqs;
+            newState        = (uint64_t)newState & ~CurUserPrimReqs;
             CurUserPrimReqs = 0;
         }
 
-        CurUserPrimReqMask = ~(tU32)0;
+        CurUserPrimReqMask = ~(uint32_t)0;
 
         if (prim <= GL_LINE_STRIP)
             newState.PrimType = kPtsLinesStripsFans;
@@ -557,7 +557,7 @@ bool CRendererManager::UpdateNewRenderer()
             rreqs.TwoSidedLighting = 0;
         }
 
-        rreqs = (tU64)rreqs & CurUserPrimReqMask;
+        rreqs = (uint64_t)rreqs & CurUserPrimReqMask;
 
         // first check the user renderers
 
@@ -591,10 +591,10 @@ bool CRendererManager::UpdateNewRenderer()
             mErrorIf(i == NumDefaultRenderers,
                 "Couldn't find a suitable renderer..\n"
                 "state reqs = 0x%08x 0x%08x, mask = %08x %08x\n",
-                (tU32)((tU64)rreqs >> 32),
-                (tU32)((tU64)rreqs),
-                (tU32)((tU64)CurUserPrimReqMask >> 32),
-                (tU32)((tU64)CurUserPrimReqMask));
+                (uint32_t)((uint64_t)rreqs >> 32),
+                (uint32_t)((uint64_t)rreqs),
+                (uint32_t)((uint64_t)CurUserPrimReqMask >> 32),
+                (uint32_t)((uint64_t)CurUserPrimReqMask));
 
             NewRenderer = &DefaultRenderers[i];
 

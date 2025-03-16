@@ -566,7 +566,7 @@ void display(void)
 
     //     float *material = (float*)Core::MemMappings::VU1Data + kMaterialEmission * 4;
     //     Utils::QwordFloatDump( material, 4 );
-    //     tU32 *output = (tU32*)Core::MemMappings::VU1Data + kDoubleBufBase*4 + kOutputStart*4;
+    //     uint32_t *output = (uint32_t*)Core::MemMappings::VU1Data + kDoubleBufBase*4 + kOutputStart*4;
     //     Utils::QwordHexDump( output, 7 );
     //     printf("\n");
 

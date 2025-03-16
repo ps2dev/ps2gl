@@ -15,8 +15,8 @@
 #include "ps2gl/linear_renderer.h"
 #include "ps2gl/renderer.h"
 
-#define kBillboardPrimType (((tU32)1 << 31) | 1)
-#define kBillboardPrimTypeFlag ((tU64)1 << 32)
+#define kBillboardPrimType (((uint32_t)1 << 31) | 1)
+#define kBillboardPrimTypeFlag ((uint64_t)1 << 32)
 
 class CBillboardRenderer : public CLinearRenderer {
     static void* Microcode;
@@ -26,7 +26,7 @@ public:
 
     static CBillboardRenderer* Register();
 
-    virtual void InitContext(GLenum primType, tU32 rcChanges, bool userRcChanged);
+    virtual void InitContext(GLenum primType, uint32_t rcChanges, bool userRcChanged);
     virtual void DrawLinearArrays(CGeometryBlock& block);
 };
 

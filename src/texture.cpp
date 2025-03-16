@@ -256,12 +256,12 @@ void CTexManager::SetCurTexParam(GLenum pname, GLint param)
 }
 
 class CSetCurTexImageCmd : public CDListCmd {
-    tU128* Image;
+    uint128_t* Image;
     unsigned int Width, Height;
     GS::tPSM Psm;
 
 public:
-    CSetCurTexImageCmd(tU128* image, unsigned int w, unsigned int h,
+    CSetCurTexImageCmd(uint128_t* image, unsigned int w, unsigned int h,
         GS::tPSM psm)
         : Image(image)
         , Width(w)
@@ -276,7 +276,7 @@ public:
     }
 };
 
-void CTexManager::SetCurTexImage(tU128* imagePtr, tU32 w, tU32 h,
+void CTexManager::SetCurTexImage(uint128_t* imagePtr, uint32_t w, uint32_t h,
     GS::tPSM psm)
 {
     GLContext.TextureChanged();
@@ -379,7 +379,7 @@ CMMTexture::~CMMTexture()
 /**
  * Use the given image in main ram as the texture.
  */
-void CMMTexture::SetImage(tU128* imagePtr, tU32 w, tU32 h, GS::tPSM psm)
+void CMMTexture::SetImage(uint128_t* imagePtr, uint32_t w, uint32_t h, GS::tPSM psm, uint32_t* clutPtr)
 {
     if (pImageMem) {
         // we are being re-initialized
@@ -387,10 +387,10 @@ void CMMTexture::SetImage(tU128* imagePtr, tU32 w, tU32 h, GS::tPSM psm)
         CTexture::Reset();
     }
 
-    CTexture::SetImage(imagePtr, w, h, psm, NULL);
+    CTexture::SetImage(imagePtr, w, h, psm, clutPtr);
 
     // create a memarea for the image
-    tU32 bufWidth = gsrTex0.tb_width * 64;
+    uint32_t bufWidth = gsrTex0.tb_width * 64;
     pImageMem     = new GS::CMemArea(bufWidth, h, psm, GS::kAlignBlock);
 
     XferImage = true;
@@ -643,7 +643,7 @@ void glTexImage2D(GLenum target,
 
     if (psm != GS::kInvalidPsm) {
         CTexManager& tm = pGLContext->GetTexManager();
-        tm.SetCurTexImage((tU128*)pixels, width, height, psm);
+        tm.SetCurTexImage((uint128_t*)pixels, width, height, psm);
     }
 }
 

@@ -49,7 +49,7 @@ void CLinearRenderer::DrawLinearArrays(CGeometryBlock& block)
     DrawBlock(packet, block, maxVertsPerBuffer);
 }
 
-void CLinearRenderer::InitContext(GLenum primType, tU32 rcChanges, bool userRcChanged)
+void CLinearRenderer::InitContext(GLenum primType, uint32_t rcChanges, bool userRcChanged)
 {
     CGLContext& glContext   = *pGLContext;
     CVifSCDmaPacket& packet = glContext.GetVif1Packet();
@@ -79,7 +79,7 @@ CRendererProps
 CLinearRenderer::GetRenderContextDeps()
 {
     CRendererProps deps;
-    deps                = (tU64)0;
+    deps                = (uint64_t)0;
     deps.Lighting       = 1;
     deps.Texture        = 1;
     deps.PerVtxMaterial = 1;
@@ -293,7 +293,7 @@ void CLinearRenderer::XferBufferHeader(CVifSCDmaPacket& packet,
         // num vertices
         packet += numVerts;
         packet += 0;
-        packet += (tU64)0;
+        packet += (uint64_t)0;
 
         // adc bits for the beginning of strips.. 16 24-bit values of following format:
         //   bits 0-9	: offset into output geometry (not including giftag)

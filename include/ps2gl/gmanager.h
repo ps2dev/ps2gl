@@ -80,8 +80,8 @@ public:
  */
 
 typedef struct {
-    tU64 requirements;
-    tU64 rendererReqMask;
+    uint64_t requirements;
+    uint64_t rendererReqMask;
     bool mergeContiguous;
 } tUserPrimEntry;
 
@@ -132,8 +132,8 @@ public:
     static inline bool IsUserPrimType(unsigned int prim) { return (prim & 0x80000000); }
 
     static inline void RegisterUserPrimType(GLenum prim,
-        tU64 requirements,
-        tU64 rendererReqMask,
+        uint64_t requirements,
+        uint64_t rendererReqMask,
         bool mergeContiguous)
     {
         CheckPrimAccess(prim);
@@ -143,7 +143,7 @@ public:
         UserPrimTypes[prim].mergeContiguous = mergeContiguous;
     }
 
-    static inline tU64 GetUserPrimRequirements(GLenum prim)
+    static inline uint64_t GetUserPrimRequirements(GLenum prim)
     {
         CheckPrimAccess(prim);
         prim &= 0x7fffffff;
@@ -157,7 +157,7 @@ public:
         return UserPrimTypes[prim].mergeContiguous;
     }
 
-    static inline tU64 GetUserPrimReqMask(GLenum prim)
+    static inline uint64_t GetUserPrimReqMask(GLenum prim)
     {
         CheckPrimAccess(prim);
         prim &= 0x7fffffff;
@@ -185,8 +185,8 @@ public:
 
     // user state
 
-    virtual void EnableCustom(tU64 flag)  = 0;
-    virtual void DisableCustom(tU64 flag) = 0;
+    virtual void EnableCustom(uint64_t flag)  = 0;
+    virtual void DisableCustom(uint64_t flag) = 0;
 
     // rendering interface
 

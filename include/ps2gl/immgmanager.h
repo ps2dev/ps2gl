@@ -64,8 +64,8 @@ public:
 
     // user state
 
-    void EnableCustom(tU64 flag) { RendererManager.EnableCustom(flag); }
-    void DisableCustom(tU64 flag) { RendererManager.DisableCustom(flag); }
+    void EnableCustom(uint64_t flag) { RendererManager.EnableCustom(flag); }
+    void DisableCustom(uint64_t flag) { RendererManager.DisableCustom(flag); }
 
     // geometry specification
 
