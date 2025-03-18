@@ -33,6 +33,8 @@
 #include "ps2gl/matrix.h"
 #include "ps2gl/texture.h"
 
+#include "ee_regs.h"
+
 /********************************************
  * globals
  */
@@ -129,6 +131,9 @@ CGLContext::CGLContext(int immBufferQwordSize, int immDrawBufferQwordSize)
     *(volatile unsigned int*)GS::ControlRegs::csr = 9;
     // enable signal and vsync exceptions
     *(volatile unsigned int*)GS::ControlRegs::imr = 0x7600;
+
+    // Mask bugged tag mismatch error
+    WR_EE_VIF1_ERR(2);
 }
 
 CGLContext::~CGLContext()
