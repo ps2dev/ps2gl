@@ -343,8 +343,6 @@ void CGLContext::RenderGeometry()
 
 int CGLContext::GsIntHandler(int cause)
 {
-    int ret = 0;
-
     uint32_t csr = *(volatile uint32_t*)GS::ControlRegs::csr;
     // is this a signal interrupt?
     if (csr & 1) {
@@ -369,8 +367,6 @@ int CGLContext::GsIntHandler(int cause)
             *(volatile uint64_t*)GS::ControlRegs::siglblid = sigLblId;
             // clear the exception and wait for the next
             *(volatile unsigned int*)GS::ControlRegs::csr = 1;
-
-            ret = -1; // don't call other handlers
         }
     }
     // is this a vsync interrupt?
@@ -380,20 +376,9 @@ int CGLContext::GsIntHandler(int cause)
         *(volatile unsigned int*)GS::ControlRegs::csr = 8;
     }
 
-    // I'm not entirely sure why this is necessary, but if I don't do
-    // it then framing out can cause the display thread to lock (I've
-    // only verified it frozen waiting on pglFinishRenderingGeometry().)
-    // The GS manual says that a second "signal" event occuring before
-    // the first is cleared causes the gs to stop drawing, and the second
-    // interrupt will not be raised until that interrupt (signal) is masked
-    // and then unmasked.  Could something similar be true for gs events/
-    // interrupts in general?  This needs to be here, not in the vsync branch.
-    if (ret == -1) {
-        *(volatile unsigned int*)GS::ControlRegs::imr = 0x7f00;
-        *(volatile unsigned int*)GS::ControlRegs::imr = 0x7600;
-    }
+    ExitHandler();
 
-    return ret;
+    return 0;
 }
 
 void CGLContext::FinishRenderingGeometry(bool forceImmediateStop)
