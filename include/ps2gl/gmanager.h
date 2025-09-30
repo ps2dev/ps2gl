@@ -104,6 +104,7 @@ protected:
     static tUserPrimEntry UserPrimTypes[kMaxUserPrimTypes];
 
     // GL state
+    cpu_vec_xyzw CurGeomColor;
     cpu_vec_xyz CurNormal;
     float CurTexCoord[2];
     static bool DoNormalize;
@@ -167,8 +168,9 @@ public:
     void SetUserRenderContextChanged() { UserRenderContextChanged = true; }
 
     // GL state
-
+    inline cpu_vec_xyzw GetCurGeomColor() const { return CurGeomColor; }
     inline cpu_vec_xyz GetCurNormal() const { return CurNormal; }
+    inline void SetCurGeomColor(cpu_vec_xyzw color) { CurGeomColor = color; }
     inline void SetCurNormal(cpu_vec_xyz normal) { CurNormal = normal; }
 
     inline const float* GetCurTexCoord() const { return CurTexCoord; }

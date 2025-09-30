@@ -38,6 +38,7 @@ void display(void)                                      // Create The Display Fu
     glVertex3f(1.0f, -1.0f, 0.0f);                      // Bottom Right
     glEnd();                                            // Finished Drawing The Triangle
     glTranslatef(3.0f, 0.0f, 0.0f);                     // Move Right 3 Units
+    //TODO: renderer ordering here in renderermanager causing confusion (non trivial path finding for renderers)
     glBegin(GL_QUADS);                                  // Draw A Quad
     glVertex3f(-1.0f, 1.0f, 0.0f);                      // Top Left
     glVertex3f(1.0f, 1.0f, 0.0f);                       // Top Right

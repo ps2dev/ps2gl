@@ -5,6 +5,7 @@
 	  main directory of this archive for more details.                             */
 
 #include <stdio.h>
+#include <ps2gl/lighting.h>
 
 #include "ps2s/cpu_matrix.h"
 #include "ps2s/displayenv.h"
@@ -117,11 +118,14 @@ void CImmGeomManager::Vertex(cpu_vec_xyzw newVert)
     *CurTexCoordBuf += texCoord[0];
     *CurTexCoordBuf += texCoord[1];
 
+    cpu_vec_xyzw color = GetCurGeomColor();
+    *CurColorBuf += color;
     *CurVertexBuf += newVert;
 
     Geometry.AddVertices();
     Geometry.AddNormals();
     Geometry.AddTexCoords();
+    Geometry.AddColors();
 }
 
 void CImmGeomManager::Normal(cpu_vec_xyz normal)
@@ -133,10 +137,8 @@ void CImmGeomManager::Normal(cpu_vec_xyz normal)
 
 void CImmGeomManager::Color(cpu_vec_xyzw color)
 {
-    if (InsideBeginEnd) {
-        *CurColorBuf += color;
-        Geometry.AddColors();
-    } else {
+    SetCurGeomColor(color);
+    if (!InsideBeginEnd) {
         GLContext.GetMaterialManager().Color(color);
     }
 }
@@ -156,22 +158,13 @@ void CImmGeomManager::EndGeom()
     Geometry.SetTexCoordsAreValid(true);
 
     // check colors
-    Geometry.SetColorsAreValid(false);
-    if (Geometry.GetNumNewColors() > 0) {
-        mErrorIf(Geometry.GetNumNewVertices() != Geometry.GetNumNewColors(),
-            "Sorry, but inside glBegin/glEnd you need "
-            "to specify either one color for each vertex given, or none.");
-        Geometry.SetColorsAreValid(true);
-
-        SyncColorMaterial(true);
-    } else {
-        SyncColorMaterial(false);
-    }
+    Geometry.SetColorsAreValid(Geometry.GetNumNewColors() > 0);
+    SyncColorMaterial(Geometry.GetNumNewColors() > 0);
 
     Geometry.SetWordsPerVertex(4);
     Geometry.SetWordsPerNormal(3);
     Geometry.SetWordsPerTexCoord(2);
-    Geometry.SetWordsPerColor(4);
+    Geometry.SetWordsPerColor(Geometry.GetNumNewColors() > 0 ? 4 : 0);
 
     CommitNewGeom();
 }
@@ -196,7 +189,9 @@ void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
     Geometry.SetVerticesAreValid(VertArray->GetVerticesAreValid());
     Geometry.SetNormalsAreValid(VertArray->GetNormalsAreValid());
     Geometry.SetTexCoordsAreValid(VertArray->GetTexCoordsAreValid());
-    Geometry.SetColorsAreValid(VertArray->GetColorsAreValid());
+    Geometry.SetColorsAreValid(Geometry.GetNumNewColors() > 0);
+    SyncColorMaterial(Geometry.GetNumNewColors() > 0);
+    // Geometry.SetColorsAreValid(VertArray->GetColorsAreValid());
 
     Geometry.SetWordsPerVertex(VertArray->GetWordsPerVertex());
     Geometry.SetWordsPerNormal(VertArray->GetWordsPerNormal());
@@ -211,7 +206,8 @@ void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
     Geometry.AdjustNewGeomPtrs(first);
 
     // do this before sync'ing the vu1 renderer in CommitNewGeom
-    SyncColorMaterial(VertArray->GetColors() != NULL);
+    SyncColorMaterial(VertArray->GetColorsAreValid());
+    // SyncColorMaterial(VertArray->GetColors() != NULL);
 
     CommitNewGeom();
 }
@@ -409,7 +405,8 @@ void CImmGeomManager::SyncGsContext()
 void CImmGeomManager::SyncColorMaterial(bool pvColorsArePresent)
 {
     CMaterialManager& mm = GLContext.GetMaterialManager();
-    if (pvColorsArePresent && mm.GetColorMaterialEnabled()) {
+    //if (pvColorsArePresent && mm.GetColorMaterialEnabled()) {
+    if (GLContext.GetImmLighting().GetLightingEnabled() && pvColorsArePresent && mm.GetColorMaterialEnabled()) {
         switch (mm.GetColorMaterialMode()) {
         case GL_EMISSION:
             mNotImplemented("Only GL_DIFFUSE can change per-vertex");

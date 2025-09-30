@@ -97,7 +97,7 @@
 
      .macro         xform_vert     xformed_vert, vert_xform, vert
      mul_pt_mat_44  \xformed_vert, \vert_xform, \vert
-     div            q, vf00w, \xformed_vert[w]
+     div            q, vf00[w], \xformed_vert[w]
      mulq.xyz       \xformed_vert, \xformed_vert, q
      ; FIXME: visible vertices are now in range (+-320, +-112, +-2^24-1)
      .endm

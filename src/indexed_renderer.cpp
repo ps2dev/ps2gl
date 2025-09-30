@@ -66,7 +66,7 @@ void CIndexedRenderer::InitContext(GLenum primType, uint32_t rcChanges, bool use
     if (doLighting)
         materialEmm = material.GetEmission() * maxColorValue;
     else
-        materialEmm = glContext.GetMaterialManager().GetCurColor() * maxColorValue;
+        materialEmm = glContext.GetMaterialManager().GetCurMatColor() * maxColorValue;
 
     ConstantVertColor = materialAmb * globalAmb + materialEmm;
 }

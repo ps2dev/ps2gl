@@ -13,7 +13,7 @@
      ; fill in the nloop field in the giftag and store at
      ; top of the output buffer
      lq             gif_tag\@, kGifTag(vi00)
-     mtir           eop\@, gif_tag\@x
+     mtir           eop\@, gif_tag\@[x]
      ior            eop\@, eop\@, num_verts
      mfir.x         gif_tag\@, eop\@
      sq             gif_tag\@, -1(next_output)

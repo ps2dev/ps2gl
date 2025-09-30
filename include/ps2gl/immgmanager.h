@@ -61,7 +61,7 @@ public:
     // normal, tex coord or vertex color is supplied for each vertex
     inline CDmaPacket& GetNormalBuf() { return *CurNormalBuf; }
     inline CDmaPacket& GetTexCoordBuf() { return *CurTexCoordBuf; }
-
+    inline CDmaPacket& GetColorBuf() { return *CurColorBuf; }
     // user state
 
     void EnableCustom(uint64_t flag) { RendererManager.EnableCustom(flag); }

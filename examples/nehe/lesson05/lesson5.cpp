@@ -27,12 +27,6 @@ void InitGL(GLvoid) // Create Some Everyday Functions
     glEnable(GL_DEPTH_TEST);              // Enables Depth Testing
     glDepthFunc(GL_LEQUAL);               // The Type Of Depth Testing To Do
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-    // ps2gl needs lighting + color_material for per-vertex colors
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
 }
 
 void idle(void) {
@@ -41,6 +35,9 @@ void idle(void) {
 
 void display(void)                                      // Create The Display Function
 {
+    glDisable(GL_COLOR_MATERIAL);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear Screen And Depth Buffer
     glLoadIdentity();                                   // Reset The Current Modelview Matrix
     glPushMatrix();
@@ -73,10 +70,18 @@ void display(void)                                      // Create The Display Fu
     glVertex3f(-1.0f, -1.0f, 1.0f);                     // Right Of Triangle (Left)
     glEnd();                                            // Finished Drawing The Triangle
 
+    // TODO: next make a fast no lights for QUADS
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
     glLoadIdentity();                                   // Reset The Current Modelview Matrix
     glTranslatef(1.5f, 0.0f, -6.0f);                    // Move Right 1.5 Units And Into The Screen 6.0
     glRotatef(rquad, 1.0f, 0.0f, 0.0f);                 // Rotate The Quad On The X axis
     glColor3f(0.5f, 0.5f, 1.0f);                        // Set The Color To Blue One Time Only
+    constexpr float default_normal_direction_alignment[4] = {0.f, 0.f, 1.f, 0.f};
+    glLightfv(GL_LIGHT0, GL_POSITION, default_normal_direction_alignment);
     glBegin(GL_QUADS);                                  // Draw A Quad
     glColor3f(0.0f, 1.0f, 0.0f);                        // Set The Color To Blue
     glVertex3f(1.0f, 1.0f, -1.0f);                      // Top Right Of The Quad (Top)

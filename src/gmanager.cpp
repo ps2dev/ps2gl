@@ -46,6 +46,21 @@ bool CGeomManager::DoNormalize = false;
 
 CGeomManager::CGeomManager(CGLContext& context)
     : GLContext(context)
+    , CurGeomColor(1.0f, 1.0f, 1.0f, 1.0f) //TODO: I think this is the GL color behavior? for missing colors case...
+    //NOTE: this default CurNormal allows for "appearing" unlit PVC effect when:
+    // - ColorMaterial Enabled
+    // - Lighting Enabled
+    // - Light0 Enabled
+    // - Normals are never set during the glBegin/glEnd -> Default CurNormal of {0.0, 0.0, 1.0} (set in this constructor) is set
+    // VU Renderer: "linear, pvc, tris" is then targetted
+    // IMPORTANT: EVERY FRAME Light0's direction is set via
+    // constexpr float direction_towards_per_vertex_normal[4] = {0.0, 0.0, 1.0, 0.0};
+    // glLightfv(GL_LIGHT0, GL_POSITION, direction_towards_per_vertex_normal);
+    // Why the dot product in the VU1 renderer GeneralPVDiff cancels out the Diffuse lighting effect:
+    // ps2gl converts lights into object/model space for VU1:
+    // AddVu1RendererContext: lighting calculations are done in object/model space via worldToObjXfrm).
+    // so LIGHT0's direction {0, 0, 1, 0} remains aligned with every vertices default CurNormal = {0,0,1}.
+    // Therefore N·L = 1 for the whole object/model
     , CurNormal(0.0f, 0.0f, 1.0f)
     , Prim(GL_INVALID_VALUE)
     , InsideBeginEnd(false)

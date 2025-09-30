@@ -26,7 +26,8 @@ protected:
     // cached in DrawArrays from geometry manager for XferBlock
     float CurTexCoord[2];
     cpu_vec_xyz CurNormal;
-    CDmaPacket *TexCoordBuf, *NormalBuf;
+    cpu_vec_xyzw CurGeomColor;
+    CDmaPacket *TexCoordBuf, *NormalBuf, *ColorBuf;
 
     int WordsPerVertex, WordsPerNormal, WordsPerTexCoord, WordsPerColor;
     unsigned int VertexUnpackMode, NormalUnpackMode;

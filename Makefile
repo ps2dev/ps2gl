@@ -50,7 +50,8 @@ RENDERERS = \
 	general_tri \
 	general \
 	indexed \
-	scei
+	scei \
+	fast_no_lights_pvc_tri
 
 EE_OBJS += $(addsuffix .vo, $(addprefix vu1/, $(RENDERERS)))
 
@@ -76,23 +77,42 @@ realclean: clean
 include $(PS2SDK)/Defs.make
 include $(PS2SDK)/samples/Makefile.eeglobal
 
+## dvp-as origin in ps2dev toolchain: https://github.com/ps2dev/ps2toolchain/blob/master/scripts/001-dvp.sh
+## Build .vo (VU object) from a compiled .vsm
 %.vo: %_vcl.vsm
 	dvp-as -o $@ $<
 
+# VCL (Vector Command Language): https://ps2linux.no-ip.info/playstation2-linux.com/projects/vcl.html
+# for documentation download the x86 or win32 tar above and read the VCL_User_Manual_E_v1.4_1.pdf
+# more resources on vsm: http://lukasz.dk/files/vu-instruction-manual.pdf
 %_vcl.vsm: %_pp4.vcl
 	vcl -o$@ $<
 
+# GCC / CPP flags (-E, -P, -imacros): https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation
+# -E = preprocess only, -P = strip #line, -imacros includes macros without writing #include
 %indexed_pp4.vcl: %indexed_pp3.vcl
 	cat $< | cc -E -P -imacros vu1/vu1_mem_indexed.h -o $@ -
 
+# GCC / CPP flags (-E, -P, -imacros): https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation
+# -E = preprocess only, -P = strip #line, -imacros includes macros without writing #include
 %_pp4.vcl: %_pp3.vcl
 	cat $< | cc -E -P -imacros vu1/vu1_mem_linear.h -o $@ -
 
+#TODO: remove this step? This could be covered simply from writing correct vcl code... unless intending to allow new and old syntax?
+# you can standardize syntax by using ".syntax old" or ".syntax new" or by passing `-n` to VCL for "new" and writing sources
+# accordingly, it might be better to allow for correcting towards that to avoid confusion...
 %_pp3.vcl: %_pp2.vcl
 	cat $< | sed 's/\[\([0-9]\)\]/_\1/g ; s/\[\([w-zW-Z]\)\]/\1/g' - > $@
 
+# Expand assembly-style macros and .include with GASP
+# -c ';' uses ';' as the comment char; -Ivu1 resolves local .include files.
+# GASP (GNU assembler preprocessor) manpage: https://manpages.debian.org/unstable/binutils-m68hc1x/gasp.1.en.html
 %_pp2.vcl: %_pp1.vcl
 	gasp -c ';' -Ivu1 -o $@ $<
 
+# this is in order to normalize sources for GASP by removing C preprocessor stuff (#include/#define),
+# and then fix local .include paths so GASP can resolve them relative to the source dir.
+# if the .vcl file ALREADY avoids #include/#define and only use .include/.macro etc
+# you can wire %.vcl -> %_pp2.vcl directly and drop this rule
 %_pp1.vcl: %.vcl
 	cat $< | sed 's/#include[ 	]\+.\+// ; s/#define[ 	]\+.\+// ; s|\(\.include[ 	]\+\)"\([^/].\+\)"|\1"$(<D)/\2"|' - > $@

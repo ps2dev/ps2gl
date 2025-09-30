@@ -9,6 +9,7 @@
 #include "ps2s/packet.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "ps2gl/base_renderer.h"
 #include "ps2gl/drawcontext.h"
@@ -65,12 +66,14 @@ void CBaseRenderer::InitXferBlock(CVifSCDmaPacket& packet,
 
     NormalBuf   = &gmanager.GetNormalBuf();
     TexCoordBuf = &gmanager.GetTexCoordBuf();
+    ColorBuf = &gmanager.GetColorBuf();
 
     CurNormal             = gmanager.GetCurNormal();
     const float* texCoord = gmanager.GetCurTexCoord();
     CurTexCoord[0]        = texCoord[0];
     CurTexCoord[1]        = texCoord[1];
 
+    CurGeomColor = gmanager.GetCurGeomColor();
     // get unpack modes/masks
 
     WordsPerVertex = wordsPerVertex;
@@ -84,6 +87,11 @@ void CBaseRenderer::InitXferBlock(CVifSCDmaPacket& packet,
 
     WordsPerColor = (wordsPerColor > 0) ? wordsPerColor : 3;
     GetUnpackAttribs(WordsPerColor, ColorUnpackMode, ColorUnpackMask);
+
+    XferVertices  = (wordsPerVertex  > 0);
+    XferNormals   = (wordsPerNormal  > 0) && pGLContext->GetImmLighting().GetLightingEnabled();
+    XferTexCoords = (wordsPerTex     > 0);
+    XferColors    = (WordsPerColor   > 0) && (!pGLContext->GetImmLighting().GetLightingEnabled() || pGLContext->GetMaterialManager().GetColorMaterialEnabled());
 
     // set up the row register to expand vectors with fewer than 4 elements
 
@@ -116,6 +124,12 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
     const void* texCoords, const void* colors,
     int vu1Offset, int firstElement, int numToAdd)
 {
+    //TODO: lane mapping V|T|C, V|C|T, V|N|T|C is difficult to figure out with the vu code sometimes
+    // should be super super clear somewhere probably better than here
+    const int laneV = 0;
+    const int laneN = 1;
+    const int laneT = 2;
+    const int laneC = 3;
     //
     // vertices
     //
@@ -125,7 +139,7 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
         XferVectors(packet, (unsigned int*)vertices,
             firstElement, numToAdd,
             WordsPerVertex, VertexUnpackMask, VertexUnpackMode,
-            vu1Offset);
+            vu1Offset + laneV);
     }
 
     //
@@ -146,11 +160,12 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
             normalBuf += CurNormal;
     }
 
-    if (XferNormals)
+    if (XferNormals) {
         XferVectors(packet, (unsigned int*)normals,
             firstNormal, numToAdd,
             WordsPerNormal, NormalUnpackMask, NormalUnpackMode,
-            vu1Offset + 1);
+            vu1Offset + laneN);
+    }
 
     //
     // tex coords
@@ -169,22 +184,37 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
             texCoordBuf += CurTexCoord[1];
         }
     }
-    if (XferTexCoords)
+    if (XferTexCoords) {
         XferVectors(packet, (unsigned int*)texCoords,
             firstTexCoord, numToAdd,
             WordsPerTexCoord, TexCoordUnpackMask, TexCoordUnpackMode,
-            vu1Offset + 2);
+            vu1Offset + laneT);
+    }
 
     //
     // colors
     //
 
     int firstColor = firstElement;
+    // TODO: perhaps this is not good for EE? but i think this should also somehow default to white or the pushed registered color
+    //  needs more testing with OpenGL expected behavior...
+    if (XferColors && colors == NULL) {
+        CDmaPacket& colorBuf = *ColorBuf;
+        colors = (void*)colorBuf.GetNextPtr();
+        firstColor = 0;
+        for (int i = 0; i < numToAdd; ++i) {
+            colorBuf += CurGeomColor[0];
+            colorBuf += CurGeomColor[1];
+            colorBuf += CurGeomColor[2];
+        }
+    }
+
     if (colors != NULL && XferColors) {
+        mErrorIf(colors == NULL, "XferColors=true but no color data present");
         XferVectors(packet, (unsigned int*)colors,
             firstColor, numToAdd,
             WordsPerColor, ColorUnpackMask, ColorUnpackMode,
-            vu1Offset + 3);
+            vu1Offset + laneC);
     }
 }
 
@@ -314,10 +344,18 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
 
         // add emissive component
         cpu_vec_4 emission;
+        if (doLighting) {
+            emission = material.GetEmission() * maxColorValue;
+        } else {
+            emission = glContext.GetGeomManager().GetCurGeomColor() * maxColorValue;
+            // emission = glContext.GetMaterialManager().GetCurMatColor() * maxColorValue;
+        }
+        /*
         if (doLighting)
             emission = material.GetEmission() * maxColorValue;
         else
             emission = glContext.GetMaterialManager().GetCurColor() * maxColorValue;
+        */
         packet += emission;
 
         // ambient
@@ -328,7 +366,8 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
         // the alpha value is set to the alpha of the diffuse in the renderers;
         // this should be the current color alpha if lighting is disabled
         if (!doLighting)
-            matDiffuse[3] = glContext.GetMaterialManager().GetCurColor()[3];
+            matDiffuse[3] = glContext.GetGeomManager().GetCurGeomColor()[3];
+            // matDiffuse[3] = glContext.GetMaterialManager().GetCurMatColor()[3];
         packet += matDiffuse;
 
         // specular
@@ -395,7 +434,9 @@ void CBaseRenderer::CacheRendererState()
 {
     XferNormals   = pGLContext->GetImmLighting().GetLightingEnabled();
     XferTexCoords = pGLContext->GetTexManager().GetTexEnabled();
-    XferColors    = pGLContext->GetMaterialManager().GetColorMaterialEnabled();
+    //TODO: something tells me this needs to be restructured i think, it feels too hidden for where its important...
+    XferColors    = false;
+    // XferColors    = pGLContext->GetMaterialManager().GetColorMaterialEnabled();
 }
 
 void CBaseRenderer::Load()
