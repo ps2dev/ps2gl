@@ -403,6 +403,17 @@ void glColor4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
     gmanager.Color(cpu_vec_xyzw(red, green, blue, alpha));
 }
 
+//raylib need this function
+void glColor4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
+{
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+    float r = (float)red/255.0;
+    float b = (float)blue/255.0;
+    float g = (float)green/255.0;
+    float a = (float)alpha/255.0;
+    glColor4f(r,g,b,a);
+}
+
 void glColor4fv(const GLfloat* color)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
