@@ -68,39 +68,6 @@ CRendererManager::CRendererManager(CGLContext& context)
             "indexed"));
     }
 
-    // unlit renderer per vertex color
-    // TODO: make sure this actually is ordered in here to work with other examples
-    //  (the pathing for this renderermanager approach is concerning how maybe this
-    //  could capture cases that dont want this renderer?
-
-    //TODO: something could be making this horrendously slow, will need to continue to investigate performance of the lighting vcl and the no lights pvc...
-    {
-        CRendererProps capabilities = {
-            .PrimType = kTriangles,
-            .Lighting = 0,
-            .NumDirLights = k3DirLights,
-            .NumPtLights = 0,
-            .Texture = 1,
-            .Specular = 0,
-            .PerVtxMaterial = kNoMaterial,
-            .Clipping = kNonClipped | kClipped,
-            .CullFace = 0,
-            .TwoSidedLighting = 0,
-            .ArrayAccess = kLinear
-        };
-        RegisterDefaultRenderer(
-            new CLinearRenderer(
-                mVsmAddr(FastNoLightsPVCTri),
-                mVsmSize(FastNoLightsPVCTri),
-                capabilities,
-                no_reqs,
-                4,
-                3,
-                kInputStart,
-                kInputBufSize - kInputStart,
-                "fast no lights, pvc, tri")
-        );
-    }
     // fast, no lights renderer
     {
         CRendererProps capabilities = {
@@ -120,6 +87,39 @@ CRendererManager::CRendererManager(CGLContext& context)
         RegisterDefaultRenderer(new CLinearRenderer(mVsmAddr(FastNoLights), mVsmSize(FastNoLights), capabilities, no_reqs, 3, 3,
             kInputStart, kInputBufSize - kInputStart,
             "fast, no lights"));
+    }
+    // unlit renderer per vertex color
+    // TODO: make sure this actually is ordered in here to work with other examples
+    //  (the pathing for this renderermanager approach is concerning how maybe this
+    //  could capture cases that dont want this renderer?
+
+    //TODO: something could be making this horrendously slow, will need to continue to investigate performance of the lighting vcl and the no lights pvc...
+    {
+        CRendererProps capabilities = {
+            .PrimType = kTriangles,
+            .Lighting = 0,
+            .NumDirLights = k3DirLights,
+            .NumPtLights = 0,
+            .Texture = 0,
+            .Specular = 0,
+            .PerVtxMaterial = kNoMaterial,
+            .Clipping = kNonClipped | kClipped,
+            .CullFace = 0,
+            .TwoSidedLighting = 0,
+            .ArrayAccess = kLinear
+        };
+        RegisterDefaultRenderer(
+            new CLinearRenderer(
+                mVsmAddr(FastNoLightsPVCTri),
+                mVsmSize(FastNoLightsPVCTri),
+                capabilities,
+                no_reqs,
+                4,
+                3,
+                kInputStart,
+                kInputBufSize - kInputStart,
+                "fast no lights, pvc, tri")
+        );
     }
     // fast renderer
     {

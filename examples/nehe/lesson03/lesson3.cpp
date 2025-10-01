@@ -24,8 +24,6 @@ void init(GLvoid) // Create Some Everyday Functions
     glEnable(GL_DEPTH_TEST);              // Enables Depth Testing
     glDepthFunc(GL_LEQUAL);               // The Type Of Depth Testing To Do
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-    // TODO: next make a fast no lights for QUADS
 }
 
 void display(void)                                      // Create The Display Function
@@ -43,7 +41,6 @@ void display(void)                                      // Create The Display Fu
     glEnd();                                            // Finished Drawing The Triangle
     glTranslatef(3.0f, 0.0f, 0.0f);                     // Move Right 3 Units
     glColor3f(0.5f, 0.5f, 1.0f);                        // Set The Color To Blue One Time Only
-    //TODO: like lesson02, renderermanager causing potential issues with ordering
     glBegin(GL_QUADS);                                  // Draw A Quad
     glVertex3f(-1.0f, 1.0f, 0.0f);                      // Top Left
     glVertex3f(1.0f, 1.0f, 0.0f);                       // Top Right

@@ -100,6 +100,7 @@ void CImmGeomManager::BeginGeom(GLenum mode)
 
     Geometry.SetPrimType(mode);
     Geometry.SetArrayType(kLinear);
+    ColorVariesInPrim = false;
 
     Geometry.SetNormals(CurNormalBuf->GetNextPtr());
     Geometry.SetVertices(CurVertexBuf->GetNextPtr());
@@ -118,14 +119,16 @@ void CImmGeomManager::Vertex(cpu_vec_xyzw newVert)
     *CurTexCoordBuf += texCoord[0];
     *CurTexCoordBuf += texCoord[1];
 
-    cpu_vec_xyzw color = GetCurGeomColor();
-    *CurColorBuf += color;
+    if (ColorVariesInPrim) {
+        const cpu_vec_xyzw color = GetCurGeomColor();
+        *CurColorBuf += color;
+        Geometry.AddColors();
+    }
     *CurVertexBuf += newVert;
 
     Geometry.AddVertices();
     Geometry.AddNormals();
     Geometry.AddTexCoords();
-    Geometry.AddColors();
 }
 
 void CImmGeomManager::Normal(cpu_vec_xyz normal)
@@ -137,8 +140,19 @@ void CImmGeomManager::Normal(cpu_vec_xyz normal)
 
 void CImmGeomManager::Color(cpu_vec_xyzw color)
 {
-    SetCurGeomColor(color);
-    if (!InsideBeginEnd) {
+    if (InsideBeginEnd) {
+        if (!ColorVariesInPrim) {
+            int backFillVertexCount = Geometry.GetNumNewVertices() - Geometry.GetNumNewColors();
+            const cpu_vec_xyzw currentColor = GetCurGeomColor();
+            for (int i = 0; i < backFillVertexCount; ++i) {
+                *CurColorBuf += currentColor;
+                Geometry.AddColors();
+            }
+            ColorVariesInPrim = true;
+        }
+        SetCurGeomColor(color);
+    } else {
+        SetCurGeomColor(color);
         GLContext.GetMaterialManager().Color(color);
     }
 }
@@ -157,15 +171,18 @@ void CImmGeomManager::EndGeom()
     Geometry.SetNormalsAreValid(true);
     Geometry.SetTexCoordsAreValid(true);
 
-    // check colors
-    Geometry.SetColorsAreValid(Geometry.GetNumNewColors() > 0);
-    SyncColorMaterial(Geometry.GetNumNewColors() > 0);
-
     Geometry.SetWordsPerVertex(4);
     Geometry.SetWordsPerNormal(3);
     Geometry.SetWordsPerTexCoord(2);
-    Geometry.SetWordsPerColor(Geometry.GetNumNewColors() > 0 ? 4 : 0);
-
+    // check colors
+    // CHANGES!!!
+    const bool useColorLane = (!GLContext.GetImmLighting().GetLightingEnabled() && ColorVariesInPrim) ||
+        (GLContext.GetImmLighting().GetLightingEnabled() &&
+            GLContext.GetMaterialManager().GetColorMaterialEnabled() &&
+            ColorVariesInPrim);
+    Geometry.SetColorsAreValid(useColorLane);
+    Geometry.SetWordsPerColor(useColorLane ? 4 : 0);
+    SyncColorMaterial(useColorLane);
     CommitNewGeom();
 }
 
@@ -189,25 +206,34 @@ void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
     Geometry.SetVerticesAreValid(VertArray->GetVerticesAreValid());
     Geometry.SetNormalsAreValid(VertArray->GetNormalsAreValid());
     Geometry.SetTexCoordsAreValid(VertArray->GetTexCoordsAreValid());
-    Geometry.SetColorsAreValid(Geometry.GetNumNewColors() > 0);
-    SyncColorMaterial(Geometry.GetNumNewColors() > 0);
-    // Geometry.SetColorsAreValid(VertArray->GetColorsAreValid());
+    Geometry.SetColorsAreValid(VertArray->GetColorsAreValid());
 
     Geometry.SetWordsPerVertex(VertArray->GetWordsPerVertex());
     Geometry.SetWordsPerNormal(VertArray->GetWordsPerNormal());
     Geometry.SetWordsPerTexCoord(VertArray->GetWordsPerTexCoord());
-    Geometry.SetWordsPerColor(VertArray->GetWordsPerColor());
+    // CHANGES!!!
+    // Geometry.SetWordsPerColor(VertArray->GetWordsPerColor());
+    //OLD WAY!!! something about glColorPointer is what sets Colors for the VertArray!!??
+    // SyncColorMaterial(VertArray->GetColors() != NULL);
+    const bool lighting = GLContext.GetImmLighting().GetLightingEnabled();
+    const bool colormat = GLContext.GetMaterialManager().GetColorMaterialEnabled();
+
+    const bool arrayHasColors =
+        VertArray->GetColorsAreValid() && (VertArray->GetWordsPerColor() > 0);
+
+    const bool useColorLane =
+        (!lighting && arrayHasColors) ||
+        ( lighting && colormat && arrayHasColors);
+
+    Geometry.SetColorsAreValid(useColorLane);
+    Geometry.SetWordsPerColor(useColorLane ? 4 : 0);
+    SyncColorMaterial(useColorLane);
 
     Geometry.AddVertices(count);
     Geometry.AddNormals(count);
     Geometry.AddTexCoords(count);
-    Geometry.AddColors(count);
-
+    if (useColorLane) Geometry.AddColors(count);
     Geometry.AdjustNewGeomPtrs(first);
-
-    // do this before sync'ing the vu1 renderer in CommitNewGeom
-    SyncColorMaterial(VertArray->GetColorsAreValid());
-    // SyncColorMaterial(VertArray->GetColors() != NULL);
 
     CommitNewGeom();
 }
@@ -359,12 +385,8 @@ void CImmGeomManager::SyncRenderer()
 void CImmGeomManager::SyncRendererContext(GLenum primType)
 {
     // resend the rendering context if necessary
-    if (GLContext.GetRendererContextChanged()
-        || (RendererManager.IsCurRendererCustom() && UserRenderContextChanged)) {
-        RendererManager.GetCurRenderer().InitContext(primType,
-            GLContext.GetRendererContextChanged(),
-            UserRenderContextChanged);
-
+    if (GLContext.GetRendererContextChanged() || (RendererManager.IsCurRendererCustom() && UserRenderContextChanged)) {
+        RendererManager.GetCurRenderer().InitContext(primType, GLContext.GetRendererContextChanged(), UserRenderContextChanged);
         GLContext.SetRendererContextChanged(false);
         UserRenderContextChanged = false;
         Prim                     = primType;

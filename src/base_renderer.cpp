@@ -79,19 +79,29 @@ void CBaseRenderer::InitXferBlock(CVifSCDmaPacket& packet,
     WordsPerVertex = wordsPerVertex;
     GetUnpackAttribs(WordsPerVertex, VertexUnpackMode, VertexUnpackMask);
 
-    WordsPerNormal = (wordsPerNormal > 0) ? wordsPerNormal : 3;
-    GetUnpackAttribs(WordsPerNormal, NormalUnpackMode, NormalUnpackMask);
+    // WordsPerNormal = (wordsPerNormal > 0) ? wordsPerNormal : 3;
+    // GetUnpackAttribs(WordsPerNormal, NormalUnpackMode, NormalUnpackMask);
+    WordsPerNormal   = wordsPerNormal;
+    if (WordsPerNormal > 0) GetUnpackAttribs(WordsPerNormal,   NormalUnpackMode,   NormalUnpackMask);
 
-    WordsPerTexCoord = (wordsPerTex > 0) ? wordsPerTex : 2;
-    GetUnpackAttribs(WordsPerTexCoord, TexCoordUnpackMode, TexCoordUnpackMask);
+    // WordsPerTexCoord = (wordsPerTex > 0) ? wordsPerTex : 2;
+    // GetUnpackAttribs(WordsPerTexCoord, TexCoordUnpackMode, TexCoordUnpackMask);
+    WordsPerTexCoord = wordsPerTex;
+    if (WordsPerTexCoord > 0) GetUnpackAttribs(WordsPerTexCoord, TexCoordUnpackMode, TexCoordUnpackMask);
 
-    WordsPerColor = (wordsPerColor > 0) ? wordsPerColor : 3;
-    GetUnpackAttribs(WordsPerColor, ColorUnpackMode, ColorUnpackMask);
-
+    //TODO: still confusing, could be improved along with the above ones.. (also confirm this whole 4 vs 3 thing for RGBA and VU1...)
+    WordsPerColor = wordsPerColor;
+    if (WordsPerColor > 0) GetUnpackAttribs(WordsPerColor, ColorUnpackMode, ColorUnpackMask);
+    //NOTE FOR YOU: we can just remove these aswell? because they are decided at the CacheRendererState function which is called immediately after all the glEnable/glDisable context flags are called?
+    // where as Colors are not known to be Per vertex or constant yet until here?
     XferVertices  = (wordsPerVertex  > 0);
     XferNormals   = (wordsPerNormal  > 0) && pGLContext->GetImmLighting().GetLightingEnabled();
     XferTexCoords = (wordsPerTex     > 0);
-    XferColors    = (WordsPerColor   > 0) && (!pGLContext->GetImmLighting().GetLightingEnabled() || pGLContext->GetMaterialManager().GetColorMaterialEnabled());
+    // NOTE FOR YOU:XferColors means: we need to send full 4 QuadWord Widths of colors PER VERTEX down a lane) thus:
+    // TRUE: when color material is enabled AND per vertex (is material always per vertex?)
+    // TRUE: when color geometry is set per vertex
+    // FALSE: when color geometry is CONSTANT -> colors will be set via a single value, not sent down the lanes...?
+    XferColors    = (WordsPerColor   > 0);
 
     // set up the row register to expand vectors with fewer than 4 elements
 
@@ -196,21 +206,7 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
     //
 
     int firstColor = firstElement;
-    // TODO: perhaps this is not good for EE? but i think this should also somehow default to white or the pushed registered color
-    //  needs more testing with OpenGL expected behavior...
-    if (XferColors && colors == NULL) {
-        CDmaPacket& colorBuf = *ColorBuf;
-        colors = (void*)colorBuf.GetNextPtr();
-        firstColor = 0;
-        for (int i = 0; i < numToAdd; ++i) {
-            colorBuf += CurGeomColor[0];
-            colorBuf += CurGeomColor[1];
-            colorBuf += CurGeomColor[2];
-        }
-    }
-
     if (colors != NULL && XferColors) {
-        mErrorIf(colors == NULL, "XferColors=true but no color data present");
         XferVectors(packet, (unsigned int*)colors,
             firstColor, numToAdd,
             WordsPerColor, ColorUnpackMask, ColorUnpackMode,
@@ -432,11 +428,10 @@ CBaseRenderer::BuildGiftag(GLenum primType)
 
 void CBaseRenderer::CacheRendererState()
 {
-    XferNormals   = pGLContext->GetImmLighting().GetLightingEnabled();
-    XferTexCoords = pGLContext->GetTexManager().GetTexEnabled();
-    //TODO: something tells me this needs to be restructured i think, it feels too hidden for where its important...
-    XferColors    = false;
-    // XferColors    = pGLContext->GetMaterialManager().GetColorMaterialEnabled();
+    //TODO: these are too confusing??? look at CommitNewGeom, and SyncRenderer and all that stuff
+    //XferNormals   = pGLContext->GetImmLighting().GetLightingEnabled();
+    //XferTexCoords = pGLContext->GetTexManager().GetTexEnabled();
+    //TODO: cannot decide Xfercolor state yet because we dont know if its per vertex or constant yet...????
 }
 
 void CBaseRenderer::Load()

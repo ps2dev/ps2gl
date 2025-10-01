@@ -27,6 +27,7 @@ class CImmGeomManager : public CGeomManager {
     CGeometryBlock Geometry;
 
     void CommitNewGeom();
+    bool ColorVariesInPrim = false;
 
 public:
     CImmGeomManager(CGLContext& context, int immBufferQwordSize);

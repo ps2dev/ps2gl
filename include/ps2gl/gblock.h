@@ -72,12 +72,12 @@ public:
     CGeometryBlock() { Reset(); }
 
     // get/set info about geometry
-
+    //TODO: make these an actual proper validation based on the prim?
     inline void SetVerticesAreValid(bool valid) { AreNewVerticesValid = valid; }
     inline void SetNormalsAreValid(bool valid) { AreNewNormalsValid = valid; }
     inline void SetTexCoordsAreValid(bool valid) { AreNewTexCoordsValid = valid; }
     inline void SetColorsAreValid(bool valid) { AreNewColorsValid = valid; }
-
+    //TODO: make these an actual proper validation based on the prim?
     inline bool GetVerticesAreValid() const { return AreVerticesValid; }
     inline bool GetNormalsAreValid() const { return AreNormalsValid; }
     inline bool GetTexCoordsAreValid() const { return AreTexCoordsValid; }

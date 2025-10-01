@@ -116,3 +116,42 @@ include $(PS2SDK)/samples/Makefile.eeglobal
 # you can wire %.vcl -> %_pp2.vcl directly and drop this rule
 %_pp1.vcl: %.vcl
 	cat $< | sed 's/#include[ 	]\+.\+// ; s/#define[ 	]\+.\+// ; s|\(\.include[ 	]\+\)"\([^/].\+\)"|\1"$(<D)/\2"|' - > $@
+
+# ---- build examples and create ./bin launchers ---------------------
+
+SHELL := /bin/bash
+EXAMPLES_DIR := examples
+BIN_DIR      := bin
+PCSX2_BIN    ?= pcsx2
+PCSX2_FLAGS  ?= -nogui -batch -fastboot -earlyconsolelog -logfile /dev/null
+
+.PHONY: examples clean-examples
+
+examples:
+	mkdir -p $(BIN_DIR)
+	# build each example (skip shared_code)
+	find $(EXAMPLES_DIR) -type f -name Makefile ! -path '*/shared_code/*' -print0 \
+	| while IFS= read -r -d '' mf; do \
+		dir=$$(dirname "$$mf"); \
+		echo "==> make -C $$dir"; \
+		$(MAKE) -C "$$dir"; \
+	done; \
+	# create launchers for every .elf (absolute path!)
+	find $(EXAMPLES_DIR) -type f -name '*.elf' -print0 \
+	| while IFS= read -r -d '' elf; do \
+		name=$$(basename "$${elf%.elf}"); \
+		abs=$$(readlink -f "$$elf"); \
+		echo "==> writing $(BIN_DIR)/$$name -> $$abs"; \
+		printf '#!/usr/bin/env bash\n%s %s -elf %s "$$@"\n' \
+			'$(PCSX2_BIN)' '$(PCSX2_FLAGS)' "$$abs" > "$(BIN_DIR)/$$name"; \
+		chmod +x "$(BIN_DIR)/$$name"; \
+	done
+
+clean-examples:
+	rm -rf $(BIN_DIR)
+	find $(EXAMPLES_DIR) -type f -name Makefile ! -path '*/shared_code/*' -print0 \
+	| while IFS= read -r -d '' mf; do \
+		dir=$$(dirname "$$mf"); \
+		echo "==> clean $$dir"; \
+		$(MAKE) -C "$$dir" clean || true; \
+	done

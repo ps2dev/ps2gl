@@ -1,8 +1,8 @@
-EE_BIN       = box.elf
+EE_BIN       = pvc_box.elf
 EE_CFLAGS   := -I$(PS2SDK)/ports/include -I../shared_code/ $(EE_CFLAGS)
 EE_CXXFLAGS := -I$(PS2SDK)/ports/include -I../shared_code/ $(EE_CXXFLAGS)
-EE_OBJS      = lit_pvc_box.o ../shared_code/text_stuff.o
-#EE_OBJS      = unlit_pvc_box.o ../shared_code/text_stuff.o
+#EE_OBJS      = lit_pvc_box.o ../shared_code/text_stuff.o
+EE_OBJS      = unlit_pvc_box.o ../shared_code/text_stuff.o
 EE_LDFLAGS  += -L$(PS2SDK)/ports/lib
 EE_LIBS      = -lps2glut -lps2gl -lps2stuff -lpad -ldma
 
