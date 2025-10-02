@@ -171,18 +171,28 @@ void CImmGeomManager::EndGeom()
     Geometry.SetNormalsAreValid(true);
     Geometry.SetTexCoordsAreValid(true);
 
-    Geometry.SetWordsPerVertex(4);
-    Geometry.SetWordsPerNormal(3);
-    Geometry.SetWordsPerTexCoord(2);
-    // check colors
-    // CHANGES!!!
-    const bool useColorLane = (!GLContext.GetImmLighting().GetLightingEnabled() && ColorVariesInPrim) ||
-        (GLContext.GetImmLighting().GetLightingEnabled() &&
-            GLContext.GetMaterialManager().GetColorMaterialEnabled() &&
-            ColorVariesInPrim);
-    Geometry.SetColorsAreValid(useColorLane);
-    Geometry.SetWordsPerColor(useColorLane ? 4 : 0);
-    SyncColorMaterial(useColorLane);
+    const bool useColorLane =
+        (!GLContext.GetImmLighting().GetLightingEnabled() && ColorVariesInPrim) ||
+        ( GLContext.GetImmLighting().GetLightingEnabled() &&
+          GLContext.GetMaterialManager().GetColorMaterialEnabled() &&
+          ColorVariesInPrim);
+
+    LaneConfig lanes;
+    lanes.vertices  = QW_XYZW;
+    lanes.normals   = GLContext.GetImmLighting().GetLightingEnabled() ? QW_XYZ : QW_NONE;
+    lanes.texcoords = GLContext.GetTexManager().GetTexEnabled() ? QW_XY : QW_NONE;
+    lanes.colors    = useColorLane ? QW_XYZW : QW_NONE;
+
+    ValidateLaneConfig(&lanes, "EndGeom");
+
+    Geometry.SetColorsAreValid(LanePresent(lanes.colors));
+    SyncColorMaterial(LanePresent(lanes.colors));
+
+    Geometry.SetWordsPerVertex(QWToWords(lanes.vertices));
+    Geometry.SetWordsPerNormal(QWToWords(lanes.normals));
+    Geometry.SetWordsPerTexCoord(QWToWords(lanes.texcoords));
+    Geometry.SetWordsPerColor(QWToWords(lanes.colors));
+
     CommitNewGeom();
 }
 
@@ -206,33 +216,37 @@ void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
     Geometry.SetVerticesAreValid(VertArray->GetVerticesAreValid());
     Geometry.SetNormalsAreValid(VertArray->GetNormalsAreValid());
     Geometry.SetTexCoordsAreValid(VertArray->GetTexCoordsAreValid());
-    Geometry.SetColorsAreValid(VertArray->GetColorsAreValid());
 
-    Geometry.SetWordsPerVertex(VertArray->GetWordsPerVertex());
-    Geometry.SetWordsPerNormal(VertArray->GetWordsPerNormal());
-    Geometry.SetWordsPerTexCoord(VertArray->GetWordsPerTexCoord());
-    // CHANGES!!!
-    // Geometry.SetWordsPerColor(VertArray->GetWordsPerColor());
-    //OLD WAY!!! something about glColorPointer is what sets Colors for the VertArray!!??
-    // SyncColorMaterial(VertArray->GetColors() != NULL);
-    const bool lighting = GLContext.GetImmLighting().GetLightingEnabled();
-    const bool colormat = GLContext.GetMaterialManager().GetColorMaterialEnabled();
+    const bool arrayHasColors = VertArray->GetColorsAreValid() && (VertArray->GetWordsPerColor() > 0);
 
-    const bool arrayHasColors =
-        VertArray->GetColorsAreValid() && (VertArray->GetWordsPerColor() > 0);
+    LaneConfig lanes;
+    lanes.vertices  = (VertArray->GetWordsPerVertex()   == 4) ? QW_XYZW :
+                      (VertArray->GetWordsPerVertex()   == 3) ? QW_XYZ  : QW_NONE;
+    lanes.normals   = (VertArray->GetNormalsAreValid()   &&
+                       VertArray->GetWordsPerNormal()    == 3 &&
+                       GLContext.GetImmLighting().GetLightingEnabled()) ? QW_XYZ : QW_NONE;
+    lanes.texcoords = (VertArray->GetTexCoordsAreValid() &&
+                       VertArray->GetWordsPerTexCoord()  == 2) ? QW_XY : QW_NONE;
+    lanes.colors    =
+        ((!GLContext.GetImmLighting().GetLightingEnabled() && arrayHasColors) ||
+         ( GLContext.GetImmLighting().GetLightingEnabled() &&
+           GLContext.GetMaterialManager().GetColorMaterialEnabled() &&
+           arrayHasColors)) ? QW_XYZW : QW_NONE;
 
-    const bool useColorLane =
-        (!lighting && arrayHasColors) ||
-        ( lighting && colormat && arrayHasColors);
+    ValidateLaneConfig(&lanes, "DrawArrays");
 
-    Geometry.SetColorsAreValid(useColorLane);
-    Geometry.SetWordsPerColor(useColorLane ? 4 : 0);
-    SyncColorMaterial(useColorLane);
+    Geometry.SetWordsPerVertex(QWToWords(lanes.vertices));
+    Geometry.SetWordsPerNormal(QWToWords(lanes.normals));
+    Geometry.SetWordsPerTexCoord(QWToWords(lanes.texcoords));
+    Geometry.SetWordsPerColor(QWToWords(lanes.colors));
+
+    Geometry.SetColorsAreValid(LanePresent(lanes.colors));
+    SyncColorMaterial(LanePresent(lanes.colors));
 
     Geometry.AddVertices(count);
     Geometry.AddNormals(count);
     Geometry.AddTexCoords(count);
-    if (useColorLane) Geometry.AddColors(count);
+    if (LanePresent(lanes.colors)) Geometry.AddColors(count);
     Geometry.AdjustNewGeomPtrs(first);
 
     CommitNewGeom();

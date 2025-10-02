@@ -76,32 +76,35 @@ void CBaseRenderer::InitXferBlock(CVifSCDmaPacket& packet,
     CurGeomColor = gmanager.GetCurGeomColor();
     // get unpack modes/masks
 
-    WordsPerVertex = wordsPerVertex;
+    LaneConfig lanes;
+    lanes.vertices  = (wordsPerVertex == 4) ? QW_XYZW :
+                      (wordsPerVertex == 3) ? QW_XYZ  : QW_NONE;
+    lanes.normals   = (wordsPerNormal == 0) ? QW_NONE :
+                      (wordsPerNormal == 3) ? QW_XYZ  : QW_NONE;
+    lanes.texcoords = (wordsPerTex    == 0) ? QW_NONE :
+                      (wordsPerTex    == 2) ? QW_XY   : QW_NONE;
+    lanes.colors    = (wordsPerColor  == 0) ? QW_NONE :
+                      (wordsPerColor  == 4) ? QW_XYZW : QW_NONE;
+
+    ValidateLaneConfig(&lanes, "InitXferBlock");
+    WordsPerVertex = QWToWords(lanes.vertices);
     GetUnpackAttribs(WordsPerVertex, VertexUnpackMode, VertexUnpackMask);
 
     // WordsPerNormal = (wordsPerNormal > 0) ? wordsPerNormal : 3;
-    // GetUnpackAttribs(WordsPerNormal, NormalUnpackMode, NormalUnpackMask);
-    WordsPerNormal   = wordsPerNormal;
+    WordsPerNormal   = QWToWords(lanes.normals);
     if (WordsPerNormal > 0) GetUnpackAttribs(WordsPerNormal,   NormalUnpackMode,   NormalUnpackMask);
 
     // WordsPerTexCoord = (wordsPerTex > 0) ? wordsPerTex : 2;
-    // GetUnpackAttribs(WordsPerTexCoord, TexCoordUnpackMode, TexCoordUnpackMask);
-    WordsPerTexCoord = wordsPerTex;
+    WordsPerTexCoord = QWToWords(lanes.texcoords);
     if (WordsPerTexCoord > 0) GetUnpackAttribs(WordsPerTexCoord, TexCoordUnpackMode, TexCoordUnpackMask);
 
-    //TODO: still confusing, could be improved along with the above ones.. (also confirm this whole 4 vs 3 thing for RGBA and VU1...)
-    WordsPerColor = wordsPerColor;
+    WordsPerColor = QWToWords(lanes.colors);
     if (WordsPerColor > 0) GetUnpackAttribs(WordsPerColor, ColorUnpackMode, ColorUnpackMask);
-    //NOTE FOR YOU: we can just remove these aswell? because they are decided at the CacheRendererState function which is called immediately after all the glEnable/glDisable context flags are called?
-    // where as Colors are not known to be Per vertex or constant yet until here?
-    XferVertices  = (wordsPerVertex  > 0);
-    XferNormals   = (wordsPerNormal  > 0) && pGLContext->GetImmLighting().GetLightingEnabled();
-    XferTexCoords = (wordsPerTex     > 0);
-    // NOTE FOR YOU:XferColors means: we need to send full 4 QuadWord Widths of colors PER VERTEX down a lane) thus:
-    // TRUE: when color material is enabled AND per vertex (is material always per vertex?)
-    // TRUE: when color geometry is set per vertex
-    // FALSE: when color geometry is CONSTANT -> colors will be set via a single value, not sent down the lanes...?
-    XferColors    = (WordsPerColor   > 0);
+
+    XferVertices  = LanePresent(lanes.vertices);
+    XferNormals   = LanePresent(lanes.normals);
+    XferTexCoords = LanePresent(lanes.texcoords);
+    XferColors    = LanePresent(lanes.colors);
 
     // set up the row register to expand vectors with fewer than 4 elements
 

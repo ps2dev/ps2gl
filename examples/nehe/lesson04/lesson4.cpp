@@ -52,6 +52,7 @@ void display(void)                                      // Create The Display Fu
     glTranslatef(1.5f, 0.0f, -6.0f);                    // Move Right 1.5 Units And Into The Screen 6.0
     glRotatef(rquad, 1.0f, 0.0f, 0.0f);                 // Rotate The Quad On The X axis
     glColor3f(0.5f, 0.5f, 1.0f);                        // Set The Color To Blue One Time Only
+    //TODO: add fast no lights PVC for QUADS!
     glBegin(GL_QUADS);                                  // Draw A Quad
     glVertex3f(-1.0f, 1.0f, 0.0f);                      // Top Left
     glVertex3f(1.0f, 1.0f, 0.0f);                       // Top Right
