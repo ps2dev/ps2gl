@@ -89,11 +89,6 @@ CRendererManager::CRendererManager(CGLContext& context)
             "fast, no lights"));
     }
     // unlit renderer per vertex color
-    // TODO: make sure this actually is ordered in here to work with other examples
-    //  (the pathing for this renderermanager approach is concerning how maybe this
-    //  could capture cases that dont want this renderer?
-
-    //TODO: something could be making this horrendously slow, will need to continue to investigate performance of the lighting vcl and the no lights pvc...
     {
         CRendererProps capabilities = {
             .PrimType = kTriangles,
@@ -102,7 +97,7 @@ CRendererManager::CRendererManager(CGLContext& context)
             .NumPtLights = 0,
             .Texture = 0,
             .Specular = 0,
-            .PerVtxMaterial = kNoMaterial,
+            .PerVtxMaterial = kDiffuse, //TODO: this is just to allow for only certain targets to get pvc (its a hack to get behavior, clean up next
             .Clipping = kNonClipped | kClipped,
             .CullFace = 0,
             .TwoSidedLighting = 0,

@@ -187,6 +187,7 @@ void CImmGeomManager::EndGeom()
 
     Geometry.SetColorsAreValid(LanePresent(lanes.colors));
     SyncColorMaterial(LanePresent(lanes.colors));
+    RendererManager.PerVtxMaterialChanged(useColorLane ? RendererProps::kDiffuse : RendererProps::kNoMaterial);
 
     Geometry.SetWordsPerVertex(QWToWords(lanes.vertices));
     Geometry.SetWordsPerNormal(QWToWords(lanes.normals));
@@ -242,6 +243,7 @@ void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
 
     Geometry.SetColorsAreValid(LanePresent(lanes.colors));
     SyncColorMaterial(LanePresent(lanes.colors));
+    RendererManager.PerVtxMaterialChanged(LanePresent(lanes.colors) ? RendererProps::kDiffuse : RendererProps::kNoMaterial);
 
     Geometry.AddVertices(count);
     Geometry.AddNormals(count);
