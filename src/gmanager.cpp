@@ -232,17 +232,23 @@ void glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indic
     const int numVertices = (int)max + 1;
 
     if (max <= 255) {
+        const int numIndexQwords = (int)((count + 15) / 16);
+        const int bytesNeeded    = numIndexQwords * 16;
+
         static uint8_t* indices_u8_scratch = NULL;
         static int scratchCapacity = 0;
-        if (scratchCapacity < count) {
+        if (scratchCapacity < bytesNeeded) {
             delete[] indices_u8_scratch;
-            indices_u8_scratch = new uint8_t[count];
-            scratchCapacity = (int)count;
+            indices_u8_scratch = new uint8_t[bytesNeeded];
+            scratchCapacity = bytesNeeded;
         }
         for (GLsizei i = 0; i < count; ++i) {
             indices_u8_scratch[i] = (uint8_t)indices_u16[i];
         }
-        mDebugPrint("glDrawElements: primType=%d count=%d type=GL_UNSIGNED_SHORT maxIndex=%u numVertices=%d (u8 path)\n", (int)mode, (int)count, (unsigned)max, (int)numVertices);
+        if (bytesNeeded > count) {
+            memset(indices_u8_scratch + count, 0, (size_t)(bytesNeeded - count));
+        }
+        mDebugPrint("glDrawElements: primType=%d count=%d type=GL_UNSIGNED_SHORT ""maxIndex=%u numVertices=%d (u8 path, %d QW / %d bytes)\n", (int)mode, (int)count, (unsigned)max, (int)numVertices, numIndexQwords, bytesNeeded);
         CGeomManager& gmanager = pGLContext->GetGeomManager();
         gmanager.IndexedArraysGeomStage(mode, (int)count, indices_u8_scratch, numVertices);
     } else {

@@ -105,53 +105,29 @@ void CIndexedRenderer::DrawIndexedArrays(CGeometryBlock& block)
 
     CVifSCDmaPacket& packet = pGLContext->GetVif1Packet();
 
-    const int kLaneWords = 3; // xyz for all lanes used here
-
     int wordsPerVert   = block.GetWordsPerVertex();
-    int wordsPerNormal = block.GetNormalsAreValid()   ? block.GetWordsPerNormal()   : kLaneWords;
-    int wordsPerTex    = block.GetTexCoordsAreValid() ? block.GetWordsPerTexCoord() : kLaneWords;
-    int wordsPerColor  = block.GetColorsAreValid()    ? block.GetWordsPerColor()    : kLaneWords;
+    int wordsPerNormal = (block.GetNormalsAreValid())   ? block.GetWordsPerNormal()   : 0;
+    int wordsPerTex    = (block.GetTexCoordsAreValid()) ? block.GetWordsPerTexCoord() : 0;
+    int wordsPerColor  = (block.GetColorsAreValid())    ? block.GetWordsPerColor()    : 0;
 
     InitXferBlock(packet, wordsPerVert, wordsPerNormal, wordsPerTex, wordsPerColor);
 
-    // Static scratch for dummy lanes (no STL allowed)
-    static float* sDummyN = nullptr;
-    static float* sDummySTQ = nullptr;
-    static float* sDummyPVC = nullptr;
-    static int sDummyCap = 0;
+    for (int curArray = 0; curArray < block.GetNumArrays(); curArray++) {
 
-    for (int curArray = 0; curArray < block.GetNumArrays(); ++curArray) {
+        const void *normals, *vertices, *texCoords, *colors;
+        vertices  = block.GetVerticesAreValid()   ? block.GetVertices(curArray)   : NULL;
+        normals   = block.GetNormalsAreValid()    ? block.GetNormals(curArray)    : NULL;
+        texCoords = block.GetTexCoordsAreValid()  ? block.GetTexCoords(curArray)  : NULL;
+        colors    = block.GetColorsAreValid()     ? block.GetColors(curArray)     : NULL;
 
-        int numVertices = block.GetArrayLength(curArray);
-        int needFloats = numVertices * kLaneWords;
-
-        if (sDummyCap < needFloats) {
-            delete[] sDummyN;   sDummyN   = new float[needFloats];
-            delete[] sDummySTQ; sDummySTQ = new float[needFloats];
-            delete[] sDummyPVC; sDummyPVC = new float[needFloats];
-            sDummyCap = needFloats;
-        }
-
-        // Fill dummies: N=(0,0,0), STQ=(0,0,1), PVC=(1,1,1)
-        for (int i = 0; i < numVertices; ++i) {
-            sDummyN[i*3+0] = 0.0f; sDummyN[i*3+1] = 0.0f; sDummyN[i*3+2] = 0.0f;
-            sDummySTQ[i*3+0] = 0.0f; sDummySTQ[i*3+1] = 0.0f; sDummySTQ[i*3+2] = 1.0f;
-            sDummyPVC[i*3+0] = 1.0f; sDummyPVC[i*3+1] = 1.0f; sDummyPVC[i*3+2] = 1.0f;
-        }
-
-        const void* vertices = block.GetVerticesAreValid()   ? block.GetVertices(curArray)   : nullptr;
-        const void* normals  = block.GetNormalsAreValid()    ? block.GetNormals(curArray)    : sDummyN;
-        const void* texCoords= block.GetTexCoordsAreValid()  ? block.GetTexCoords(curArray)  : sDummySTQ;
-        const void* colors   = block.GetColorsAreValid()     ? block.GetColors(curArray)     : sDummyPVC;
-
-        // Set lane stride: 4 qwords per vertex (V,N,STQ,PVC)
         packet.Cnt();
+        // Use the renderer’s configured per-vertex lane count (3 for const-color kernels, 4 for PVC).
         packet.Stcycl(1, InputQuadsPerVert).Nop();
         packet.CloseTag();
 
         int numIndices      = block.GetNumIndices(curArray);
         const void* indices = block.GetIndices(curArray);
-        // int numVertices     = block.GetArrayLength(curArray);
+        int numVertices     = block.GetArrayLength(curArray);
 
         XferBlock(packet,
             vertices, normals, texCoords, colors,
@@ -165,9 +141,9 @@ void CIndexedRenderer::DrawIndexedArrays(CGeometryBlock& block)
             packet.Stmod(Vifs::AddModes::kOffset);
             // don't write over the xyz's
             Vifs::tMask mask = { 3, 3, 3, 0,
-                3, 3, 3, 0,
-                3, 3, 3, 0,
-                3, 3, 3, 0 };
+                                 3, 3, 3, 0,
+                                 3, 3, 3, 0,
+                                 3, 3, 3, 0 };
             packet.Stmask(mask);
             static const float row[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
             packet.Strow(row);
@@ -175,16 +151,15 @@ void CIndexedRenderer::DrawIndexedArrays(CGeometryBlock& block)
         }
         packet.CloseTag();
 
-        // int numIndexQwords = numIndices / 16 + (numIndices % 16 > 0);
-        int numIndexQwords = (numIndices + 7) / 8;
+        // NOTE: original layout packs 16 u8 indices per qword; keep that accounting.
+        int numIndexQwords = numIndices / 16 + (numIndices % 16 > 0);
         packet.Ref(Core::MakePtrNormal((const unsigned int*)indices), numIndexQwords);
         {
             packet.Stcycl(1, 1);
             packet.OpenUnpack(Vifs::UnpackModes::s_16, kInputGeomStart,
-                Packet::kDoubleBuff, Packet::kMasked);
-            // packet.CloseUnpack( numIndices/2 );
-            // packet.CloseUnpack(numIndexQwords * 8);
-            packet.CloseUnpack(numIndices);
+                              Packet::kDoubleBuff, Packet::kMasked);
+            // close with the number of s16 elements (8 per qword)
+            packet.CloseUnpack(numIndexQwords * 8);
         }
 
         // transfer a buffer header & start renderer
@@ -197,24 +172,25 @@ void CIndexedRenderer::DrawIndexedArrays(CGeometryBlock& block)
             packet.OpenUnpack(Vifs::UnpackModes::v4_32, 0, Packet::kDoubleBuff);
             {
                 packet += numVertices;
-                packet += (numIndices + 1) / 2;  // number of 32-bit words carrying two s16 indices
+                packet += numIndices / 2 + (numIndices & 1);
                 packet += numIndices;
                 packet += 0;
             }
             packet.CloseUnpack();
 
-            // constant color of each vertex
-
-            packet.Strow(&ConstantVertColor);
-            packet.Stcycl(numVertices, 0);
-            Vifs::tMask mask = { 1, 1, 1, 3,
-                1, 1, 1, 3,
-                1, 1, 1, 3,
-                1, 1, 1, 3 };
-            packet.Stmask(mask);
-            packet.OpenUnpack(Vifs::UnpackModes::v4_32, kTempAreaStart,
-                Packet::kDoubleBuff, Packet::kMasked);
-            packet.CloseUnpack(numVertices);
+            // constant color of each vertex (only when no per-vertex color lane is present)
+            if (!XferColors) {
+                packet.Strow(&ConstantVertColor);
+                packet.Stcycl(numVertices, 0);
+                Vifs::tMask mask = { 1, 1, 1, 3,
+                                     1, 1, 1, 3,
+                                     1, 1, 1, 3,
+                                     1, 1, 1, 3 };
+                packet.Stmask(mask);
+                packet.OpenUnpack(Vifs::UnpackModes::v4_32, kTempAreaStart,
+                                  Packet::kDoubleBuff, Packet::kMasked);
+                packet.CloseUnpack(numVertices);
+            }
 
             // start renderer
 
