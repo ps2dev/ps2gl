@@ -30,6 +30,7 @@ CVertArray::CVertArray()
     VerticesAreValid = NormalsAreValid = TexCoordsAreValid = ColorsAreValid = false;
     WordsPerVertex = WordsPerTexCoord = WordsPerColor = 0;
     WordsPerNormal                                    = 3; // not set by NormalPointer
+    ColorSrcType = kColor_Float;
 }
 
 /********************************************
@@ -155,23 +156,39 @@ void glTexCoordPointer(GLint size, GLenum type,
  * @param stride must be <b>zero</b>.  Non-zero strides are unsupported and likely
  * to remain so.
  */
-void glColorPointer(GLint size, GLenum type,
-    GLsizei stride, const GLvoid* ptr)
+void glColorPointer(GLint size, GLenum type, GLsizei stride, const GLvoid* ptr)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+    mDebugPrint("glColorPointer: size=%d type=0x%X stride=%d ptr=%p\n", (int)size, (unsigned)type, (int)stride, ptr);
 
     if (stride != 0) {
         mNotImplemented("stride must be 0");
         return;
     }
     if (type != GL_FLOAT) {
+        if (type == GL_UNSIGNED_BYTE) {
+            if (ptr) {
+                const unsigned char* colorSample = (const unsigned char*)ptr;
+                mDebugPrint("glColorPointer: SAMPLE u8=(%u,%u,%u,%u)\n", colorSample[0], colorSample[1], colorSample[2], colorSample[3]);
+            }
+            CVertArray& vertArray = pGLContext->GetGeomManager().GetVertArray();
+            vertArray.SetColors((void*)ptr);
+            vertArray.SetWordsPerColor(4);
+            vertArray.SetColorSrc(kColor_UByte);
+            return;
+        }
         mNotImplemented("type must be float");
         return;
     }
 
+    if (ptr) {
+        const float* colorSample = (const float*)ptr;
+        mDebugPrint("glColorPointer: SAMPLE f32=(%.3f,%.3f,%.3f,%.3f)\n", colorSample[0], colorSample[1], colorSample[2], colorSample[3]);
+    }
     CVertArray& vertArray = pGLContext->GetGeomManager().GetVertArray();
     vertArray.SetColors((void*)ptr);
     vertArray.SetWordsPerColor(size);
+    mDebugPrint("glColorPointer: BOUND F32 colors (wpc=%d)\n", (int)size);
 }
 
 /**
@@ -190,17 +207,49 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count)
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
     CGeomManager& gmanager = pGLContext->GetGeomManager();
-    gmanager.DrawArrays(mode, first, count);
+    gmanager.LinearArraysGeomStage(mode, first, count);
 }
 
 /**
- * This is not implemented yet
+ * This is now being implemented/experimental
  */
 void glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
-    mError("glDrawElements is a placeholder ATM and should not be called");
+    if (type != GL_UNSIGNED_SHORT) {
+        mNotImplemented("glDrawElements only supports GL_UNSIGNED_SHORT for now");
+        return;
+    }
+
+    const GLushort* indices_u16 = (const GLushort*)indices;
+    GLushort max = 0;
+
+    for (GLsizei i = 0; i < count; ++i) {
+        if (indices_u16[i] > max) max = indices_u16[i];
+    }
+
+    const int numVertices = (int)max + 1;
+
+    if (max <= 255) {
+        static uint8_t* indices_u8_scratch = NULL;
+        static int scratchCapacity = 0;
+        if (scratchCapacity < count) {
+            delete[] indices_u8_scratch;
+            indices_u8_scratch = new uint8_t[count];
+            scratchCapacity = (int)count;
+        }
+        for (GLsizei i = 0; i < count; ++i) {
+            indices_u8_scratch[i] = (uint8_t)indices_u16[i];
+        }
+        mDebugPrint("glDrawElements: primType=%d count=%d type=GL_UNSIGNED_SHORT maxIndex=%u numVertices=%d (u8 path)\n", (int)mode, (int)count, (unsigned)max, (int)numVertices);
+        CGeomManager& gmanager = pGLContext->GetGeomManager();
+        gmanager.IndexedArraysGeomStage(mode, (int)count, indices_u8_scratch, numVertices);
+    } else {
+        mDebugPrint("glDrawElements: primType=%d count=%d type=GL_UNSIGNED_SHORT maxIndex=%u numVertices=%d (u16 path)\n", (int)mode, (int)count, (unsigned)max, (int)numVertices);
+        CGeomManager& gmanager = pGLContext->GetGeomManager();
+        gmanager.IndexedArraysGeomStage(mode, (int)count, (const unsigned char*)indices, numVertices);
+    }
 }
 
 /**
@@ -464,7 +513,7 @@ void pglDrawIndexedArrays(GLenum primType,
     int numIndices, const unsigned char* indices,
     int numVertices)
 {
-    pGLContext->GetGeomManager().DrawIndexedArrays(primType, numIndices, indices, numVertices);
+    pGLContext->GetGeomManager().IndexedArraysGeomStage(primType, numIndices, indices, numVertices);
 }
 
 /**

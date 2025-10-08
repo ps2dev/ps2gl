@@ -19,48 +19,7 @@
 /********************************************
  * constants
  */
-typedef enum {
-    QW_NONE  = 0x0,  // ----
-    QW_X     = 0x1,  // X---
-    QW_XY    = 0x3,  // XY--
-    QW_XYZ   = 0x7,  // XYZ-
-    QW_XYZW  = 0xF   // XYZW
-} QuadWords;
-
-typedef struct {
-    QuadWords vertices;   // legal: QW_XYZ or QW_XYZW
-    QuadWords normals;    // legal: QW_NONE or QW_XYZ
-    QuadWords texcoords;  // legal: QW_NONE or QW_XY
-    QuadWords colors;     // legal: QW_NONE or QW_XYZW
-} LaneConfig;
-
-static inline int verticesOk(QuadWords  qw) { return (qw == QW_XYZ)  || (qw == QW_XYZW); }
-static inline int normalsOk(QuadWords   qw) { return (qw == QW_NONE) || (qw == QW_XYZ);  }
-static inline int texcoordsOk(QuadWords qw) { return (qw == QW_NONE) || (qw == QW_XY);   }
-static inline int colorsOk(QuadWords    qw) { return (qw == QW_NONE) || (qw == QW_XYZW); }
-
-static inline int ValidateLaneConfig(const LaneConfig* lanes, const char* where) {
-    if (!verticesOk(lanes->vertices) || !normalsOk(lanes->normals) || !texcoordsOk(lanes->texcoords) || !colorsOk(lanes->colors)) {
-        mError("%s: illegal lane masks (V=%x N=%x T=%x C=%x)", where, lanes->vertices, lanes->normals, lanes->texcoords, lanes->colors);
-        return 0;
-    }
-    return 1;
-}
-
-// Helper: map QW -> float components per vertex
-static inline int QWToWords(QuadWords qw) {
-    switch (qw) {
-    case QW_NONE: return 0;
-    case QW_X:    return 1;   // rarely used; we don’t select it for V/N/T/C
-    case QW_XY:   return 2;
-    case QW_XYZ:  return 3;
-    case QW_XYZW: return 4;
-    default:      return 0;
-    }
-}
-
-static inline int LanePresent(QuadWords qw) { return (qw != QW_NONE); }
-
+enum ColorSrc : uint8_t { kColor_Float = 0, kColor_UByte = 1 };
 /********************************************
  * CVertArray
  */
@@ -69,6 +28,7 @@ class CVertArray {
     void *Vertices, *Normals, *TexCoords, *Colors;
     bool VerticesAreValid, NormalsAreValid, TexCoordsAreValid, ColorsAreValid;
     char WordsPerVertex, WordsPerNormal, WordsPerTexCoord, WordsPerColor;
+    ColorSrc ColorSrcType;
 
 public:
     CVertArray();
@@ -92,6 +52,8 @@ public:
     inline void SetNormals(void* newPtr) { Normals = newPtr; }
     inline void SetTexCoords(void* newPtr) { TexCoords = newPtr; }
     inline void SetColors(void* newPtr) { Colors = newPtr; }
+    inline ColorSrc GetColorSrcType() const { return ColorSrcType; }
+    inline void SetColorSrc(ColorSrc src) { ColorSrcType = src; }
 
     inline int GetWordsPerVertex() const { return WordsPerVertex; }
     inline int GetWordsPerNormal() const { return WordsPerNormal; }
@@ -239,8 +201,8 @@ public:
     virtual void TexCoord(float u, float v) = 0;
     virtual void Color(cpu_vec_xyzw color) = 0;
     virtual void EndGeom()                 = 0;
-    virtual void DrawArrays(GLenum mode, int first, int count) = 0;
-    virtual void DrawIndexedArrays(GLenum primType,
+    virtual void LinearArraysGeomStage(GLenum mode, int first, int count) = 0;
+    virtual void IndexedArraysGeomStage(GLenum primType,
         int numIndices, const unsigned char* indices,
         int numVertices)
         = 0;
@@ -248,3 +210,5 @@ public:
 };
 
 #endif // ps2gl_gmanager_h
+
+// #include "ps2gl/fixed_function.h"

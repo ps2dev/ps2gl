@@ -164,6 +164,31 @@ done_lighting_lid:
      iaddiu         input_start, buffer_top, kInputGeomStart
      iaddiu         color_start, buffer_top, kTempAreaStart
 
+     ; If lighting is OFF (no dir lights AND no point lights), seed the
+     ; per-vertex color accumulation buffer at kTempAreaStart with a constant
+     ;      color = emission + (globalAmbient ⊙ materialAmbient).
+     ; This makes the later "lq.xyz vert_color, (next_color)" path valid even
+     ; when the lighting loops above were skipped entirely.
+
+     ibne           num_dir_lights, vi00, colors_ready_lid
+     ibne           num_pt_lights,  vi00, colors_ready_lid
+
+     ; Load vertex count and set write ptr to the temp color buffer
+     ilw.x          num_vertices, kNumVertices(buffer_top)
+     iaddiu         next_color_acc, buffer_top, kTempAreaStart
+
+     ; Build the constant base color once
+     get_cnst_color vert_color
+
+     ; for (seed_i = 0; seed_i < num_vertices; ++seed_i)
+     iaddiu         seed_i, vi00, 0
+seed_const_colors_lid:
+     sqi.xyz        vert_color, (next_color_acc++)
+     iaddiu         seed_i, seed_i, 1
+     ibne           seed_i, num_vertices, seed_const_colors_lid
+
+colors_ready_lid:
+
      ; set up index-decompression
 
      iaddiu         next_index, buffer_top, kInputGeomStart

@@ -198,11 +198,32 @@ void CImmGeomManager::EndGeom()
 }
 
 /********************************************
- * DrawArrays
+ * LinearArraysGeomStage
  */
 
-void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
+void CImmGeomManager::LinearArraysGeomStage(GLenum mode, int first, int count)
 {
+    //DrawingLinearArray();
+    mDebugPrint("LinearArraysGeomStage: ENTER mode=%d first=%d count=%d\n", (int)mode, first, count);
+    void* beforeColors = VertArray->GetColors();
+    mDebugPrint("LinearArraysGeomStage: BEFORE colors=%p valid=%d wpc=%d src=%d\n",
+                beforeColors,
+                (int)VertArray->GetColorsAreValid(),
+                VertArray->GetWordsPerColor(),
+                VertArray->GetColorSrcType());
+    if (beforeColors && VertArray->GetColorsAreValid() && VertArray->GetWordsPerColor() >= 4) {
+        if (VertArray->GetColorSrcType() == kColor_UByte) {
+            const unsigned char* sampleColor = (const unsigned char*)beforeColors + 4 * first;
+            mDebugPrint("LinearArraysGeomStage: BEFORE sample[%d] u8=(%u,%u,%u,%u)\n",
+                    first, sampleColor[0], sampleColor[1], sampleColor[2], sampleColor[3]);
+        } else {
+            //TODO: fix the casting insanity to make it more clear?
+            const float* sampleColor = (const float*)beforeColors + 4 * first;
+            mDebugPrint("LinearArraysGeomStage: BEFORE sample[%d] f32=(%.3f,%.3f,%.3f,%.3f)\n",
+                    first, sampleColor[0], sampleColor[1], sampleColor[2], sampleColor[3]);
+        }
+    }
+
     if (Prim != mode)
         PrimChanged(mode);
 
@@ -212,7 +233,32 @@ void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
     Geometry.SetVertices(VertArray->GetVertices());
     Geometry.SetNormals(VertArray->GetNormals());
     Geometry.SetTexCoords(VertArray->GetTexCoords());
-    Geometry.SetColors(VertArray->GetColors());
+
+    void* colorsPtr = VertArray->GetColors();
+    const bool colorArrayEnabled = VertArray->GetColorsAreValid() && VertArray->GetWordsPerColor() == 4;
+
+    if (colorArrayEnabled && VertArray->GetColorSrcType() == kColor_UByte) {
+        float* bufStart = (float*)CurColorBuf->GetNextPtr();
+        const unsigned char* srcColorBuf_U8 = (const unsigned char*)colorsPtr;
+        const int totalCount = first + count;
+        for (int i = 0; i < totalCount; ++i) {
+            const unsigned char* colorChannels = srcColorBuf_U8 + 4*i;
+            *CurColorBuf += colorChannels[0] / 255.0f;
+            *CurColorBuf += colorChannels[1] / 255.0f;
+            *CurColorBuf += colorChannels[2] / 255.0f;
+            *CurColorBuf += colorChannels[3] / 255.0f;
+        }
+        const float* sampleColor = bufStart + 4*first;
+        mDebugPrint("LinearArraysGeomStage: AFTER-CONVERT colors=%p sample[%d] f32=(%.3f,%.3f,%.3f,%.3f)\n",
+                    (void*)bufStart, first, sampleColor[0], sampleColor[1], sampleColor[2], sampleColor[3]);
+        colorsPtr = bufStart;
+    } else {
+        mDebugPrint("LinearArraysGeomStage: no UBYTE->FLOAT conversion (enabled=%d src=%d wpc=%d)\n",
+                    (int)colorArrayEnabled, VertArray->GetColorSrcType(), VertArray->GetWordsPerColor());
+    }
+
+    Geometry.SetColors(colorsPtr);
+    mDebugPrint("LinearArraysGeomStage: Geometry.SetColors(%p)\n", colorsPtr);
 
     Geometry.SetVerticesAreValid(VertArray->GetVerticesAreValid());
     Geometry.SetNormalsAreValid(VertArray->GetNormalsAreValid());
@@ -234,7 +280,7 @@ void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
            GLContext.GetMaterialManager().GetColorMaterialEnabled() &&
            arrayHasColors)) ? QW_XYZW : QW_NONE;
 
-    ValidateLaneConfig(&lanes, "DrawArrays");
+    ValidateLaneConfig(&lanes, "LinearArraysGeomStage");
 
     Geometry.SetWordsPerVertex(QWToWords(lanes.vertices));
     Geometry.SetWordsPerNormal(QWToWords(lanes.normals));
@@ -251,8 +297,95 @@ void CImmGeomManager::DrawArrays(GLenum mode, int first, int count)
     if (LanePresent(lanes.colors)) Geometry.AddColors(count);
     Geometry.AdjustNewGeomPtrs(first);
 
+    mDebugPrint("LinearArraysGeomStage: EXIT\n");
     CommitNewGeom();
 }
+
+void CImmGeomManager::IndexedArraysGeomStage(GLenum primType,
+    int numIndices, const unsigned char* indices,
+    int numVertices)
+{
+    mDebugPrint("IndexedArraysGeomStage: ENTER primType=%d numIdx=%d numVtx=%d\n", (int)primType, (int)numIndices, (int)numVertices);
+
+    if (Prim != primType) PrimChanged(primType);
+
+    Geometry.SetPrimType(primType);
+    Geometry.SetArrayType(kIndexed);
+
+    Geometry.SetVertices(VertArray->GetVertices());
+    Geometry.SetNormals(VertArray->GetNormals());
+    Geometry.SetTexCoords(VertArray->GetTexCoords());
+
+    void* colorsPtr = VertArray->GetColors();
+    const bool colorArrayEnabled = VertArray->GetColorsAreValid() && VertArray->GetWordsPerColor() == 4;
+    if (colorArrayEnabled && VertArray->GetColorSrcType() == kColor_UByte) {
+        float* bufStart = (float*)CurColorBuf->GetNextPtr();
+        const unsigned char* srcColorBuf_U8 = (const unsigned char*)colorsPtr;
+        for (int i = 0; i < numVertices; ++i) {
+            const unsigned char* colorChannels = srcColorBuf_U8 + 4*i;
+            *CurColorBuf += (float)colorChannels[0] / 255.0f;
+            *CurColorBuf += (float)colorChannels[1] / 255.0f;
+            *CurColorBuf += (float)colorChannels[2] / 255.0f;
+            *CurColorBuf += (float)colorChannels[3] / 255.0f;
+        }
+        if (numVertices > 0) {
+            const float* sampleColor = bufStart;
+            mDebugPrint("IndexedArraysGeomStage: AFTER-CONVERT colors=%p sample[0] f32=(%.3f,%.3f,%.3f,%.3f)\n", (void*)bufStart, sampleColor[0], sampleColor[1], sampleColor[2], sampleColor[3]);
+        }
+        colorsPtr = bufStart;
+    } else {
+        mDebugPrint("IndexedArraysGeomStage: no UBYTE->FLOAT conversion (enabled=%d src=%d wpc=%d)\n",(int)colorArrayEnabled, VertArray->GetColorSrcType(), VertArray->GetWordsPerColor());
+    }
+    Geometry.SetColors(colorsPtr);
+
+    Geometry.SetVerticesAreValid(VertArray->GetVerticesAreValid());
+    Geometry.SetNormalsAreValid(VertArray->GetNormalsAreValid());
+    Geometry.SetTexCoordsAreValid(VertArray->GetTexCoordsAreValid());
+
+    const bool arrayHasColors = VertArray->GetColorsAreValid() && (VertArray->GetWordsPerColor() > 0);
+
+    LaneConfig lanes;
+    lanes.vertices  = (VertArray->GetWordsPerVertex()   == 4) ? QW_XYZW :
+                      (VertArray->GetWordsPerVertex()   == 3) ? QW_XYZ  : QW_NONE;
+    lanes.normals   = (VertArray->GetNormalsAreValid()   &&
+                       VertArray->GetWordsPerNormal()    == 3 &&
+                       GLContext.GetImmLighting().GetLightingEnabled()) ? QW_XYZ : QW_NONE;
+    lanes.texcoords = (VertArray->GetTexCoordsAreValid() &&
+                       VertArray->GetWordsPerTexCoord()  == 2) ? QW_XY : QW_NONE;
+    lanes.colors    =
+        ((!GLContext.GetImmLighting().GetLightingEnabled() && arrayHasColors) ||
+         ( GLContext.GetImmLighting().GetLightingEnabled() &&
+           GLContext.GetMaterialManager().GetColorMaterialEnabled() &&
+           arrayHasColors)) ? QW_XYZW : QW_NONE;
+
+    ValidateLaneConfig(&lanes, "IndexedArraysGeomStage");
+
+    Geometry.SetWordsPerVertex(QWToWords(lanes.vertices));
+    Geometry.SetWordsPerNormal(QWToWords(lanes.normals));
+    Geometry.SetWordsPerTexCoord(QWToWords(lanes.texcoords));
+    Geometry.SetWordsPerColor(QWToWords(lanes.colors));
+
+    Geometry.SetColorsAreValid(LanePresent(lanes.colors));
+    SyncColorMaterial(LanePresent(lanes.colors));
+    RendererManager.PerVtxMaterialChanged(LanePresent(lanes.colors) ? RendererProps::kDiffuse
+                                                                    : RendererProps::kNoMaterial);
+
+    Geometry.AddVertices(numVertices);
+    Geometry.AddNormals(numVertices);
+    Geometry.AddTexCoords(numVertices);
+    if (LanePresent(lanes.colors)) Geometry.AddColors(numVertices);
+
+    Geometry.SetNumIndices(numIndices);
+    Geometry.SetIndices(indices);
+    Geometry.SetIStripLengths(NULL);
+
+    mDebugPrint("IndexedArraysGeomStage: EXIT\n");
+    CommitNewGeom();
+}
+
+/********************************************
+ * common and synchronization code
+ */
 
 void CImmGeomManager::DrawingIndexedArray()
 {
@@ -263,71 +396,6 @@ void CImmGeomManager::DrawingIndexedArray()
     }
     LastArrayAccessWasIndexed = true;
 }
-
-void CImmGeomManager::DrawIndexedArrays(GLenum primType,
-    int numIndices, const unsigned char* indices,
-    int numVertices)
-{
-    /*
-   // make sure there's no pending geometry
-   Flush();
-
-   // do these before sync'ing the vu1 renderer
-   SyncColorMaterial(VertArray->GetColors() != NULL);
-   DrawingIndexedArray();
-
-   // now update the renderer and render
-
-   bool rendererChanged = RendererManager.UpdateRenderer();
-
-   if ( rendererChanged ) {
-      RendererManager.LoadRenderer(GLContext.GetVif1Packet());
-   }
-   SyncRendererContext(primType);
-   SyncGsContext();
-
-   RendererManager.GetCurRenderer().DrawIndexedArrays( primType, numIndices, indices,
-						  numVertices, *VertArray );
-   */
-    if (Prim != primType)
-        PrimChanged(primType);
-
-    Geometry.SetPrimType(primType);
-    Geometry.SetArrayType(kIndexed);
-
-    Geometry.SetVertices(VertArray->GetVertices());
-    Geometry.SetNormals(VertArray->GetNormals());
-    Geometry.SetTexCoords(VertArray->GetTexCoords());
-    Geometry.SetColors(VertArray->GetColors());
-
-    Geometry.SetVerticesAreValid(VertArray->GetVerticesAreValid());
-    Geometry.SetNormalsAreValid(VertArray->GetNormalsAreValid());
-    Geometry.SetTexCoordsAreValid(VertArray->GetTexCoordsAreValid());
-    Geometry.SetColorsAreValid(VertArray->GetColorsAreValid());
-
-    Geometry.SetWordsPerVertex(VertArray->GetWordsPerVertex());
-    Geometry.SetWordsPerNormal(VertArray->GetWordsPerNormal());
-    Geometry.SetWordsPerTexCoord(VertArray->GetWordsPerTexCoord());
-    Geometry.SetWordsPerColor(VertArray->GetWordsPerColor());
-
-    Geometry.AddVertices(numVertices);
-    Geometry.AddNormals(numVertices);
-    Geometry.AddTexCoords(numVertices);
-    Geometry.AddColors(numVertices);
-
-    Geometry.SetNumIndices(numIndices);
-    Geometry.SetIndices(indices);
-    Geometry.SetIStripLengths(NULL);
-
-    // do this before sync'ing the vu1 renderer in CommitNewGeom
-    SyncColorMaterial(VertArray->GetColors() != NULL);
-
-    CommitNewGeom();
-}
-
-/********************************************
- * common and synchronization code
- */
 
 void CImmGeomManager::DrawingLinearArray()
 {

@@ -281,7 +281,11 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
             packet += numPts;
             packet += numSpots;
         } else {
+            /*
             packet += (uint64_t)0;
+            */
+            packet += 0;
+            packet += 0;
             packet += 0;
         }
 
@@ -423,6 +427,8 @@ CBaseRenderer::BuildGiftag(GLenum primType)
     bool useTexture              = glContext.GetTexManager().GetTexEnabled();
     bool alpha                   = drawContext.GetBlendEnabled();
     unsigned int nreg            = OutputQuadsPerVert;
+    // bool flip = drawContext.CurFrameMem != drawContext.Frame0Mem;
+    // GS::tPrim prim = { .prim_type = primType, .iip = smoothShading, .tme = useTexture, .fge = 0, .abe = alpha, .aa1 = 0, .fst = 0, .ctxt = flip, .fix = 0 };
 
     GS::tPrim prim = { .prim_type = primType, .iip = smoothShading, .tme = useTexture, .fge = 0, .abe = alpha, .aa1 = 0, .fst = 0, .ctxt = 0, .fix = 0 };
     tGifTag giftag = { .NLOOP = 0, .EOP = 1, .pad0 = 0, .id = 0, .PRE = 1, .PRIM = *(uint64_t*)&prim, .FLG = 0, .NREG = nreg, .REGS0 = 2, .REGS1 = 1, .REGS2 = 4 };

@@ -54,8 +54,8 @@ public:
     void TexCoord(float u, float v);
     void Color(cpu_vec_xyzw color);
     void EndGeom();
-    void DrawArrays(GLenum mode, int first, int count);
-    void DrawIndexedArrays(GLenum primType,
+    void LinearArraysGeomStage(GLenum mode, int first, int count);
+    void IndexedArraysGeomStage(GLenum primType,
         int numIndices, const unsigned char* indices,
         int numVertices);
     void Flush();

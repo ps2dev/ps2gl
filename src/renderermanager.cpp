@@ -88,6 +88,56 @@ CRendererManager::CRendererManager(CGLContext& context)
             kInputStart, kInputBufSize - kInputStart,
             "fast, no lights"));
     }
+    {
+        CRendererProps capabilities = {
+            .PrimType = kTriangles,
+            .Lighting = 0,
+            .NumDirLights = k3DirLights,
+            .NumPtLights = 0,
+            .Texture = 1, //TODO: huh???
+            .Specular = 0,
+            .PerVtxMaterial = kNoMaterial,
+            .Clipping = kNonClipped | kClipped,
+            .CullFace = 0,
+            .TwoSidedLighting = 0,
+            .ArrayAccess = kIndexed
+        };
+        RegisterDefaultRenderer(
+            new CIndexedRenderer(
+                mVsmAddr(Indexed),
+                mVsmSize(Indexed),
+                capabilities,
+                no_reqs,
+                3,
+                3,
+            "indexed, constant color, tri")
+        );
+    }
+    {
+        CRendererProps capabilities = {
+            .PrimType         = kTriangles,
+            .Lighting         = 0,
+            .NumDirLights     = k3DirLights,
+            .NumPtLights      = 0,
+            .Texture          = 1,
+            .Specular         = 0,
+            .PerVtxMaterial   = kDiffuse,       // <-- PVC path stilll
+            .Clipping         = kNonClipped | kClipped,
+            .CullFace         = 0,
+            .TwoSidedLighting = 0,
+            .ArrayAccess      = kIndexed
+        };
+        RegisterDefaultRenderer(
+            new CIndexedRenderer(
+                mVsmAddr(IndexedPVC),
+                mVsmSize(IndexedPVC),
+                capabilities,
+                no_reqs,
+                4,
+                3, // output quads per vert
+                "indexed, pvc, tri")
+        );
+    }
     // unlit renderer per vertex color
     {
         CRendererProps capabilities = {
@@ -113,7 +163,7 @@ CRendererManager::CRendererManager(CGLContext& context)
                 3,
                 kInputStart,
                 kInputBufSize - kInputStart,
-                "fast no lights, pvc, tri")
+                "linear fast no lights, pvc, tri")
         );
     }
     // fast renderer

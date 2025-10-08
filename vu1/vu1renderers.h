@@ -33,6 +33,7 @@ VU_FUNCTIONS(FastNoLights);
 VU_FUNCTIONS(FastNoLightsPVCTri);
 
 VU_FUNCTIONS(Indexed);
+VU_FUNCTIONS(IndexedPVC);
 }
 
 #endif // ps2gl_vu1code_h

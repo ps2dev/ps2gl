@@ -50,6 +50,7 @@ RENDERERS = \
 	general_tri \
 	general \
 	indexed \
+	indexed_no_lights_pvc \
 	scei \
 	fast_no_lights_pvc_tri
 
@@ -77,6 +78,11 @@ realclean: clean
 include $(PS2SDK)/Defs.make
 include $(PS2SDK)/samples/Makefile.eeglobal
 
+.PHONY: one
+one:
+	@test -n "$(VCL)" || (echo "Usage: make $@ VCL=path/to/foo.vcl"; exit 1)
+	$(MAKE) $(VCL:.vcl=_vcl.vsm) $(VCL:.vcl=.vo)
+
 ## dvp-as origin in ps2dev toolchain: https://github.com/ps2dev/ps2toolchain/blob/master/scripts/001-dvp.sh
 ## Build .vo (VU object) from a compiled .vsm
 %.vo: %_vcl.vsm
@@ -90,7 +96,7 @@ include $(PS2SDK)/samples/Makefile.eeglobal
 
 # GCC / CPP flags (-E, -P, -imacros): https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation
 # -E = preprocess only, -P = strip #line, -imacros includes macros without writing #include
-%indexed_pp4.vcl: %indexed_pp3.vcl
+vu1/indexed%_pp4.vcl: vu1/indexed%_pp3.vcl
 	cat $< | cc -E -P -imacros vu1/vu1_mem_indexed.h -o $@ -
 
 # GCC / CPP flags (-E, -P, -imacros): https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation
