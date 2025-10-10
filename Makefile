@@ -97,18 +97,12 @@ one:
 
 # GCC / CPP flags (-E, -P, -imacros): https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation
 # -E = preprocess only, -P = strip #line, -imacros includes macros without writing #include
-vu1/indexed%_pp4.vcl: vu1/indexed%_pp3.vcl
-	cat $< | cc -E -P -imacros vu1/vu1_mem_indexed.h -o $@ -
-
-#TODO: this is too allow for the old "single indexed.vcl naming, figure out a way thats better to integrate all namings of indexed.
-# also shouldnt even match this on naming, it should be controlled better when adding new indexed renderers.
-vu1/indexed_pp4.vcl: vu1/indexed_pp3.vcl
-	cat $< | cc -E -P -imacros vu1/vu1_mem_indexed.h -o $@ -
-
-# GCC / CPP flags (-E, -P, -imacros): https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation
-# -E = preprocess only, -P = strip #line, -imacros includes macros without writing #include
-%_pp4.vcl: %_pp3.vcl
-	cat $< | cc -E -P -imacros vu1/vu1_mem_linear.h -o $@ -
+vu1/%_pp4.vcl: vu1/%_pp3.vcl
+	@hdr=vu1/vu1_mem_linear.h; \
+	case "$*" in \
+	  indexed|indexed_*) hdr=vu1/vu1_mem_indexed.h ;; \
+	esac; \
+	cat $< | cc -E -P -imacros $$hdr -o $@ -
 
 #TODO: remove this step? This could be covered simply from writing correct vcl code... unless intending to allow new and old syntax?
 # you can standardize syntax by using ".syntax old" or ".syntax new" or by passing `-n` to VCL for "new" and writing sources
@@ -125,7 +119,7 @@ vu1/indexed_pp4.vcl: vu1/indexed_pp3.vcl
 # this is in order to normalize sources for GASP by removing C preprocessor stuff (#include/#define),
 # and then fix local .include paths so GASP can resolve them relative to the source dir.
 # if the .vcl file ALREADY avoids #include/#define and only use .include/.macro etc
-# you can wire %.vcl -> %_pp2.vcl directly and drop this rule
+# and wire %.vcl -> %_pp2.vcl directly and drop this rule??
 %_pp1.vcl: %.vcl
 	cat $< | sed 's/#include[ 	]\+.\+// ; s/#define[ 	]\+.\+// ; s|\(\.include[ 	]\+\)"\([^/].\+\)"|\1"$(<D)/\2"|' - > $@
 

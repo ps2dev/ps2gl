@@ -77,7 +77,7 @@ xform_loop_lid:      --LoopCS 1,3
         set_adc_fs     gs_vert, vi00
         store_xyzf     gs_vert
 
-        iaddiu         color_qw, next_input, kColorQwOff
+        iaddiu         color_qw, next_input, kColorQwOff ;TODO: this probably as a macro, but just emphatic for now...
         lq             vert_color, 0(color_qw)
         loi            255.0
         muli           vert_color, vert_color, i
