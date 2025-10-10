@@ -8,13 +8,13 @@
     .include       "io.i"
     .include       "general.i"
 
-kInputQPerV    .equ   4
+kInputQPerV    .equ   3
 kOutputQPerV   .equ   3
 
     .init_vf_all
     .init_vi_all
 
-    .name          vsmIndexedPVC
+    .name          vsmIndexedConstColor
 
     --enter
     --endenter
@@ -30,12 +30,13 @@ main_loop_lid:
     xtop           buffer_top
     iaddiu         next_output,  vi00,       kOutputGeomStart
     iaddiu         input_start,  buffer_top, kInputGeomStart
+    iaddiu         color_start,  buffer_top, kTempAreaStart   ; CPU prefilled RGB per vertex
 
     iaddiu         next_index,       buffer_top, kInputGeomStart
     iaddiu         first_index_mask, vi00,       0xff
     loi            253.0
     maxi.w         index_constants,  vf00, i
-    loi            4.0
+    loi            3.0
     maxi.z         index_constants,  vf00, i
     loi            255.0
     maxi.y         index_constants,  vf00, i
@@ -51,6 +52,14 @@ main_loop_lid:
     mfir.w         gif_tag,   next_output
     sq             gif_tag,   kOutputBufStart(vi00)
 
+    loi            255.0 ; TODO: this is a flag or like control logicked during VIF packing actually??
+    load_mat_diff  vert_color, w
+    muli.w         vert_color, vert_color, i
+    minii.w        vert_color, vert_color, i
+    ftoi0.w        vert_color, vert_color
+
+
+
     iaddiu         zero_giftag, vi00, kGifTag
     xgkick         zero_giftag
 
@@ -58,7 +67,7 @@ xform_loop_lid:      --LoopCS 1,3
     ilw.w          first_index, 0(next_index)
     iand           first_index, first_index, first_index_mask
     iadd           first_offset, first_index, first_index
-    iadd           first_offset, first_offset, first_offset
+    iadd           first_offset, first_offset, first_index
 
     lqi.w          indices, (next_index++)
     addy.w         second_ind, indices, index_constants[y]
@@ -77,13 +86,12 @@ xform_loop_lid:      --LoopCS 1,3
         set_adc_fs     gs_vert, vi00
         store_xyzf     gs_vert
 
-        iaddiu         color_qw, next_input, kColorQwOff
-        lq             vert_color, 0(color_qw)
-        loi            255.0
-        muli           vert_color, vert_color, i
-        max            vert_color, vert_color, vf00
-        ftoi0          vert_color, vert_color
+        lq.xyz         vert_color, (next_color)
+        muli.xyz       vert_color, vert_color, i
+        minii.xyz      vert_color, vert_color, i
+        ftoi0.xyz      vert_color, vert_color
         store_rgba     vert_color
+
 
         load_stq       tex_stq
         xform_tex_stq  tex_stq, tex_stq, q
@@ -91,9 +99,11 @@ xform_loop_lid:      --LoopCS 1,3
     .endm
 
     iadd           next_input, first_offset,  input_start
+    iadd           next_color, first_index,   color_start
     do_vert
 
     iadd           next_input, second_offset, input_start
+    iadd           next_color, second_index,  color_start
     iaddiu         next_output, next_output,  kOutputQPerV
     do_vert
 

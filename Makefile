@@ -50,6 +50,7 @@ RENDERERS = \
 	general_tri \
 	general \
 	indexed \
+	indexed_constant_color \
 	indexed_no_lights_pvc \
 	scei \
 	fast_no_lights_pvc_tri
@@ -97,6 +98,11 @@ one:
 # GCC / CPP flags (-E, -P, -imacros): https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation
 # -E = preprocess only, -P = strip #line, -imacros includes macros without writing #include
 vu1/indexed%_pp4.vcl: vu1/indexed%_pp3.vcl
+	cat $< | cc -E -P -imacros vu1/vu1_mem_indexed.h -o $@ -
+
+#TODO: this is too allow for the old "single indexed.vcl naming, figure out a way thats better to integrate all namings of indexed.
+# also shouldnt even match this on naming, it should be controlled better when adding new indexed renderers.
+vu1/indexed_pp4.vcl: vu1/indexed_pp3.vcl
 	cat $< | cc -E -P -imacros vu1/vu1_mem_indexed.h -o $@ -
 
 # GCC / CPP flags (-E, -P, -imacros): https://gcc.gnu.org/onlinedocs/cpp/Invocation.html#Invocation
@@ -154,6 +160,7 @@ examples:
 	done
 
 clean-examples:
+	rm -rf ./GS_DUMP/hard/*
 	rm -rf $(BIN_DIR)
 	find $(EXAMPLES_DIR) -type f -name Makefile ! -path '*/shared_code/*' -print0 \
 	| while IFS= read -r -d '' mf; do \

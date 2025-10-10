@@ -203,27 +203,6 @@ void CImmGeomManager::EndGeom()
 
 void CImmGeomManager::LinearArraysGeomStage(GLenum mode, int first, int count)
 {
-    //DrawingLinearArray();
-    mDebugPrint("LinearArraysGeomStage: ENTER mode=%d first=%d count=%d\n", (int)mode, first, count);
-    void* beforeColors = VertArray->GetColors();
-    mDebugPrint("LinearArraysGeomStage: BEFORE colors=%p valid=%d wpc=%d src=%d\n",
-                beforeColors,
-                (int)VertArray->GetColorsAreValid(),
-                VertArray->GetWordsPerColor(),
-                VertArray->GetColorSrcType());
-    if (beforeColors && VertArray->GetColorsAreValid() && VertArray->GetWordsPerColor() >= 4) {
-        if (VertArray->GetColorSrcType() == kColor_UByte) {
-            const unsigned char* sampleColor = (const unsigned char*)beforeColors + 4 * first;
-            mDebugPrint("LinearArraysGeomStage: BEFORE sample[%d] u8=(%u,%u,%u,%u)\n",
-                    first, sampleColor[0], sampleColor[1], sampleColor[2], sampleColor[3]);
-        } else {
-            //TODO: fix the casting insanity to make it more clear?
-            const float* sampleColor = (const float*)beforeColors + 4 * first;
-            mDebugPrint("LinearArraysGeomStage: BEFORE sample[%d] f32=(%.3f,%.3f,%.3f,%.3f)\n",
-                    first, sampleColor[0], sampleColor[1], sampleColor[2], sampleColor[3]);
-        }
-    }
-
     if (Prim != mode)
         PrimChanged(mode);
 
@@ -248,17 +227,10 @@ void CImmGeomManager::LinearArraysGeomStage(GLenum mode, int first, int count)
             *CurColorBuf += colorChannels[2] / 255.0f;
             *CurColorBuf += colorChannels[3] / 255.0f;
         }
-        const float* sampleColor = bufStart + 4*first;
-        mDebugPrint("LinearArraysGeomStage: AFTER-CONVERT colors=%p sample[%d] f32=(%.3f,%.3f,%.3f,%.3f)\n",
-                    (void*)bufStart, first, sampleColor[0], sampleColor[1], sampleColor[2], sampleColor[3]);
         colorsPtr = bufStart;
-    } else {
-        mDebugPrint("LinearArraysGeomStage: no UBYTE->FLOAT conversion (enabled=%d src=%d wpc=%d)\n",
-                    (int)colorArrayEnabled, VertArray->GetColorSrcType(), VertArray->GetWordsPerColor());
     }
 
     Geometry.SetColors(colorsPtr);
-    mDebugPrint("LinearArraysGeomStage: Geometry.SetColors(%p)\n", colorsPtr);
 
     Geometry.SetVerticesAreValid(VertArray->GetVerticesAreValid());
     Geometry.SetNormalsAreValid(VertArray->GetNormalsAreValid());
@@ -297,7 +269,6 @@ void CImmGeomManager::LinearArraysGeomStage(GLenum mode, int first, int count)
     if (LanePresent(lanes.colors)) Geometry.AddColors(count);
     Geometry.AdjustNewGeomPtrs(first);
 
-    mDebugPrint("LinearArraysGeomStage: EXIT\n");
     CommitNewGeom();
 }
 
@@ -305,8 +276,6 @@ void CImmGeomManager::IndexedArraysGeomStage(GLenum primType,
     int numIndices, const unsigned char* indices,
     int numVertices)
 {
-    mDebugPrint("IndexedArraysGeomStage: ENTER primType=%d numIdx=%d numVtx=%d\n", (int)primType, (int)numIndices, (int)numVertices);
-
     if (Prim != primType) PrimChanged(primType);
 
     Geometry.SetPrimType(primType);
@@ -328,13 +297,7 @@ void CImmGeomManager::IndexedArraysGeomStage(GLenum primType,
             *CurColorBuf += (float)colorChannels[2] / 255.0f;
             *CurColorBuf += (float)colorChannels[3] / 255.0f;
         }
-        if (numVertices > 0) {
-            const float* sampleColor = bufStart;
-            mDebugPrint("IndexedArraysGeomStage: AFTER-CONVERT colors=%p sample[0] f32=(%.3f,%.3f,%.3f,%.3f)\n", (void*)bufStart, sampleColor[0], sampleColor[1], sampleColor[2], sampleColor[3]);
-        }
         colorsPtr = bufStart;
-    } else {
-        mDebugPrint("IndexedArraysGeomStage: no UBYTE->FLOAT conversion (enabled=%d src=%d wpc=%d)\n",(int)colorArrayEnabled, VertArray->GetColorSrcType(), VertArray->GetWordsPerColor());
     }
     Geometry.SetColors(colorsPtr);
 
@@ -379,7 +342,6 @@ void CImmGeomManager::IndexedArraysGeomStage(GLenum primType,
     Geometry.SetIndices(indices);
     Geometry.SetIStripLengths(NULL);
 
-    mDebugPrint("IndexedArraysGeomStage: EXIT\n");
     CommitNewGeom();
 }
 

@@ -33,6 +33,7 @@ VU_FUNCTIONS(FastNoLights);
 VU_FUNCTIONS(FastNoLightsPVCTri);
 
 VU_FUNCTIONS(Indexed);
+VU_FUNCTIONS(IndexedConstColor);
 VU_FUNCTIONS(IndexedPVC);
 }
 

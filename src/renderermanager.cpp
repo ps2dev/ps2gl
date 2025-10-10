@@ -94,7 +94,7 @@ CRendererManager::CRendererManager(CGLContext& context)
             .Lighting = 0,
             .NumDirLights = k3DirLights,
             .NumPtLights = 0,
-            .Texture = 1, //TODO: huh???
+            .Texture = 1,
             .Specular = 0,
             .PerVtxMaterial = kNoMaterial,
             .Clipping = kNonClipped | kClipped,
@@ -104,8 +104,8 @@ CRendererManager::CRendererManager(CGLContext& context)
         };
         RegisterDefaultRenderer(
             new CIndexedRenderer(
-                mVsmAddr(Indexed),
-                mVsmSize(Indexed),
+                mVsmAddr(IndexedConstColor),
+                mVsmSize(IndexedConstColor),
                 capabilities,
                 no_reqs,
                 3,
@@ -121,7 +121,7 @@ CRendererManager::CRendererManager(CGLContext& context)
             .NumPtLights      = 0,
             .Texture          = 1,
             .Specular         = 0,
-            .PerVtxMaterial   = kDiffuse,       // <-- PVC path stilll
+            .PerVtxMaterial   = kDiffuse,  //TODO: this is just to allow for only certain targets to get pvc (its a hack to get behavior, clean up next
             .Clipping         = kNonClipped | kClipped,
             .CullFace         = 0,
             .TwoSidedLighting = 0,
@@ -134,7 +134,7 @@ CRendererManager::CRendererManager(CGLContext& context)
                 capabilities,
                 no_reqs,
                 4,
-                3, // output quads per vert
+                3,
                 "indexed, pvc, tri")
         );
     }

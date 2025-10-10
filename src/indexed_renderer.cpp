@@ -175,20 +175,21 @@ void CIndexedRenderer::DrawIndexedArrays(CGeometryBlock& block)
                 packet += 0;
             }
             packet.CloseUnpack();
+            if (!colors)
+            {
+                // constant color of each vertex
 
-            // constant color of each vertex
-
-            packet.Strow(&ConstantVertColor);
-            packet.Stcycl(numVertices, 0);
-            Vifs::tMask mask = { 1, 1, 1, 3,
-                1, 1, 1, 3,
-                1, 1, 1, 3,
-                1, 1, 1, 3 };
-            packet.Stmask(mask);
-            packet.OpenUnpack(Vifs::UnpackModes::v4_32, kTempAreaStart,
-                Packet::kDoubleBuff, Packet::kMasked);
-            packet.CloseUnpack(numVertices);
-
+                packet.Strow(&ConstantVertColor);
+                packet.Stcycl(numVertices, 0);
+                Vifs::tMask mask = { 1, 1, 1, 3,
+                    1, 1, 1, 3,
+                    1, 1, 1, 3,
+                    1, 1, 1, 3 };
+                packet.Stmask(mask);
+                packet.OpenUnpack(Vifs::UnpackModes::v4_32, kTempAreaStart,
+                    Packet::kDoubleBuff, Packet::kMasked);
+                packet.CloseUnpack(numVertices);
+            }
             // start renderer
 
             packet.Mscnt();
