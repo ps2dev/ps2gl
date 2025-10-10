@@ -69,6 +69,7 @@ install: all
 	cp -f  $(EE_LIB) $(PS2SDK)/ports/lib
 
 clean:
+	rm -rf ./GS_DUMP/hard/*
 	rm -f $(EE_OBJS_LIB) $(EE_OBJS) $(EE_BIN) $(EE_LIB)
 
 realclean: clean
