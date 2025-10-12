@@ -396,6 +396,8 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
         GLenum newPrimType = drawContext.GetPolygonMode();
         if (newPrimType == GL_FILL)
             newPrimType = primType;
+        if (newPrimType == GL_LINE)
+            newPrimType = GL_LINES;
         newPrimType &= 0xff;
         tGifTag giftag = BuildGiftag(newPrimType);
         packet += giftag;
@@ -420,8 +422,12 @@ tGifTag
 CBaseRenderer::BuildGiftag(GLenum primType)
 {
     CGLContext& glContext = *pGLContext;
-
-    primType &= 0x7; // convert from GL #define to gs prim number
+    //TODO: JESUS CHRIST
+    if (primType == GL_LINES) {
+        primType = 1;
+    } else {
+        primType &= 0x7; // convert from GL #define to gs prim number
+    }
     CImmDrawContext& drawContext = glContext.GetImmDrawContext();
     bool smoothShading           = drawContext.GetDoSmoothShading();
     bool useTexture              = glContext.GetTexManager().GetTexEnabled();
@@ -429,6 +435,7 @@ CBaseRenderer::BuildGiftag(GLenum primType)
     unsigned int nreg            = OutputQuadsPerVert;
     // bool flip = drawContext.CurFrameMem != drawContext.Frame0Mem;
     // GS::tPrim prim = { .prim_type = primType, .iip = smoothShading, .tme = useTexture, .fge = 0, .abe = alpha, .aa1 = 0, .fst = 0, .ctxt = flip, .fix = 0 };
+    mDebugPrint("primType =%d)\n", (int)primType);
 
     GS::tPrim prim = { .prim_type = primType, .iip = smoothShading, .tme = useTexture, .fge = 0, .abe = alpha, .aa1 = 0, .fst = 0, .ctxt = 0, .fix = 0 };
     tGifTag giftag = { .NLOOP = 0, .EOP = 1, .pad0 = 0, .id = 0, .PRE = 1, .PRIM = *(uint64_t*)&prim, .FLG = 0, .NREG = nreg, .REGS0 = 2, .REGS1 = 1, .REGS2 = 4 };
