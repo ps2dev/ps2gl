@@ -15,12 +15,27 @@ jobs:
     
     - name: Install dependencies
       run: |
-        apk add build-base git
+        apk add build-base git cmake
 
     - name: Install ps2stuff
       run: |
         git clone https://github.com/ps2dev/ps2stuff.git
         cd ps2stuff 
+        make -j $(getconf _NPROCESSORS_ONLN) clean
+        make -j $(getconf _NPROCESSORS_ONLN) all
+        make -j $(getconf _NPROCESSORS_ONLN) install
+
+    - name: Install masp
+      run: |
+        git clone https://github.com/fjtrujy/masp.git
+        cd masp
+        cmake -B build-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$PS2DEV
+        cmake --build build-cmake --config RelWithDebInfo --target install
+
+    - name: Install openvcl
+      run: |
+        git clone https://github.com/fjtrujy/openvcl.git
+        cd openvcl
         make -j $(getconf _NPROCESSORS_ONLN) clean
         make -j $(getconf _NPROCESSORS_ONLN) all
         make -j $(getconf _NPROCESSORS_ONLN) install

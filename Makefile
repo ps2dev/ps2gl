@@ -80,7 +80,7 @@ include $(PS2SDK)/samples/Makefile.eeglobal
 	dvp-as -o $@ $<
 
 %_vcl.vsm: %_pp4.vcl
-	vcl -o$@ $<
+	openvcl -o$@ $<
 
 %indexed_pp4.vcl: %indexed_pp3.vcl
 	cat $< | cc -E -P -imacros vu1/vu1_mem_indexed.h -o $@ -
@@ -92,7 +92,7 @@ include $(PS2SDK)/samples/Makefile.eeglobal
 	cat $< | sed 's/\[\([0-9]\)\]/_\1/g ; s/\[\([w-zW-Z]\)\]/\1/g' - > $@
 
 %_pp2.vcl: %_pp1.vcl
-	gasp -c ';' -Ivu1 -o $@ $<
+	masp -c ';' -Ivu1 -o $@ $<
 
 %_pp1.vcl: %.vcl
 	cat $< | sed 's/#include[ 	]\+.\+// ; s/#define[ 	]\+.\+// ; s|\(\.include[ 	]\+\)"\([^/].\+\)"|\1"$(<D)/\2"|' - > $@
