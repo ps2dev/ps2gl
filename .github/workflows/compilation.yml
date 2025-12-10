@@ -17,7 +17,9 @@ jobs:
     - name: Setup dependencies
       run: |
         apk update
-        apk add cmake build-base git make
+        apk add cmake build-base git make bash
+        # Create /bin/bash symlink if it doesn't exist (Alpine installs to /usr/bin/bash)
+        [ -f /bin/bash ] || ln -s /usr/bin/bash /bin/bash
 
     - name: Install ps2stuff
       run: |
