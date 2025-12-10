@@ -30,6 +30,24 @@ jobs:
         make -j $(getconf _NPROCESSORS_ONLN)
         make install
 
+    - name: Compile masp
+      run: |
+        git clone https://github.com/fjtrujy/masp.git
+        cd masp
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PS2DEV"
+        cmake --build build -j $(getconf _NPROCESSORS_ONLN)
+        cmake --install build
+    
+    - name: Install openvcl
+      run: |
+        git clone https://github.com/fjtrujy/openvcl.git
+        cd openvcl
+        git checkout ps2gl
+        make -j $(getconf _NPROCESSORS_ONLN) clean
+        make -j $(getconf _NPROCESSORS_ONLN)
+        make -j $(getconf _NPROCESSORS_ONLN) install
+
+
     - name: Configure with CMake
       run: |
         mkdir build
