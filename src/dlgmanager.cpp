@@ -247,7 +247,7 @@ void CDListGeomManager::EndGeom()
  * DrawArrays
  */
 
-void CDListGeomManager::DrawArrays(GLenum mode, int first, int count)
+void CDListGeomManager::LinearArraysGeomStage(GLenum mode, int first, int count)
 {
     if (Prim != mode)
         PrimChanged(mode);
@@ -280,7 +280,7 @@ void CDListGeomManager::DrawArrays(GLenum mode, int first, int count)
     CommitNewGeom();
 }
 
-void CDListGeomManager::DrawIndexedArrays(GLenum primType,
+void CDListGeomManager::IndexedArraysGeomStage(GLenum primType,
     int numIndices, const unsigned char* indices,
     int numVertices)
 {

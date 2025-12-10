@@ -8,6 +8,7 @@
 #define ps2gl_immgmanager_h
 
 #include "ps2gl/gmanager.h"
+#include "ps2gl/fixed_function.h"
 
 /********************************************
  * CImmGeomManager - the immediate renderer
@@ -27,6 +28,7 @@ class CImmGeomManager : public CGeomManager {
     CGeometryBlock Geometry;
 
     void CommitNewGeom();
+    bool ColorVariesInPrim = false;
 
 public:
     CImmGeomManager(CGLContext& context, int immBufferQwordSize);
@@ -61,7 +63,7 @@ public:
     // normal, tex coord or vertex color is supplied for each vertex
     inline CDmaPacket& GetNormalBuf() { return *CurNormalBuf; }
     inline CDmaPacket& GetTexCoordBuf() { return *CurTexCoordBuf; }
-
+    inline CDmaPacket& GetColorBuf() { return *CurColorBuf; }
     // user state
 
     void EnableCustom(uint64_t flag) { RendererManager.EnableCustom(flag); }
@@ -75,8 +77,8 @@ public:
     void TexCoord(float u, float v);
     void Color(cpu_vec_xyzw color);
     void EndGeom();
-    void DrawArrays(GLenum mode, int first, int count);
-    void DrawIndexedArrays(GLenum primType,
+    void LinearArraysGeomStage(GLenum mode, int first, int count);
+    void IndexedArraysGeomStage(GLenum primType,
         int numIndices, const unsigned char* indices,
         int numVertices);
     void Flush();

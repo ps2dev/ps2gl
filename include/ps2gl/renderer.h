@@ -68,7 +68,7 @@ typedef enum { k1PtLight = 1 << 0,
     k8PtLights           = 1 << 2 } tNumPtLights;
 
 typedef enum { kNoMaterial = 1 << 0,
-    kDiffuse               = 1 << 1,
+    kDiffuse               = 1 << 1, //TODO: it seems important to consolidate where "colors" and "light" differ still
     kSpecular              = 1 << 2 } tPerVtxMaterial;
 
 typedef enum { kLinear = 1 << 0,

@@ -39,7 +39,7 @@
      .endm
 
      .macro         normalize_3    output, input, scalar
-     div            q, vf00w, \scalar
+     div            q, vf00[w], \scalar
      mulq.xyz       \output, \input, q
      .endm
 

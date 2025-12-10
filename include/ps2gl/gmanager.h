@@ -19,7 +19,7 @@
 /********************************************
  * constants
  */
-
+enum ColorSrc : uint8_t { kColor_Float = 0, kColor_UByte = 1 };
 /********************************************
  * CVertArray
  */
@@ -28,6 +28,7 @@ class CVertArray {
     void *Vertices, *Normals, *TexCoords, *Colors;
     bool VerticesAreValid, NormalsAreValid, TexCoordsAreValid, ColorsAreValid;
     char WordsPerVertex, WordsPerNormal, WordsPerTexCoord, WordsPerColor;
+    ColorSrc ColorSrcType;
 
 public:
     CVertArray();
@@ -51,6 +52,8 @@ public:
     inline void SetNormals(void* newPtr) { Normals = newPtr; }
     inline void SetTexCoords(void* newPtr) { TexCoords = newPtr; }
     inline void SetColors(void* newPtr) { Colors = newPtr; }
+    inline ColorSrc GetColorSrcType() const { return ColorSrcType; }
+    inline void SetColorSrc(ColorSrc src) { ColorSrcType = src; }
 
     inline int GetWordsPerVertex() const { return WordsPerVertex; }
     inline int GetWordsPerNormal() const { return WordsPerNormal; }
@@ -104,6 +107,7 @@ protected:
     static tUserPrimEntry UserPrimTypes[kMaxUserPrimTypes];
 
     // GL state
+    cpu_vec_xyzw CurGeomColor;
     cpu_vec_xyz CurNormal;
     float CurTexCoord[2];
     static bool DoNormalize;
@@ -167,8 +171,9 @@ public:
     void SetUserRenderContextChanged() { UserRenderContextChanged = true; }
 
     // GL state
-
+    inline cpu_vec_xyzw GetCurGeomColor() const { return CurGeomColor; }
     inline cpu_vec_xyz GetCurNormal() const { return CurNormal; }
+    inline void SetCurGeomColor(cpu_vec_xyzw color) { CurGeomColor = color; }
     inline void SetCurNormal(cpu_vec_xyz normal) { CurNormal = normal; }
 
     inline const float* GetCurTexCoord() const { return CurTexCoord; }
@@ -196,8 +201,8 @@ public:
     virtual void TexCoord(float u, float v) = 0;
     virtual void Color(cpu_vec_xyzw color) = 0;
     virtual void EndGeom()                 = 0;
-    virtual void DrawArrays(GLenum mode, int first, int count) = 0;
-    virtual void DrawIndexedArrays(GLenum primType,
+    virtual void LinearArraysGeomStage(GLenum mode, int first, int count) = 0;
+    virtual void IndexedArraysGeomStage(GLenum primType,
         int numIndices, const unsigned char* indices,
         int numVertices)
         = 0;
@@ -205,3 +210,5 @@ public:
 };
 
 #endif // ps2gl_gmanager_h
+
+// #include "ps2gl/fixed_function.h"

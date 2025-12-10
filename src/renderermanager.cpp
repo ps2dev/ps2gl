@@ -88,6 +88,84 @@ CRendererManager::CRendererManager(CGLContext& context)
             kInputStart, kInputBufSize - kInputStart,
             "fast, no lights"));
     }
+    {
+        CRendererProps capabilities = {
+            .PrimType = kTriangles,
+            .Lighting = 0,
+            .NumDirLights = k3DirLights,
+            .NumPtLights = 0,
+            .Texture = 1,
+            .Specular = 0,
+            .PerVtxMaterial = kNoMaterial,
+            .Clipping = kNonClipped | kClipped,
+            .CullFace = 0,
+            .TwoSidedLighting = 0,
+            .ArrayAccess = kIndexed
+        };
+        RegisterDefaultRenderer(
+            new CIndexedRenderer(
+                mVsmAddr(IndexedConstColor),
+                mVsmSize(IndexedConstColor),
+                capabilities,
+                no_reqs,
+                3,
+                3,
+            "indexed, constant color, tri")
+        );
+    }
+    {
+        CRendererProps capabilities = {
+            .PrimType         = kTriangles,
+            .Lighting         = 0,
+            .NumDirLights     = k3DirLights,
+            .NumPtLights      = 0,
+            .Texture          = 1,
+            .Specular         = 0,
+            .PerVtxMaterial   = kDiffuse,  //TODO: this is just to allow for only certain targets to get pvc (its a hack to get behavior, clean up next
+            .Clipping         = kNonClipped | kClipped,
+            .CullFace         = 0,
+            .TwoSidedLighting = 0,
+            .ArrayAccess      = kIndexed
+        };
+        RegisterDefaultRenderer(
+            new CIndexedRenderer(
+                mVsmAddr(IndexedPVC),
+                mVsmSize(IndexedPVC),
+                capabilities,
+                no_reqs,
+                4,
+                3,
+                "indexed, pvc, tri")
+        );
+    }
+    // unlit renderer per vertex color
+    {
+        CRendererProps capabilities = {
+            .PrimType = kTriangles,
+            .Lighting = 0,
+            .NumDirLights = k3DirLights,
+            .NumPtLights = 0,
+            .Texture = 0,
+            .Specular = 0,
+            .PerVtxMaterial = kDiffuse, //TODO: this is just to allow for only certain targets to get pvc (its a hack to get behavior, clean up next
+            .Clipping = kNonClipped | kClipped,
+            .CullFace = 0,
+            .TwoSidedLighting = 0,
+            .ArrayAccess = kLinear
+        };
+        RegisterDefaultRenderer(
+            new CLinearRenderer(
+                mVsmAddr(FastNoLightsPVCTri),
+                mVsmSize(FastNoLightsPVCTri),
+                capabilities,
+                no_reqs,
+                4,
+                3,
+                kInputStart,
+                kInputBufSize - kInputStart,
+                "linear fast no lights, pvc, tri")
+        );
+    }
     // fast renderer
     {
         CRendererProps capabilities = {

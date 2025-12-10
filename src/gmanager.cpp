@@ -30,6 +30,7 @@ CVertArray::CVertArray()
     VerticesAreValid = NormalsAreValid = TexCoordsAreValid = ColorsAreValid = false;
     WordsPerVertex = WordsPerTexCoord = WordsPerColor = 0;
     WordsPerNormal                                    = 3; // not set by NormalPointer
+    ColorSrcType = kColor_Float;
 }
 
 /********************************************
@@ -46,6 +47,21 @@ bool CGeomManager::DoNormalize = false;
 
 CGeomManager::CGeomManager(CGLContext& context)
     : GLContext(context)
+    , CurGeomColor(1.0f, 1.0f, 1.0f, 1.0f) //TODO: I think this is the GL color behavior? for missing colors case...
+    //NOTE: this default CurNormal allows for "appearing" unlit PVC effect when:
+    // - ColorMaterial Enabled
+    // - Lighting Enabled
+    // - Light0 Enabled
+    // - Normals are never set during the glBegin/glEnd -> Default CurNormal of {0.0, 0.0, 1.0} (set in this constructor) is set
+    // VU Renderer: "linear, pvc, tris" is then targetted
+    // IMPORTANT: EVERY FRAME Light0's direction is set via
+    // constexpr float direction_towards_per_vertex_normal[4] = {0.0, 0.0, 1.0, 0.0};
+    // glLightfv(GL_LIGHT0, GL_POSITION, direction_towards_per_vertex_normal);
+    // Why the dot product in the VU1 renderer GeneralPVDiff cancels out the Diffuse lighting effect:
+    // ps2gl converts lights into object/model space for VU1:
+    // AddVu1RendererContext: lighting calculations are done in object/model space via worldToObjXfrm).
+    // so LIGHT0's direction {0, 0, 1, 0} remains aligned with every vertices default CurNormal = {0,0,1}.
+    // Therefore N·L = 1 for the whole object/model
     , CurNormal(0.0f, 0.0f, 1.0f)
     , Prim(GL_INVALID_VALUE)
     , InsideBeginEnd(false)
@@ -140,23 +156,39 @@ void glTexCoordPointer(GLint size, GLenum type,
  * @param stride must be <b>zero</b>.  Non-zero strides are unsupported and likely
  * to remain so.
  */
-void glColorPointer(GLint size, GLenum type,
-    GLsizei stride, const GLvoid* ptr)
+void glColorPointer(GLint size, GLenum type, GLsizei stride, const GLvoid* ptr)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+    mDebugPrint("glColorPointer: size=%d type=0x%X stride=%d ptr=%p\n", (int)size, (unsigned)type, (int)stride, ptr);
 
     if (stride != 0) {
         mNotImplemented("stride must be 0");
         return;
     }
     if (type != GL_FLOAT) {
+        if (type == GL_UNSIGNED_BYTE) {
+            if (ptr) {
+                const unsigned char* colorSample = (const unsigned char*)ptr;
+                mDebugPrint("glColorPointer: SAMPLE u8=(%u,%u,%u,%u)\n", colorSample[0], colorSample[1], colorSample[2], colorSample[3]);
+            }
+            CVertArray& vertArray = pGLContext->GetGeomManager().GetVertArray();
+            vertArray.SetColors((void*)ptr);
+            vertArray.SetWordsPerColor(4);
+            vertArray.SetColorSrc(kColor_UByte);
+            return;
+        }
         mNotImplemented("type must be float");
         return;
     }
 
+    if (ptr) {
+        const float* colorSample = (const float*)ptr;
+        mDebugPrint("glColorPointer: SAMPLE f32=(%.3f,%.3f,%.3f,%.3f)\n", colorSample[0], colorSample[1], colorSample[2], colorSample[3]);
+    }
     CVertArray& vertArray = pGLContext->GetGeomManager().GetVertArray();
     vertArray.SetColors((void*)ptr);
     vertArray.SetWordsPerColor(size);
+    mDebugPrint("glColorPointer: BOUND F32 colors (wpc=%d)\n", (int)size);
 }
 
 /**
@@ -174,18 +206,101 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
+    if (pGLContext->GetImmDrawContext().GetPolygonMode() == GL_LINE && mode == GL_TRIANGLES) {
+        GLushort maxIndex = (GLushort)(first + count - 1);
+        if (maxIndex <= 255) {
+            GLsizei triangleCount   = count / 3;
+            GLsizei lineIndexCount  = triangleCount * 6;
+            static uint8_t* indices_u8_scratch = NULL;
+            static int scratchCapacity = 0;
+            if (scratchCapacity < lineIndexCount) {
+                delete[] indices_u8_scratch;
+                indices_u8_scratch = new uint8_t[lineIndexCount];
+                scratchCapacity = (int)lineIndexCount;
+            }
+            uint8_t* p = indices_u8_scratch;
+            for (GLsizei i = 0; i + 2 < count; i += 3) {
+                uint8_t a = (uint8_t)(first + i + 0);
+                uint8_t b = (uint8_t)(first + i + 1);
+                uint8_t c = (uint8_t)(first + i + 2);
+                *p++ = a; *p++ = b;
+                *p++ = b; *p++ = c;
+                *p++ = c; *p++ = a;
+            }
+            CGeomManager& gmanager = pGLContext->GetGeomManager();
+            gmanager.IndexedArraysGeomStage(GL_TRIANGLES, (int)lineIndexCount, indices_u8_scratch, (int)(maxIndex + 1));
+            return;
+        }
+        mode = GL_LINES;
+    }
     CGeomManager& gmanager = pGLContext->GetGeomManager();
-    gmanager.DrawArrays(mode, first, count);
+    gmanager.LinearArraysGeomStage(mode, first, count);
 }
 
 /**
- * This is not implemented yet
+ * This is now being implemented/experimental
  */
 void glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
 
-    mError("glDrawElements is a placeholder ATM and should not be called");
+    if (type != GL_UNSIGNED_SHORT) {
+        mNotImplemented("glDrawElements only supports GL_UNSIGNED_SHORT for now");
+        return;
+    }
+
+    const GLushort* indices_u16 = (const GLushort*)indices;
+    GLushort max = 0;
+
+    for (GLsizei i = 0; i < count; ++i) {
+        if (indices_u16[i] > max) max = indices_u16[i];
+    }
+
+    const int numVertices = (int)max + 1;
+
+    static GLushort* indices_u16_scratch = NULL;
+    static int scratch16Capacity = 0;
+    if (pGLContext->GetImmDrawContext().GetPolygonMode() == GL_LINE && mode == GL_TRIANGLES)
+    {
+        int triangleCount = count / 3;
+        int lineCount =  triangleCount * 6;
+        if (scratch16Capacity < lineCount) {
+            delete[] indices_u16_scratch;
+            indices_u16_scratch = new GLushort[lineCount];
+            scratch16Capacity = lineCount;
+        }
+        GLushort* linesIndexBuffer = indices_u16_scratch;
+        if (mode == GL_TRIANGLES) {
+            for (GLsizei i = 0; i + 2 < count; i += 3) {
+                GLushort a = indices_u16[i+0];
+                GLushort b = indices_u16[i+1];
+                GLushort c = indices_u16[i+2];
+                *linesIndexBuffer++ = a; *linesIndexBuffer++ = b;
+                *linesIndexBuffer++ = b; *linesIndexBuffer++ = c;
+                *linesIndexBuffer++ = c; *linesIndexBuffer++ = a;
+            }
+        }
+        indices_u16 = indices_u16_scratch;
+        count = (GLsizei)(linesIndexBuffer - indices_u16_scratch);
+        //mode = GL_LINES; //TODO: add a renderer for lines? nah?
+    }
+    if (max <= 255) {
+        static uint8_t* indices_u8_scratch = NULL;
+        static int scratchCapacity = 0;
+        if (scratchCapacity < count) {
+            delete[] indices_u8_scratch;
+            indices_u8_scratch = new uint8_t[count];
+            scratchCapacity = (int)count;
+        }
+        for (GLsizei i = 0; i < count; ++i) {
+            indices_u8_scratch[i] = (uint8_t)indices_u16[i];
+        }
+        CGeomManager& gmanager = pGLContext->GetGeomManager();
+        gmanager.IndexedArraysGeomStage(mode, (int)count, indices_u8_scratch, numVertices);
+    } else {
+        CGeomManager& gmanager = pGLContext->GetGeomManager();
+        gmanager.IndexedArraysGeomStage(mode, (int)count, (const unsigned char*)indices_u16, numVertices);
+    }
 }
 
 /**
@@ -388,6 +503,17 @@ void glColor4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
     gmanager.Color(cpu_vec_xyzw(red, green, blue, alpha));
 }
 
+//raylib need this function
+void glColor4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
+{
+    GL_FUNC_DEBUG("%s\n", __FUNCTION__);
+    float r = (float)red/255.0;
+    float b = (float)blue/255.0;
+    float g = (float)green/255.0;
+    float a = (float)alpha/255.0;
+    glColor4f(r,g,b,a);
+}
+
 void glColor4fv(const GLfloat* color)
 {
     GL_FUNC_DEBUG("%s\n", __FUNCTION__);
@@ -438,7 +564,7 @@ void pglDrawIndexedArrays(GLenum primType,
     int numIndices, const unsigned char* indices,
     int numVertices)
 {
-    pGLContext->GetGeomManager().DrawIndexedArrays(primType, numIndices, indices, numVertices);
+    pGLContext->GetGeomManager().IndexedArraysGeomStage(primType, numIndices, indices, numVertices);
 }
 
 /**

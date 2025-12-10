@@ -13,6 +13,7 @@
 
 #include "ps2s/gsmem.h"
 #include "ps2s/packet.h"
+#include "ps2s/cpu_vector.h"
 
 #include "GL/gl.h"
 
@@ -408,6 +409,14 @@ public:
 
     void WaitForVSync();
     void SwapBuffers();
+
+    bool   IsTextureEnabled();
+    bool   IsLightingEnabled();
+    bool   IsColorMaterialEnabled();
+    GLenum GetColorMaterialMode();
+    cpu_vec_xyzw GetCurrentGeomColor();
+    cpu_vec_xyz GetCurrentNormal();
+    const float* GetCurrentTexCoord();
 };
 
 // global pointer to the GLContext

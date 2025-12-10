@@ -30,8 +30,11 @@ VU_FUNCTIONS(GeneralPVDiffQuad);
 VU_FUNCTIONS(SCEI);
 VU_FUNCTIONS(Fast);
 VU_FUNCTIONS(FastNoLights);
+VU_FUNCTIONS(FastNoLightsPVCTri);
 
 VU_FUNCTIONS(Indexed);
+VU_FUNCTIONS(IndexedConstColor);
+VU_FUNCTIONS(IndexedPVC);
 }
 
 #endif // ps2gl_vu1code_h

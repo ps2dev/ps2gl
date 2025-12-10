@@ -57,3 +57,4 @@
 #define kInputStart kInputGeomStart // temp
 
 #define kTempAreaStart (kInputGeomStart + kInputBufSize)
+#define kColorQwOff   3

@@ -789,3 +789,33 @@ const GLubyte* glGetString(GLenum name)
     mNotImplemented();
     return (GLubyte*)"not implemented";
 }
+
+bool CGLContext::IsTextureEnabled() {
+    return GetTexManager().GetTexEnabled();
+}
+
+bool CGLContext::IsLightingEnabled() {
+    return GetImmLighting().GetLightingEnabled();
+}
+
+bool CGLContext::IsColorMaterialEnabled() {
+    return GetMaterialManager().GetColorMaterialEnabled();
+}
+
+GLenum CGLContext::GetColorMaterialMode() {
+    return GetMaterialManager().GetColorMaterialMode();
+}
+
+cpu_vec_xyzw CGLContext::GetCurrentGeomColor() {
+    return GetGeomManager().GetCurGeomColor();
+}
+
+cpu_vec_xyz CGLContext::GetCurrentNormal() {
+    return GetGeomManager().GetCurNormal();
+}
+
+const float* CGLContext::GetCurrentTexCoord() {
+    return GetGeomManager().GetCurTexCoord();
+}
+
+

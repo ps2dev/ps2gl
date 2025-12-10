@@ -107,7 +107,7 @@ void CDListMaterial::SetShininess(float shine)
 
 void CMaterialManager::Color(cpu_vec_xyzw color)
 {
-    CurColor = color;
+    CurMatColor = color;
 
     if (UseColorMaterial) {
         switch (ColorMaterialMode) {
@@ -152,7 +152,7 @@ void CMaterialManager::SetUseColorMaterial(bool yesNo)
     if (!InDListDef) {
         UseColorMaterial = yesNo;
         if (yesNo)
-            Color(CurColor);
+            Color(CurMatColor);
         GLContext.CurMaterialChanged();
     } else {
         CDList& dlist = GLContext.GetDListManager().GetOpenDList();
@@ -180,7 +180,7 @@ void CMaterialManager::SetColorMaterialMode(GLenum mode)
 {
     if (!InDListDef) {
         ColorMaterialMode = mode;
-        Color(CurColor);
+        Color(CurMatColor);
         GLContext.CurMaterialChanged();
     } else {
         CDList& dlist = GLContext.GetDListManager().GetOpenDList();

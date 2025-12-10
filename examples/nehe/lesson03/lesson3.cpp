@@ -24,12 +24,6 @@ void init(GLvoid) // Create Some Everyday Functions
     glEnable(GL_DEPTH_TEST);              // Enables Depth Testing
     glDepthFunc(GL_LEQUAL);               // The Type Of Depth Testing To Do
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-    // ps2gl needs lighting + color_material for per-vertex colors
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
 }
 
 void display(void)                                      // Create The Display Function

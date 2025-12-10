@@ -85,13 +85,13 @@
      sqrt           q, \atten[z]
      addw.x         \atten, vf00, vf00
      addq.y         \atten, vf00, q
-     div            q, vf00w, \atten[y]
+     div            q, vf00[w], \atten[y]
      mulq.xyz       \vert_to_light, \vert_to_light, q
      dot3_to_w      \atten, \atten, \atten_coeff
      .endm
 
      .macro         atten_color    output, vert_color, atten
-     div            q, vf00w, \atten[w]
+     div            q, vf00[w], \atten[w]
      mulq.xyz       \output, \vert_color, q
      .endm
 

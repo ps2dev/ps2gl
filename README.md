@@ -152,6 +152,12 @@ Bug reports should be submitted to the appropriate homepage, which hosts a bug t
 
 ## Changelog
 
+### 0.3.x (beginning revival attempts)
+- Added documentation to Makefile for references to using vcl and other tools in 2025 (also updated some vcl for potential deprecation of vcl preprocess step 2:
+ `cat $< | sed 's/\[\([0-9]\)\]/_\1/g ; s/\[\([w-zW-Z]\)\]/\1/g' - > $@ `
+- Added a fast no lights per vertex color renderer with pvc_box examples (lit with `general_pv_diff_tri` and unlit `fast_no_lights_pvc_tri`) -- WIP, could be very slow for some reason
+- begin testing against https://github.com/raylib4Consoles/raylib4PlayStation2 integration (will be useful for testing expected OpenGL1.1 behavior)
+
 ### 0.3
 - Can now define custom prim types and attributes, tying them to custom renderers and override default renderers.
 - Lots of bug fixes!

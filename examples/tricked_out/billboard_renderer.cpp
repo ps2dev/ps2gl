@@ -143,7 +143,7 @@ void CBillboardRenderer::InitContext(GLenum primType, uint32_t rcChanges, bool u
             packet += cpu_vec_4(0, 0, 1, 0);
 
             // set the color, max is 128 because this is unity when texture mapping is enabled
-            cpu_vec_4 color = glContext.GetMaterialManager().GetCurColor() * 128.0f;
+            cpu_vec_4 color = glContext.GetMaterialManager().GetCurMatColor() * 128.0f;
             packet += (unsigned int)color[0];
             packet += (unsigned int)color[1];
             packet += (unsigned int)color[2];

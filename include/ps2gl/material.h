@@ -104,7 +104,7 @@ class CMaterialManager {
     CDListMaterial DListMaterial;
     CMaterial* CurMaterial;
 
-    cpu_vec_xyzw CurColor;
+    cpu_vec_xyzw CurMatColor;
     GLenum ColorMaterialMode;
     bool UseColorMaterial;
     bool InDListDef;
@@ -115,7 +115,7 @@ public:
         , ImmMaterial(context)
         , DListMaterial(context)
         , CurMaterial(&ImmMaterial)
-        , CurColor(1, 1, 1, 1)
+        , CurMatColor(1, 1, 1, 1)
         , ColorMaterialMode(GL_AMBIENT_AND_DIFFUSE)
         , UseColorMaterial(false)
         , InDListDef(false)
@@ -126,7 +126,7 @@ public:
     CMaterial& GetCurMaterial() { return *CurMaterial; }
     CImmMaterial& GetImmMaterial() { return ImmMaterial; }
     CDListMaterial& GetDListMaterial() { return DListMaterial; }
-    cpu_vec_xyzw GetCurColor() const { return CurColor; }
+    cpu_vec_xyzw GetCurMatColor() const { return CurMatColor; }
     GLenum GetColorMaterialMode() const { return ColorMaterialMode; }
     bool GetColorMaterialEnabled() const { return UseColorMaterial; }
 

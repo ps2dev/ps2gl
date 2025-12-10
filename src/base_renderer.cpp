@@ -9,6 +9,7 @@
 #include "ps2s/packet.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "ps2gl/base_renderer.h"
 #include "ps2gl/drawcontext.h"
@@ -65,25 +66,45 @@ void CBaseRenderer::InitXferBlock(CVifSCDmaPacket& packet,
 
     NormalBuf   = &gmanager.GetNormalBuf();
     TexCoordBuf = &gmanager.GetTexCoordBuf();
+    ColorBuf = &gmanager.GetColorBuf();
 
     CurNormal             = gmanager.GetCurNormal();
     const float* texCoord = gmanager.GetCurTexCoord();
     CurTexCoord[0]        = texCoord[0];
     CurTexCoord[1]        = texCoord[1];
 
+    CurGeomColor = gmanager.GetCurGeomColor();
     // get unpack modes/masks
 
-    WordsPerVertex = wordsPerVertex;
+    LaneConfig lanes;
+    lanes.vertices  = (wordsPerVertex == 4) ? QW_XYZW :
+                      (wordsPerVertex == 3) ? QW_XYZ  : QW_NONE;
+    lanes.normals   = (wordsPerNormal == 0) ? QW_NONE :
+                      (wordsPerNormal == 3) ? QW_XYZ  : QW_NONE;
+    lanes.texcoords = (wordsPerTex    == 0) ? QW_NONE :
+                      (wordsPerTex    == 2) ? QW_XY   : QW_NONE;
+    lanes.colors    = (wordsPerColor  == 0) ? QW_NONE :
+                      (wordsPerColor  == 4) ? QW_XYZW : QW_NONE;
+
+    ValidateLaneConfig(&lanes, "InitXferBlock");
+    WordsPerVertex = QWToWords(lanes.vertices);
     GetUnpackAttribs(WordsPerVertex, VertexUnpackMode, VertexUnpackMask);
 
-    WordsPerNormal = (wordsPerNormal > 0) ? wordsPerNormal : 3;
-    GetUnpackAttribs(WordsPerNormal, NormalUnpackMode, NormalUnpackMask);
+    // WordsPerNormal = (wordsPerNormal > 0) ? wordsPerNormal : 3;
+    WordsPerNormal   = QWToWords(lanes.normals);
+    if (WordsPerNormal > 0) GetUnpackAttribs(WordsPerNormal,   NormalUnpackMode,   NormalUnpackMask);
 
-    WordsPerTexCoord = (wordsPerTex > 0) ? wordsPerTex : 2;
-    GetUnpackAttribs(WordsPerTexCoord, TexCoordUnpackMode, TexCoordUnpackMask);
+    // WordsPerTexCoord = (wordsPerTex > 0) ? wordsPerTex : 2;
+    WordsPerTexCoord = QWToWords(lanes.texcoords);
+    if (WordsPerTexCoord > 0) GetUnpackAttribs(WordsPerTexCoord, TexCoordUnpackMode, TexCoordUnpackMask);
 
-    WordsPerColor = (wordsPerColor > 0) ? wordsPerColor : 3;
-    GetUnpackAttribs(WordsPerColor, ColorUnpackMode, ColorUnpackMask);
+    WordsPerColor = QWToWords(lanes.colors);
+    if (WordsPerColor > 0) GetUnpackAttribs(WordsPerColor, ColorUnpackMode, ColorUnpackMask);
+
+    XferVertices  = LanePresent(lanes.vertices);
+    XferNormals   = LanePresent(lanes.normals);
+    XferTexCoords = LanePresent(lanes.texcoords);
+    XferColors    = LanePresent(lanes.colors);
 
     // set up the row register to expand vectors with fewer than 4 elements
 
@@ -116,6 +137,12 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
     const void* texCoords, const void* colors,
     int vu1Offset, int firstElement, int numToAdd)
 {
+    //TODO: lane mapping V|T|C, V|C|T, V|N|T|C is difficult to figure out with the vu code sometimes
+    // should be super super clear somewhere probably better than here
+    const int laneV = 0;
+    const int laneN = 1;
+    const int laneT = 2;
+    const int laneC = 3;
     //
     // vertices
     //
@@ -125,7 +152,7 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
         XferVectors(packet, (unsigned int*)vertices,
             firstElement, numToAdd,
             WordsPerVertex, VertexUnpackMask, VertexUnpackMode,
-            vu1Offset);
+            vu1Offset + laneV);
     }
 
     //
@@ -146,11 +173,12 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
             normalBuf += CurNormal;
     }
 
-    if (XferNormals)
+    if (XferNormals) {
         XferVectors(packet, (unsigned int*)normals,
             firstNormal, numToAdd,
             WordsPerNormal, NormalUnpackMask, NormalUnpackMode,
-            vu1Offset + 1);
+            vu1Offset + laneN);
+    }
 
     //
     // tex coords
@@ -169,11 +197,12 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
             texCoordBuf += CurTexCoord[1];
         }
     }
-    if (XferTexCoords)
+    if (XferTexCoords) {
         XferVectors(packet, (unsigned int*)texCoords,
             firstTexCoord, numToAdd,
             WordsPerTexCoord, TexCoordUnpackMask, TexCoordUnpackMode,
-            vu1Offset + 2);
+            vu1Offset + laneT);
+    }
 
     //
     // colors
@@ -184,7 +213,7 @@ void CBaseRenderer::XferBlock(CVifSCDmaPacket& packet,
         XferVectors(packet, (unsigned int*)colors,
             firstColor, numToAdd,
             WordsPerColor, ColorUnpackMask, ColorUnpackMode,
-            vu1Offset + 3);
+            vu1Offset + laneC);
     }
 }
 
@@ -252,7 +281,11 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
             packet += numPts;
             packet += numSpots;
         } else {
+            /*
             packet += (uint64_t)0;
+            */
+            packet += 0;
+            packet += 0;
             packet += 0;
         }
 
@@ -314,10 +347,18 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
 
         // add emissive component
         cpu_vec_4 emission;
+        if (doLighting) {
+            emission = material.GetEmission() * maxColorValue;
+        } else {
+            emission = glContext.GetGeomManager().GetCurGeomColor() * maxColorValue;
+            // emission = glContext.GetMaterialManager().GetCurMatColor() * maxColorValue;
+        }
+        /*
         if (doLighting)
             emission = material.GetEmission() * maxColorValue;
         else
             emission = glContext.GetMaterialManager().GetCurColor() * maxColorValue;
+        */
         packet += emission;
 
         // ambient
@@ -328,7 +369,8 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
         // the alpha value is set to the alpha of the diffuse in the renderers;
         // this should be the current color alpha if lighting is disabled
         if (!doLighting)
-            matDiffuse[3] = glContext.GetMaterialManager().GetCurColor()[3];
+            matDiffuse[3] = glContext.GetGeomManager().GetCurGeomColor()[3];
+            // matDiffuse[3] = glContext.GetMaterialManager().GetCurMatColor()[3];
         packet += matDiffuse;
 
         // specular
@@ -354,6 +396,8 @@ void CBaseRenderer::AddVu1RendererContext(CVifSCDmaPacket& packet, GLenum primTy
         GLenum newPrimType = drawContext.GetPolygonMode();
         if (newPrimType == GL_FILL)
             newPrimType = primType;
+        if (newPrimType == GL_LINE)
+            newPrimType = GL_LINES;
         newPrimType &= 0xff;
         tGifTag giftag = BuildGiftag(newPrimType);
         packet += giftag;
@@ -378,24 +422,32 @@ tGifTag
 CBaseRenderer::BuildGiftag(GLenum primType)
 {
     CGLContext& glContext = *pGLContext;
-
-    primType &= 0x7; // convert from GL #define to gs prim number
+    //TODO: JESUS CHRIST
+    if (primType == GL_LINES) {
+        primType = 1;
+    } else {
+        primType &= 0x7; // convert from GL #define to gs prim number
+    }
     CImmDrawContext& drawContext = glContext.GetImmDrawContext();
     bool smoothShading           = drawContext.GetDoSmoothShading();
     bool useTexture              = glContext.GetTexManager().GetTexEnabled();
     bool alpha                   = drawContext.GetBlendEnabled();
     unsigned int nreg            = OutputQuadsPerVert;
+    // bool flip = drawContext.CurFrameMem != drawContext.Frame0Mem;
+    // GS::tPrim prim = { .prim_type = primType, .iip = smoothShading, .tme = useTexture, .fge = 0, .abe = alpha, .aa1 = 0, .fst = 0, .ctxt = flip, .fix = 0 };
+    mDebugPrint("primType =%d)\n", (int)primType);
 
-    GS::tPrim prim = { prim_type : primType, iip : smoothShading, tme : useTexture, fge : 0, abe : alpha, aa1 : 0, fst : 0, ctxt : 0, fix : 0 };
-    tGifTag giftag = { NLOOP : 0, EOP : 1, pad0 : 0, id : 0, PRE : 1, PRIM : *(uint64_t*)&prim, FLG : 0, NREG : nreg, REGS0 : 2, REGS1 : 1, REGS2 : 4 };
+    GS::tPrim prim = { .prim_type = primType, .iip = smoothShading, .tme = useTexture, .fge = 0, .abe = alpha, .aa1 = 0, .fst = 0, .ctxt = 0, .fix = 0 };
+    tGifTag giftag = { .NLOOP = 0, .EOP = 1, .pad0 = 0, .id = 0, .PRE = 1, .PRIM = *(uint64_t*)&prim, .FLG = 0, .NREG = nreg, .REGS0 = 2, .REGS1 = 1, .REGS2 = 4 };
     return giftag;
 }
 
 void CBaseRenderer::CacheRendererState()
 {
-    XferNormals   = pGLContext->GetImmLighting().GetLightingEnabled();
-    XferTexCoords = pGLContext->GetTexManager().GetTexEnabled();
-    XferColors    = pGLContext->GetMaterialManager().GetColorMaterialEnabled();
+    //TODO: these are too confusing??? look at CommitNewGeom, and SyncRenderer and all that stuff
+    //XferNormals   = pGLContext->GetImmLighting().GetLightingEnabled();
+    //XferTexCoords = pGLContext->GetTexManager().GetTexEnabled();
+    //TODO: cannot decide Xfercolor state yet because we dont know if its per vertex or constant yet...????
 }
 
 void CBaseRenderer::Load()
