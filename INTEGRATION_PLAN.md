@@ -25,8 +25,9 @@ minimal repro committed.
    bug discovered during test densification. See §2.3.
 4. 🟡 **More unit tests** for masp + openvcl, especially per-module coverage.
    masp side: sb / hash / number-prefix landed 2026-05-11 (3 new test
-   binaries, 57 cases). openvcl side: 17 → 42 cases — tokenizer suite
-   landed 2026-05-11 (`openvcl@edc5b76`). See §2.4.
+   binaries, 57 cases). openvcl side: 17 → 55 cases — tokenizer suite
+   (`openvcl@edc5b76`) + Parser operand-family / error-recovery suite
+   (`openvcl@acc1ba6`) both landed 2026-05-11. See §2.4.
 
 **Workarounds & infrastructure landed this session:**
 - `-DPS2GL_USE_SCE_VSM=ON` — bypasses openvcl, assembles Sony's reference VSMs
@@ -34,9 +35,11 @@ minimal repro committed.
 - `vsm_diff.py` semantic diff harness + per-renderer CTest entries. All 12
   WILL_FAIL today; XPASS-flips as renderers converge. (`ps2gl@cmake` commit
   `9138e1f`)
-- openvcl unit + integration test framework. 42 tests (17 originally,
-  +25 from the Tokenizer suite), 0 failures.
-  (`openvcl@ps2gl` commits `7f1db90`, `de7f1f8`, `bec6b7f`, `edc5b76`)
+- openvcl unit + integration test framework. 55 tests (17 originally,
+  +25 from the Tokenizer suite, +13 from the Parser family/error suite),
+  0 failures.
+  (`openvcl@ps2gl` commits `7f1db90`, `de7f1f8`, `bec6b7f`, `edc5b76`,
+  `acc1ba6`)
 
 ---
 
@@ -194,7 +197,7 @@ per-module tests are easy. Targets:
 | Conditional assembly     | `\ifmode` / `\ifm` / `\endifm` truth tables      | open |
 | Golden files             | Re-run every `ps2gl/vu1/*.vcl` through masp; compare to checked-in expected output | open |
 
-**openvcl** — has 42 tests across `unit/` and `integration/` (was 17
+**openvcl** — has 55 tests across `unit/` and `integration/` (was 17
 before 2026-05-11). Hand-rolled harness in `test/include/test_harness.h`
 (TEST_CASE / CHECK / REQUIRE / EXPECTED_FAIL, auto-registered via
 static init). Subprocess runner in `test/include/openvcl_runner.h` for
@@ -203,8 +206,8 @@ end-to-end checks. Targets to expand:
 | Area                                              | Effort | Status |
 | ------------------------------------------------- | ------ | ------ |
 | Tokenizer: comments, fields, bit-flags, labels    | ½ day  | ✅ 25 cases in `test_tokenizer.cpp` (`openvcl@edc5b76`) — case-insensitive mnemonic lookup and `.xyzw`→0 normalisation pinned with comments |
-| Tokenizer: argument-list parsing for FMAC/LSU forms | ½ day  | open (broadcast, indirect, post-inc, immediate operands) |
-| Parser: operand templates, error recovery         | ½ day  | open  |
+| Tokenizer: argument-list parsing for FMAC/LSU forms | ½ day  | partial — broadcast (`MULw`), post-inc (`(vi++)`) and `imm(vi)` addressing covered by Parser family tests (`openvcl@acc1ba6`); still open: pre-dec, `i`/`q`/`p`/`r` immediate operands, indirect `(vi)` zero-form |
+| Parser: operand templates, error recovery         | ½ day  | ✅ 13 cases in `test_parser_families.cpp` (`openvcl@acc1ba6`) — one positive per VU family (FMAC, FDIV, LSU, IALU, BRU, RANDU, EFU) + negatives for unknown mnemonic, wrong arg count, out-of-range register, family mismatch |
 | Expression: edge cases (some landed)              | started | partial |
 | CodeGenerator golden files per mnemonic family    | 1 day  | open  |
 | CommandLine: every flag in README                 | ½ day  | open  |
@@ -255,6 +258,14 @@ allocator, CLIP validation, `.init_vf` range. All with regression tests.
 - Output-parameters only applied at "proper" branch exits (vague spec)
 - GASP preparsing doesn't track filenames (low priority)
 - *Plus the new quad-renderer bug* — filed, repro committed.
+- **Error propagation gap** discovered 2026-05-11 while densifying Parser
+  tests: `"Read-attempt from uninitialized float register"` prints to
+  stderr but does NOT bump `Error::m_errorCount`, so the process exits
+  0 instead of failing.  Sibling of the bug commit `5c0227b` already
+  fixed for CLIP.  Cheap fix: route this code path through
+  `Error::Display` (or directly increment the counter).  Parser tests
+  in `test_parser_families.cpp` deliberately check stderr substrings
+  instead of exit_code on positives, so they're not blocked by this.
 
 ---
 
