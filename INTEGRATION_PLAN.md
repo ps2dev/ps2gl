@@ -1,24 +1,36 @@
 # PS2 OpenGL Toolchain — Current State & Plan
 
-_Last reviewed: 2026-05-11_
+_Last reviewed: 2026-05-12_
 
 ## 0. TL;DR — pick this up here next session
 
-**Where we are.** The open pipeline (`openvcl + masp + dvp-as`) builds all 13
-ps2gl renderers and produces ELFs that boot in PCSX2. Triangle-based samples
-render correctly. **`GL_QUADS`-based shaders render blank** because openvcl
-emits wrong ADC-bit values — bug is localized, has a workaround, and has a
-minimal repro committed.
+**Where we are.** The open pipeline (`openvcl + masp + dvp-as`) builds all
+13 ps2gl renderers and produces ELFs that boot in PCSX2. Both triangle-
+and quad-based samples render correctly. ✅ The GL_QUADS bug is **FIXED**
+(`openvcl@520766b`).
 
 **Headline open items, in priority order:**
 
-1. 🔴 **Quad-renderer bug** in openvcl (`general_quad`, `general_pv_diff_quad`,
-   `general_nospec_quad`). Workaround: build ps2gl with
-   `-DPS2GL_USE_SCE_VSM=ON`. Minimal repro: `openvcl/test/repro/quad_adc_bug.vcl`.
-   See §2.1.
-2. 🟡 **Dual-pipe scheduler** in openvcl. Headline performance feature.
+1. ~~🔴 **Quad-renderer bug**~~ — ✅ **FIXED 2026-05-12** (`openvcl@520766b`).
+   Root cause: the `CLIP` operand template had `:write` on its first VF
+   argument, copy-pasted from the destination-writing FMAC ops (ADD, MUL,
+   etc.).  But clipw's first VF is hardware-semantically a source — only
+   the CLIP register itself is written.  The bogus `:write` caused
+   openvcl's register allocator to treat clipw as starting a new
+   lifetime, breaking the data-flow chain from the preceding mul.  For
+   v3 of every quad-strip iteration, the allocator gave the mul one VF
+   and the clipw a different freed-up VF (which still held the pre-mul
+   xformed_vert_3 at magnitude ~3.7M after perspective divide).
+   `clipw` correctly flagged that as out-of-frustum, fcand returned
+   non-zero clip flags, and every quad rendered as ADC=skip.  One-char
+   fix (drop `:write`) in `src/Parser.cpp`.  See §2.1.
+2. 🟡 **Dual-pipe scheduler** in openvcl — adjacent-pairing landed
+   2026-05-12 (`openvcl@fd7cf6e`).  Full software-pipelining still
+   future work; the current pass handles only adjacent pair candidates
+   and doesn't hoist instructions across non-adjacent positions.
    Currently openvcl produces 0.34-0.73× Sony's instruction count per
-   renderer. Multi-week. See §2.2.
+   renderer; adjacent pairing closes some of that gap, the rest needs
+   PRO/MAIN/EPI loop restructuring.  Multi-week.  See §2.2.
 3. 🟡 **masp polish** — most of §2.3 closed 2026-05-11: FIXMEs in
    `src/macro.c` rewritten as NOTEs, stale `build_ps2/` removed.
    Remaining: README expand, and the dormant `change_base` trailing-`'`
@@ -73,7 +85,33 @@ Three repos in this workspace, all symlinks into `~/Projects/<name>`:
 
 ## 2. Open work
 
-### 2.1 Quad-renderer rendering bug 🔴
+### 2.1 Quad-renderer rendering bug ✅ FIXED 2026-05-12
+
+**Resolution.** Root cause was the `CLIP` operand template in openvcl's
+`src/Parser.cpp` having `:write` on its first VF argument, copied from
+the destination-writing FMAC ops (ADD, MUL, etc.).  But clipw's first
+VF is hardware-semantically a source — only the CLIP register itself
+is written.  The bogus `:write` flag caused openvcl's register
+allocator to treat clipw as starting a new lifetime, breaking the
+data-flow chain from the preceding mul that produces what clipw
+consumes.  One-char fix (drop `:write`) in `openvcl@520766b`.
+
+For the full historical investigation breadcrumbs see
+`memory/project_quad_bug_investigation_notes.md` — many plausible-
+looking hypotheses (alias collision, clipw→fcand latency, mfir.w → sq
+latency, cross-iteration CLIP leak, software-pipelining-required) were
+all falsified before the correct root cause was found.  Each of those
+hypothesis ruled-out lines remains documented in the notes file so the
+next investigator doesn't re-tread them.
+
+Verified after fix: `nehe_lesson04` and `nehe_lesson05` render both
+their pyramids AND their cubes; lesson02/03 still render triangles;
+GIF chain W field at `0x1100D42C`/`D45C` flips from `00 80 FF FF`
+(skip) to `FF 7F 00 00` (draw) for the previously-buggy vertices.
+
+### 2.1.1 Quad-renderer bug — historical investigation (pre-fix)
+
+(Retained for reference.)
 
 **Symptom.** Any ps2gl example that draws with `GL_QUADS` renders blank.
 `box` shows only the clear color; `nehe_lesson04`/`05` show their triangles
