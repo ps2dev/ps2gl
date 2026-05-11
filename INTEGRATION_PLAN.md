@@ -25,9 +25,10 @@ minimal repro committed.
    bug discovered during test densification. See §2.3.
 4. 🟡 **More unit tests** for masp + openvcl, especially per-module coverage.
    masp side: sb / hash / number-prefix landed 2026-05-11 (3 new test
-   binaries, 57 cases). openvcl side: 17 → 55 cases — tokenizer suite
+   binaries, 57 cases). openvcl side: 17 → 56 cases — tokenizer suite
    (`openvcl@edc5b76`) + Parser operand-family / error-recovery suite
-   (`openvcl@acc1ba6`) both landed 2026-05-11. See §2.4.
+   (`openvcl@acc1ba6`) + RA uninit-read propagation fix and its
+   regression test (`openvcl@66b4486`) all landed 2026-05-11. See §2.4.
 
 **Workarounds & infrastructure landed this session:**
 - `-DPS2GL_USE_SCE_VSM=ON` — bypasses openvcl, assembles Sony's reference VSMs
@@ -35,11 +36,11 @@ minimal repro committed.
 - `vsm_diff.py` semantic diff harness + per-renderer CTest entries. All 12
   WILL_FAIL today; XPASS-flips as renderers converge. (`ps2gl@cmake` commit
   `9138e1f`)
-- openvcl unit + integration test framework. 55 tests (17 originally,
-  +25 from the Tokenizer suite, +13 from the Parser family/error suite),
-  0 failures.
+- openvcl unit + integration test framework. 56 tests (17 originally,
+  +25 from the Tokenizer suite, +13 from the Parser family/error suite,
+  +1 regression for the RA uninit-read propagation fix), 0 failures.
   (`openvcl@ps2gl` commits `7f1db90`, `de7f1f8`, `bec6b7f`, `edc5b76`,
-  `acc1ba6`)
+  `acc1ba6`, `66b4486`)
 
 ---
 
@@ -197,7 +198,7 @@ per-module tests are easy. Targets:
 | Conditional assembly     | `\ifmode` / `\ifm` / `\endifm` truth tables      | open |
 | Golden files             | Re-run every `ps2gl/vu1/*.vcl` through masp; compare to checked-in expected output | open |
 
-**openvcl** — has 55 tests across `unit/` and `integration/` (was 17
+**openvcl** — has 56 tests across `unit/` and `integration/` (was 17
 before 2026-05-11). Hand-rolled harness in `test/include/test_harness.h`
 (TEST_CASE / CHECK / REQUIRE / EXPECTED_FAIL, auto-registered via
 static init). Subprocess runner in `test/include/openvcl_runner.h` for
@@ -258,14 +259,13 @@ allocator, CLIP validation, `.init_vf` range. All with regression tests.
 - Output-parameters only applied at "proper" branch exits (vague spec)
 - GASP preparsing doesn't track filenames (low priority)
 - *Plus the new quad-renderer bug* — filed, repro committed.
-- **Error propagation gap** discovered 2026-05-11 while densifying Parser
-  tests: `"Read-attempt from uninitialized float register"` prints to
-  stderr but does NOT bump `Error::m_errorCount`, so the process exits
-  0 instead of failing.  Sibling of the bug commit `5c0227b` already
-  fixed for CLIP.  Cheap fix: route this code path through
-  `Error::Display` (or directly increment the counter).  Parser tests
-  in `test_parser_families.cpp` deliberately check stderr substrings
-  instead of exit_code on positives, so they're not blocked by this.
+- ~~**Error propagation gap** for RegisterAllocator uninit-register
+  reads~~ — ✅ fixed 2026-05-11 (`openvcl@66b4486`).  The seven RA
+  paths (`float/integer/accumulator/Q/P/R/I`) now route through
+  `Error::Display(Error(msg, token, *i))` so they participate in
+  exit-code propagation, mirroring the `5c0227b` CLIP fix.  Guarded
+  by `RegisterAllocator: uninit-read produces a non-zero exit` in
+  `test_parser_families.cpp`.
 
 ---
 
