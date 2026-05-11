@@ -157,25 +157,6 @@ foreach(RENDERER ${RENDERERS})
         continue()
     endif()
 
-    # Check if this renderer is known to be incompatible with openvcl
-    # indexed renderer uses variable names that openvcl doesn't recognize
-    # Temporarily disabled to try compiling with openvcl
-    # if(OPENVCL_FOUND AND (RENDERER STREQUAL "indexed" OR RENDERER STREQUAL "scei"))
-    #     if(EXISTS ${VO_SOURCE})
-    #         message(STATUS "Using pre-built VU1 object for ${RENDERER}.vo (openvcl incompatible)")
-    #         add_custom_command(
-    #             OUTPUT ${VO_FILE}
-    #             COMMAND ${CMAKE_COMMAND} -E copy ${VO_SOURCE} ${VO_FILE}
-    #             DEPENDS ${VO_SOURCE}
-    #             COMMENT "Copying pre-built VU1 object: ${RENDERER}.vo"
-    #         )
-    #         list(APPEND VU1_OBJECTS ${VO_FILE})
-    #     else()
-    #         message(WARNING "Pre-built VU1 object not found: ${VO_SOURCE}")
-    #     endif()
-    #     continue()
-    # endif()
-
     # Step 1: .vcl -> _pp1.vcl (remove #include, #define, fix .include paths)
     add_custom_command(
         OUTPUT ${PP1_FILE}
