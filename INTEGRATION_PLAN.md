@@ -25,7 +25,8 @@ minimal repro committed.
    bug discovered during test densification. See §2.3.
 4. 🟡 **More unit tests** for masp + openvcl, especially per-module coverage.
    masp side: sb / hash / number-prefix landed 2026-05-11 (3 new test
-   binaries, 57 cases). openvcl side: still 17 cases. See §2.4.
+   binaries, 57 cases). openvcl side: 17 → 42 cases — tokenizer suite
+   landed 2026-05-11 (`openvcl@edc5b76`). See §2.4.
 
 **Workarounds & infrastructure landed this session:**
 - `-DPS2GL_USE_SCE_VSM=ON` — bypasses openvcl, assembles Sony's reference VSMs
@@ -33,8 +34,9 @@ minimal repro committed.
 - `vsm_diff.py` semantic diff harness + per-renderer CTest entries. All 12
   WILL_FAIL today; XPASS-flips as renderers converge. (`ps2gl@cmake` commit
   `9138e1f`)
-- openvcl unit + integration test framework. 17 tests, 0 failures.
-  (`openvcl@ps2gl` commits `7f1db90`, `de7f1f8`, `bec6b7f`)
+- openvcl unit + integration test framework. 42 tests (17 originally,
+  +25 from the Tokenizer suite), 0 failures.
+  (`openvcl@ps2gl` commits `7f1db90`, `de7f1f8`, `bec6b7f`, `edc5b76`)
 
 ---
 
@@ -192,14 +194,16 @@ per-module tests are easy. Targets:
 | Conditional assembly     | `\ifmode` / `\ifm` / `\endifm` truth tables      | open |
 | Golden files             | Re-run every `ps2gl/vu1/*.vcl` through masp; compare to checked-in expected output | open |
 
-**openvcl** — has 17 tests across `unit/` and `integration/`. Hand-rolled
-harness in `test/include/test_harness.h` (TEST_CASE / CHECK / REQUIRE /
-EXPECTED_FAIL, auto-registered via static init). Subprocess runner in
-`test/include/openvcl_runner.h` for end-to-end checks. Targets to expand:
+**openvcl** — has 42 tests across `unit/` and `integration/` (was 17
+before 2026-05-11). Hand-rolled harness in `test/include/test_harness.h`
+(TEST_CASE / CHECK / REQUIRE / EXPECTED_FAIL, auto-registered via
+static init). Subprocess runner in `test/include/openvcl_runner.h` for
+end-to-end checks. Targets to expand:
 
 | Area                                              | Effort | Status |
 | ------------------------------------------------- | ------ | ------ |
-| Tokenizer: more mnemonics, comments, fields       | ½ day  | open  |
+| Tokenizer: comments, fields, bit-flags, labels    | ½ day  | ✅ 25 cases in `test_tokenizer.cpp` (`openvcl@edc5b76`) — case-insensitive mnemonic lookup and `.xyzw`→0 normalisation pinned with comments |
+| Tokenizer: argument-list parsing for FMAC/LSU forms | ½ day  | open (broadcast, indirect, post-inc, immediate operands) |
 | Parser: operand templates, error recovery         | ½ day  | open  |
 | Expression: edge cases (some landed)              | started | partial |
 | CodeGenerator golden files per mnemonic family    | 1 day  | open  |
