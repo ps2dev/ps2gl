@@ -101,6 +101,17 @@ set(RENDERERS
     scei
 )
 
+# Diagnostic build option: skip the .vcl -> .vsm half of the pipeline
+# and assemble the in-tree Sony reference VSMs (vu1/sce_<X>_vcl.vsm)
+# directly with dvp-as.  Lets us isolate "openvcl produces wrong VSMs"
+# from "ps2gl host-side bug" -- if a sample that renders blank with the
+# openvcl-built library renders correctly with this option ON, the
+# fault is in openvcl's output (or our preprocessing) rather than in
+# ps2gl itself.
+option(PS2GL_USE_SCE_VSM
+    "Bypass the .vcl pipeline; assemble vu1/sce_<X>_vcl.vsm directly"
+    OFF)
+
 # Check for VU1 tools availability
 # Prefer open-source tools (openvcl + masp) over proprietary ones (vcl + gasp)
 find_program(OPENVCL_FOUND openvcl)
@@ -110,7 +121,16 @@ find_program(GASP_FOUND gasp)
 find_program(DVP_AS_FOUND dvp-as)
 
 # Determine which tools to use
-if(OPENVCL_FOUND AND MASP_FOUND AND DVP_AS_FOUND)
+if(PS2GL_USE_SCE_VSM AND DVP_AS_FOUND)
+    # SCE-VSM bypass: only dvp-as is required; the .vcl -> .vsm half of
+    # the pipeline is skipped and we assemble Sony's reference VSMs
+    # directly.  Treat VU1_TOOLS_AVAILABLE as TRUE so the foreach loop
+    # produces .vo files (it just takes the bypass branch below).
+    set(VU1_TOOLS_AVAILABLE TRUE)
+    set(VCL_TOOL "")
+    set(GASP_TOOL "")
+    message(STATUS "PS2GL_USE_SCE_VSM=ON - using vu1/sce_<X>_vcl.vsm directly (dvp-as only)")
+elseif(OPENVCL_FOUND AND MASP_FOUND AND DVP_AS_FOUND)
     set(VU1_TOOLS_AVAILABLE TRUE)
     set(VCL_TOOL ${OPENVCL_FOUND})
     set(GASP_TOOL ${MASP_FOUND})
@@ -153,6 +173,36 @@ foreach(RENDERER ${RENDERERS})
             list(APPEND VU1_OBJECTS ${VO_FILE})
         else()
             message(WARNING "Pre-built VU1 object not found: ${VO_SOURCE}")
+        endif()
+        continue()
+    endif()
+
+    if(PS2GL_USE_SCE_VSM)
+        # Bypass the .vcl pipeline entirely; assemble the in-tree Sony
+        # reference VSM directly.  scei's reference uses a different
+        # naming convention (`scei_vcl.vsm`, no `sce_` prefix), so
+        # special-case it.
+        if(RENDERER STREQUAL "scei")
+            set(SCE_VSM_SOURCE "${CMAKE_SOURCE_DIR}/vu1/scei_vcl.vsm")
+        else()
+            set(SCE_VSM_SOURCE "${CMAKE_SOURCE_DIR}/vu1/sce_${RENDERER}_vcl.vsm")
+        endif()
+
+        if(EXISTS ${SCE_VSM_SOURCE})
+            add_custom_command(
+                OUTPUT ${VO_FILE}
+                COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/vu1
+                COMMAND ${DVP_AS_FOUND} -o ${VO_FILE} ${SCE_VSM_SOURCE}
+                DEPENDS ${SCE_VSM_SOURCE}
+                COMMENT "SCE-VSM bypass: dvp-as ${SCE_VSM_SOURCE} -> ${RENDERER}.vo"
+            )
+            set_source_files_properties(${VO_FILE} PROPERTIES
+                EXTERNAL_OBJECT TRUE
+                GENERATED TRUE
+            )
+            list(APPEND VU1_OBJECTS ${VO_FILE})
+        else()
+            message(WARNING "PS2GL_USE_SCE_VSM=ON but ${SCE_VSM_SOURCE} not found; skipping ${RENDERER}")
         endif()
         continue()
     endif()

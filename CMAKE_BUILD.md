@@ -68,6 +68,9 @@ The following CMake options are available:
 |--------|---------|-------------|
 | `DEBUG` | OFF | Enable debug build with `_DEBUG` definition |
 | `BUILD_TESTS` | OFF | Build test executables |
+| `BUILD_EXAMPLES` | OFF | Build the example ELFs under `examples/` |
+| `BUILD_GLUT` | ON | Build the GLUT-compat library |
+| `PS2GL_USE_SCE_VSM` | OFF | Bypass the .vcl pipeline; assemble Sony's reference VSMs (`vu1/sce_<X>_vcl.vsm`) directly with `dvp-as`. Diagnostic mode: lets us isolate "openvcl produces wrong VSMs" from "ps2gl host-side bug" by comparing the SCE-built ELF behavior against the openvcl-built one. |
 
 ## Build Flags
 
