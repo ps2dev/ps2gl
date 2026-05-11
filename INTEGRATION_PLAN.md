@@ -19,10 +19,13 @@ minimal repro committed.
 2. 🟡 **Dual-pipe scheduler** in openvcl. Headline performance feature.
    Currently openvcl produces 0.34-0.73× Sony's instruction count per
    renderer. Multi-week. See §2.2.
-3. 🟡 **masp polish** — two `FIXME`s in `src/macro.c`, decision on
-   `build_ps2/`. Half-day. See §2.3.
+3. 🟡 **masp polish** — most of §2.3 closed 2026-05-11: FIXMEs in
+   `src/macro.c` rewritten as NOTEs, stale `build_ps2/` removed.
+   Remaining: README expand, and the dormant `change_base` trailing-`'`
+   bug discovered during test densification. See §2.3.
 4. 🟡 **More unit tests** for masp + openvcl, especially per-module coverage.
-   Infrastructure already in place. See §2.4.
+   masp side: sb / hash / number-prefix landed 2026-05-11 (3 new test
+   binaries, 57 cases). openvcl side: still 17 cases. See §2.4.
 
 **Workarounds & infrastructure landed this session:**
 - `-DPS2GL_USE_SCE_VSM=ON` — bypasses openvcl, assembles Sony's reference VSMs
@@ -165,27 +168,29 @@ will be subtly cleverer.
 
 | Item                                       | Effort | Notes |
 | ------------------------------------------ | ------ | ----- |
-| Address 2× `FIXME` in `src/macro.c`        | ½ day  | Comment-handling edge cases. May be doc-only notes — verify before claiming bug. |
-| Decide fate of `build_ps2/` failing tests  | ½ hour | Either fix toolchain wiring or remove the directory; masp doesn't need to run on PS2. |
+| ~~Address 2× `FIXME` in `src/macro.c`~~    | ✅ done | Both were inherited gasp doc-FIXMEs, not bugs. Rewritten as NOTE explanations. masp@`b5de42a`. |
+| ~~Decide fate of `build_ps2/`~~            | ✅ done | Stale local CMake dir from a past PS2 cross-compile experiment; deleted (was untracked). |
 | README expand to brief user manual         | ½ day  | Acknowledged gap in README itself. |
+| Fix `change_base` trailing-`'` bug         | ½ day  | Discovered 2026-05-11 while densifying tests: GASP-style `B'1010'` leaves the closing `'` in the output. Dormant — ps2gl uses `masp_syntax=1` path (`change_base2`). Tests pin the buggy behaviour in `masp@816b4d8`; fix is to bump idx past the closing `'` after `sb_strtol`. |
 
 ### 2.4 Test densification 🟡
 
 The frameworks exist; coverage is shallow.
 
-**masp** — has CMake/CTest with 2 tests; pattern links source files into a
-test binary so per-module tests are easy. Targets:
+**masp** — was 2 CTest entries, now 5 (32 + 25 = 57 new cases as of
+2026-05-11). Pattern links source files into a test binary so
+per-module tests are easy. Targets:
 
-| Module                   | What to cover |
-| ------------------------ | ------------- |
-| `sb.c` (string buffer)   | append / reset / grow / overflow / null handling |
-| `hash.c` (hash table)    | insert / lookup / delete / collision / resize    |
-| `macro.c`                | macro defs, recursive expansion, comma-arg splitting, the two FIXME edges |
-| Number-prefix parser     | `0b` / `0q` / `0h` / `0d` / `0a` vs GASP `B'…`   |
-| Directive prefix         | `-P/--prefixchar` default `\`, conflicts        |
-| Mode switching           | `\masp` / `\gasp` toggles, nested ifmode         |
-| Conditional assembly     | `\ifmode` / `\ifm` / `\endifm` truth tables      |
-| Golden files             | Re-run every `ps2gl/vu1/*.vcl` through masp; compare to checked-in expected output |
+| Module                   | What to cover | Status |
+| ------------------------ | ------------- | ------ |
+| `sb.c` (string buffer)   | append / reset / grow / overflow / null handling | ✅ 18 cases in `test_sb` (masp@`607196e`) |
+| `hash.c` (hash table)    | insert / lookup / delete / collision / resize    | ✅ 14 cases in `test_hash` (masp@`607196e`) — exercises key-copy ownership and the move-to-front cache over 5000 keys |
+| Number-prefix parser     | `0b` / `0q` / `0h` / `0d` / `0a` vs GASP `B'…`   | ✅ 25 cases in `test_number_prefix` (masp@`816b4d8`) covering `is_base`, `sb_strtol`, `change_base`, `change_base2` |
+| `macro.c`                | macro defs, recursive expansion, comma-arg splitting | open |
+| Directive prefix         | `-P/--prefixchar` default `\`, conflicts        | open |
+| Mode switching           | `\masp` / `\gasp` toggles, nested ifmode         | open |
+| Conditional assembly     | `\ifmode` / `\ifm` / `\endifm` truth tables      | open |
+| Golden files             | Re-run every `ps2gl/vu1/*.vcl` through masp; compare to checked-in expected output | open |
 
 **openvcl** — has 17 tests across `unit/` and `integration/`. Hand-rolled
 harness in `test/include/test_harness.h` (TEST_CASE / CHECK / REQUIRE /
