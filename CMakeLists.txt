@@ -232,6 +232,50 @@ if(VU1_OBJECTS)
 endif()
 
 # ============================================================================
+# VSM semantic-diff tests
+# ============================================================================
+# For each renderer with a Sony reference VSM in `vu1/sce_<X>_vcl.vsm`,
+# add a CTest that compares its opcode histogram + label set against the
+# openvcl-produced `<build>/vu1/<X>_vcl.vsm`.  Used as a ratchet for the
+# eventual dual-pipe scheduler / specialization work: tests that don't
+# pass yet are marked WILL_FAIL so a renderer "going green" lights up
+# instead of breaking the build.
+find_package(Python3 COMPONENTS Interpreter)
+if(VU1_TOOLS_AVAILABLE AND Python3_Interpreter_FOUND)
+    enable_testing()
+
+    set(VSM_DIFF_SCRIPT ${CMAKE_SOURCE_DIR}/cmake/vsm_diff.py)
+
+    foreach(RENDERER ${RENDERERS})
+        set(SCE_VSM "${CMAKE_SOURCE_DIR}/vu1/sce_${RENDERER}_vcl.vsm")
+        set(OVC_VSM "${CMAKE_BINARY_DIR}/vu1/${RENDERER}_vcl.vsm")
+
+        if(NOT EXISTS "${SCE_VSM}")
+            # No Sony reference for this renderer (e.g. scei.vcl ships its
+            # own reference under a different name); skip silently.
+            continue()
+        endif()
+
+        add_test(NAME vsm_diff_${RENDERER}
+                 COMMAND ${Python3_EXECUTABLE} ${VSM_DIFF_SCRIPT}
+                         ${SCE_VSM} ${OVC_VSM})
+        # Building the openvcl output is a prerequisite.  CTest doesn't
+        # auto-build, so the user must run `cmake --build` first; the
+        # FIXTURES_REQUIRED machinery would be overkill here.
+        set_tests_properties(vsm_diff_${RENDERER} PROPERTIES
+            # Today openvcl produces neither pipe-paired nor multi-
+            # specialised output, so the strict histogram check fails
+            # for every renderer.  Mark them WILL_FAIL so a renderer
+            # becoming equivalent shows up as XPASS instead of silently
+            # breaking the build.  Drop this property per-renderer as
+            # the scheduler / specialization work closes each one.
+            WILL_FAIL TRUE
+            LABELS "vsm-diff;known-failing"
+        )
+    endforeach()
+endif()
+
+# ============================================================================
 # Build the library
 # ============================================================================
 add_library(ps2gl STATIC ${PS2GL_SOURCES})
