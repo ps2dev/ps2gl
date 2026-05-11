@@ -1,0 +1,257 @@
+; === __LP__ EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__MAIN_LOOP:
+; ===            ldumb : optimal=16 clid=0 mlid=3 size=(16) 
+; ===          normal1 : optimal=16 clid=0 mlid=2 size=(16) 
+; ===             vuta : optimal=16 clid=0 mlid=3 size=(16) 
+; ===              dUp : optimal=16 clid=0 mlid=2 size=(16) 
+; ===           normal : optimal=16 clid=0 mlid=3 size=(16) 
+; =================================================
+; flowMon::Emit() vcl 1.4beta7 produced this code:
+		.vu
+		.align 4
+		.global	vsmFast_CodeStart
+		.global	vsmFast_CodeEnd
+vsmFast_CodeStart:
+__v_vu1_fast_pp4_vcl_4:
+; _LNOPT_w=[ normal ] 10 [10 0] 10   [__v_vu1_fast_pp4_vcl_4]
+         NOP                                                        ilw.x         VI01,0(VI00)                        
+         NOP                                                        iaddiu        VI02,VI00,0                         
+         NOP                                                        lq            VF01,62(VI00)                       
+         NOP                                                        lq            VF02,63(VI00)                       
+         max.xyz       VF06,VF00,VF00                               lq            VF03,64(VI00)                       
+         max.xyz       VF07,VF00,VF00                               lq            VF04,65(VI00)                       
+         max.xyz       VF08,VF00,VF00                               lq.xyz        VF05,58(VI00)                       
+         max.xyz       VF09,VF00,VF00                               ilw.x         VI03,1(VI02)                        
+         max.xyz       VF10,VF00,VF00                               ibeq          VI01,VI00,finish_init_lid           
+         max.xyz       VF11,VF00,VF00                               lq.xyz        VF12,59(VI00)                       
+; _LNOPT_w=[ vuta1 ] 12 [9 0] 12   [__v_vu1_fast_pp4_vcl_5]
+         NOP                                                        lq.xyz        VF14,67(VI00)                       
+         NOP                                                        lq.xyz        VF06,3(VI03)                        
+         NOP                                                        lq.xyz        VF15,68(VI00)                       
+         NOP                                                        lq.xyz        VF17,0(VI03)                        
+         NOP                                                        lq.xyz        VF09,1(VI03)                        
+         NOP                                                        lq.xyz        VF16,69(VI00)                       
+         mulax.xyz     ACC,VF14,VF06x                               lq.xyz        VF13,60(VI00)                       
+         mul.xyz       VF17,VF12,VF17                               NOP                                               
+         madday.xyz    ACC,VF15,VF06y                               isubiu        VI04,VI01,0x00000001                
+         maddz.xyz     VF06,VF16,VF06z                              NOP                                               
+         mul.xyz       VF09,VF09,VF13                               ibeq          VI04,VI00,finish_init_lid           
+         add.xyz       VF05,VF05,VF17                               NOP                                               
+; _LNOPT_w=[ another ] 10 [14 0] 15   [__v_vu1_fast_pp4_vcl_6]
+         NOP                                                        iaddiu        VI01,VI02,0                         
+         NOP                                                        ilw.x         VI02,2(VI01)                        
+         NOP                                                        lq.xyz        VF07,3(VI02)                               ;	STALL_LATENCY ?3
+         NOP                                                        lq.xyz        VF17,0(VI02)                        
+         mulax.xyz     ACC,VF14,VF07x                               lq.xyz        VF10,1(VI02)                               ;	STALL_LATENCY ?2
+         mul.xyz       VF17,VF12,VF17                               NOP                                               
+         madday.xyz    ACC,VF15,VF07y                               isubiu        VI04,VI04,0x00000001                
+         maddz.xyz     VF07,VF16,VF07z                              NOP                                               
+         mul.xyz       VF10,VF10,VF13                               ibeq          VI04,VI00,finish_init_lid           
+         add.xyz       VF05,VF05,VF17                               NOP                                               
+; _LNOPT_w=[ normal2 ] 10 [14 0] 16   [__v_vu1_fast_pp4_vcl_7]
+         NOP                                                        iaddiu        VI01,VI01,0                         
+         NOP                                                        ilw.x         VI01,3(VI01)                        
+         NOP                                                        lq.xyz        VF08,3(VI01)                               ;	STALL_LATENCY ?3
+         NOP                                                        lq.xyz        VF11,0(VI01)                        
+         mulax.xyz     ACC,VF14,VF08x                               NOP                                                      ;	STALL_LATENCY ?2
+         madday.xyz    ACC,VF15,VF08y                               lq.xyz        VF14,1(VI01)                        
+         mul.xyz       VF15,VF12,VF11                               NOP                                               
+         maddz.xyz     VF08,VF16,VF08z                              NOP                                               
+         mul.xyz       VF11,VF14,VF13                               NOP                                                      ;	STALL_LATENCY ?1
+         add.xyz       VF05,VF05,VF15                               NOP                                               
+finish_init_lid:
+; _LNOPT_w=[ normal2 ] 35 [35 0] 35   [finish_init_lid]
+         sub           VF17,VF00,VF00                               lq.xyz        VF15,57(VI00)                       
+         addy.x        VF13,VF00,VF06y                              NOP                                               
+         addz.x        VF14,VF00,VF06z                              lq.w          VF09,60(VI00)                       
+         sub           VF18,VF00,VF00                               mr32.x        VF19,VF08                           
+         mul.xyz       VF15,VF12,VF15                               lq.w          VF11,57(VI00)                       
+         sub           VF12,VF00,VF00                               loi           0x43000000                          
+         muli.w        VF10,VF09,I                                  loi           0x44fff000                          
+         addi.xy       VF19,VF00,I                                  mr32.w        VF09,VF19                           
+         add.xyz       VF05,VF05,VF15                               mr32.z        VF19,VF11                           
+         maxw.x        VF17,VF17,VF00w                              NOP                                               
+         maxw.y        VF18,VF18,VF00w                              NOP                                               
+         maxw.z        VF12,VF12,VF00w                              NOP                                               
+         max.xyz       VF19,VF19,VF19                               NOP                                               
+         mulax         ACC,VF17,VF01x                               NOP                                               
+         madday        ACC,VF18,VF01y                               mr32.y        VF08,VF07                           
+         maddaz        ACC,VF12,VF01z                               move.w        VF19,VF00                           
+         addx.y        VF06,VF00,VF07x                              loi           0x4b4000ff                          
+         addx.z        VF06,VF00,VF08x                              mr32.z        VF07,VF09                           
+         maxi.w        VF09,VF00,I                                  loi           0x437f0000                          
+         minii.w       VF10,VF10,I                                  loi           0x4b400000                          
+         addi.xyz      VF13,VF05,I                                  move.x        VF07,VF13                           
+         maddw         VF14,VF19,VF01w                              move.x        VF08,VF14                           
+         mulax         ACC,VF17,VF02x                               NOP                                               
+         addi.w        VF05,VF10,I                                  NOP                                               
+         madday        ACC,VF18,VF02y                               NOP                                               
+         maddaz        ACC,VF12,VF02z                               NOP                                               
+         maddw         VF15,VF19,VF02w                              NOP                                               
+         mulax         ACC,VF17,VF03x                               NOP                                               
+         madday        ACC,VF18,VF03y                               NOP                                               
+         maddaz        ACC,VF12,VF03z                               NOP                                               
+         maddw         VF16,VF19,VF03w                              NOP                                               
+         mulax         ACC,VF17,VF04x                               NOP                                               
+         madday        ACC,VF18,VF04y                               NOP                                               
+         maddaz[E]     ACC,VF12,VF04z                               NOP                                               
+         maddw         VF17,VF19,VF04w                              NOP                                               
+main_loop_lid:
+; _LNOPT_w=[ normal2 ] 19 [19 0] 19   [main_loop_lid]
+         NOP                                                        xtop          VI01                                
+         NOP                                                        lq            VF01,75(VI00)                       
+         NOP                                                        ilw.x         VI04,0(VI01)                        
+         NOP                                                        iaddiu        VI06,VI01,0x00000001                
+         NOP                                                        iaddiu        VI02,VI01,0x00000005                
+         NOP                                                        mtir          VI03,VF01x                          
+         NOP                                                        iadd          VI05,VI02,VI04                      
+         NOP                                                        ior           VI03,VI03,VI04                      
+         NOP                                                        iadd          VI05,VI05,VI04                      
+         NOP                                                        mfir.x        VF01,VI03                           
+         NOP                                                        iaddiu        VI03,VI01,0                         
+         NOP                                                        iadd          VI04,VI05,VI04                      
+         NOP                                                        iaddiu        VI05,VI01,0x00000005                
+         NOP                                                        sq            VF01,236(VI03)                      
+         NOP                                                        iaddiu        VI07,VI06,0x00000004                
+         NOP                                                        iaddiu        VI08,VI00,0x000003ff                
+         NOP                                                        iaddiu        VI09,VI00,0x00000800                
+         NOP                                                        iaddiu        VI10,VI00,0x00000400                
+         NOP                                                        iaddiu        VI11,VI00,0x00000020                
+adcLoop_lid:
+; _LNOPT_w=[ normal2 ] 7 [13 0] 13   [adcLoop_lid]
+         NOP                                                        lq            VF01,0(VI06)                        
+         ftoi0         VF01,VF01                                    NOP                                                      ;	STALL_LATENCY ?3
+         NOP                                                        mtir          VI12,VF01x                                 ;	STALL_LATENCY ?3
+         NOP                                                        iand          VI13,VI12,VI10                      
+         NOP                                                        NOP                                               
+         NOP                                                        ibeq          VI13,VI10,EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__ENTRY_POINT
+         NOP                                                        NOP                                               
+; _LNOPT_w=[ normal2 ] 8 [8 0] 8   [__v_vu1_fast_pp4_vcl_12]
+         NOP                                                        iand          VI14,VI12,VI08                      
+         NOP                                                        mtir          VI13,VF01y                          
+         NOP                                                        iand          VI12,VI12,VI09                      
+         NOP                                                        iadd          VI14,VI14,VI05                      
+         NOP                                                        iand          VI15,VI13,VI10                      
+         NOP                                                        isw.w         VI11,0(VI14)                        
+         NOP                                                        ibeq          VI15,VI10,EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__ENTRY_POINT
+         NOP                                                        isw.w         VI12,3(VI14)                        
+; _LNOPT_w=[ normal2 ] 8 [8 0] 8   [__v_vu1_fast_pp4_vcl_13]
+         NOP                                                        iand          VI14,VI13,VI08                      
+         NOP                                                        mtir          VI12,VF01z                          
+         NOP                                                        iand          VI13,VI13,VI09                      
+         NOP                                                        iadd          VI14,VI14,VI05                      
+         NOP                                                        iand          VI15,VI12,VI10                      
+         NOP                                                        isw.w         VI11,0(VI14)                        
+         NOP                                                        ibeq          VI15,VI10,EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__ENTRY_POINT
+         NOP                                                        isw.w         VI13,3(VI14)                        
+; _LNOPT_w=[ normal2 ] 8 [8 0] 8   [__v_vu1_fast_pp4_vcl_14]
+         NOP                                                        iand          VI14,VI12,VI08                      
+         NOP                                                        mtir          VI13,VF01w                          
+         NOP                                                        iand          VI12,VI12,VI09                      
+         NOP                                                        iadd          VI14,VI14,VI05                      
+         NOP                                                        iand          VI15,VI13,VI10                      
+         NOP                                                        isw.w         VI11,0(VI14)                        
+         NOP                                                        ibeq          VI15,VI10,EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__ENTRY_POINT
+         NOP                                                        isw.w         VI12,3(VI14)                        
+; _LNOPT_w=[ normal2 ] 7 [7 0] 7   [__v_vu1_fast_pp4_vcl_15]
+         NOP                                                        iand          VI12,VI13,VI08                      
+         NOP                                                        iaddiu        VI06,VI06,0x00000001                
+         NOP                                                        iand          VI13,VI13,VI09                      
+         NOP                                                        iadd          VI12,VI12,VI05                      
+         NOP                                                        isw.w         VI11,0(VI12)                        
+         NOP                                                        ibne          VI06,VI07,adcLoop_lid               
+         NOP                                                        isw.w         VI13,3(VI12)                        
+EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__ENTRY_POINT:
+; _LNOPT_w=[ ] 11 [16 0] 16   [EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__ENTRY_POINT]
+         NOP                                                        lq.xyz        VF05,1(VI02)                        
+         mulax.xyz     ACC,VF06,VF05x                               NOP                                                      ;	STALL_LATENCY ?3
+         madday.xyz    ACC,VF07,VF05y                               lq.xyz        VF01,0(VI02)                        
+         maddz.xyz     VF05,VF08,VF05z                              NOP                                               
+         mulax         ACC,VF14,VF01x                               NOP                                                      ;	STALL_LATENCY ?2
+         max.xyz       VF05,VF05,VF00                               NOP                                               
+         madday        ACC,VF15,VF01y                               NOP                                               
+         maddaz        ACC,VF16,VF01z                               iaddiu        VI02,VI02,0x00000003                
+         maddw         VF01,VF17,VF00w                              NOP                                               
+         mulax.xyz     ACC,VF09,VF05x                               ibeq          VI02,VI04,EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EPI1
+         madday.xyz    ACC,VF10,VF05y                               iaddiu        VI03,VI03,0                         
+; _LNOPT_w=[ ] 15 [16 0] 16   [EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__PRO1]
+         maddz.xyz     VF03,VF11,VF05z                              lq.xyz        VF05,1(VI02)                        
+         NOP                                                        div           Q,VF00w,VF01w                       
+         NOP                                                        lq.xyz        VF12,0(VI02)                        
+         mulax.xyz     ACC,VF06,VF05x                               NOP                                                      ;	STALL_LATENCY ?1
+         madday.xyz    ACC,VF07,VF05y                               NOP                                               
+         maddz.xyz     VF05,VF08,VF05z                              NOP                                               
+         mulax         ACC,VF14,VF12x                               NOP                                               
+         madday        ACC,VF15,VF12y                               ilw.w         VI05,-3(VI02)                       
+         maddaz        ACC,VF16,VF12z                               move.xyz      VF12,VF01                           
+         max.xyz       VF05,VF05,VF00                               iaddiu        VI03,VI03,0x000000f3                
+         maddw         VF01,VF17,VF00w                              iaddiu        VI02,VI02,0x00000003                
+         add.xyz       VF03,VF03,VF13                               iaddiu        VI05,VI05,0x00007fff                
+         mulq.xyz      VF04,VF12,Q                                  mfir.w        VF03,VI05                           
+         mulax.xyz     ACC,VF09,VF05x                               ibeq          VI02,VI04,EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EPI0
+         madday.xyz    ACC,VF10,VF05y                               lq.xyz        VF12,-4(VI02)                       
+EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__MAIN_LOOP:
+; _LPOPT_w=[ normal1 ] 16 [16 16] 16   [EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__MAIN_LOOP]
+         maddz.xyz     VF02,VF11,VF05z                              lq.xyz        VF18,1(VI02)                        
+         miniw.xyz     VF05,VF03,VF09w                              iaddiu        VI03,VI03,0x00000003                
+         ftoi4.xyz     VF03,VF04                                    NOP                                               
+         mulq.xyz      VF04,VF12,Q                                  lq.xyz        VF12,0(VI02)                        
+         mulax.xyz     ACC,VF06,VF18x                               div           Q,VF00w,VF01w                       
+         madday.xyz    ACC,VF07,VF18y                               sq            VF05,-8(VI03)                       
+         maddz.xyz     VF05,VF08,VF18z                              NOP                                               
+         mulax         ACC,VF14,VF12x                               ilw.w         VI05,-3(VI02)                       
+         madday        ACC,VF15,VF12y                               iaddiu        VI02,VI02,0x00000003                
+         maddaz        ACC,VF16,VF12z                               move.xyz      VF12,VF01                           
+         max.xyz       VF05,VF05,VF00                               sq.xyz        VF04,-9(VI03)                       
+         maddw         VF01,VF17,VF00w                              iaddiu        VI05,VI05,0x00007fff                
+         add.xyz       VF03,VF02,VF13                               sq            VF03,-7(VI03)                       
+         mulq.xyz      VF04,VF12,Q                                  mfir.w        VF03,VI05                           
+         mulax.xyz     ACC,VF09,VF05x                               ibne          VI02,VI04,EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__MAIN_LOOP
+         madday.xyz    ACC,VF10,VF05y                               lq.xyz        VF12,-4(VI02)                       
+EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EPI0:
+; _LNOPT_w=[ ] 16 [16 0] 18   [EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EPI0]
+         maddz.xyz     VF02,VF11,VF05z                              div           Q,VF00w,VF01w                       
+         miniw.xyz     VF05,VF03,VF09w                              ilw.w         VI04,-3(VI02)                       
+         ftoi4.xyz     VF03,VF04                                    NOP                                               
+         mulq.xyz      VF04,VF12,Q                                  move.xyz      VF12,VF01                           
+         NOP                                                        sq            VF05,-5(VI03)                              ;	STALL_LATENCY ?1
+         add.xyz       VF03,VF02,VF13                               sq            VF03,-4(VI03)                       
+         mulq.xyz      VF04,VF12,Q                                  sq.xyz        VF04,-6(VI03)                       
+         NOP                                                        iaddiu        VI04,VI04,0x00007fff                
+         NOP                                                        lq.xyz        VF12,-1(VI02)                       
+         miniw.xyz     VF05,VF03,VF09w                              mfir.w        VF03,VI04                           
+         ftoi4.xyz     VF03,VF04                                    NOP                                               
+         mulq.xyz      VF04,VF12,Q                                  NOP                                                      ;	STALL_LATENCY ?1
+         NOP                                                        sq            VF05,-2(VI03)                       
+         NOP                                                        sq            VF03,-1(VI03)                       
+         NOP                                                        b             EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EXIT_POINT
+         NOP                                                        sq.xyz        VF04,-3(VI03)                       
+EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EPI1:
+; _LNOPT_w=[ ] 13 [16 0] 18   [EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EPI1]
+         NOP                                                        NOP                                               
+         maddz.xyz     VF05,VF11,VF05z                              div           Q,VF00w,VF01w                       
+         NOP                                                        move.xyz      VF01,VF01                           
+         add.xyz       VF05,VF05,VF13                               lq.xyz        VF03,-1(VI02)                              ;	STALL_LATENCY ?2
+         NOP                                                        ilw.w         VI04,-3(VI02)                       
+         mulq.xyz      VF02,VF01,Q                                  waitq                                                    ;	STALL_LATENCY ?1
+         NOP                                                        iaddiu        VI04,VI04,0x00007fff                       ;	STALL_LATENCY ?1
+         miniw.xyz     VF05,VF05,VF09w                              mfir.w        VF01,VI04                           
+         ftoi4.xyz     VF01,VF02                                    NOP                                               
+         mulq.xyz      VF02,VF03,Q                                  NOP                                               
+         NOP                                                        sq            VF05,238(VI03)                             ;	STALL_LATENCY ?1
+         NOP                                                        sq            VF01,239(VI03)                      
+         NOP                                                        sq.xyz        VF02,237(VI03)                      
+EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EXIT_POINT:
+; _LNOPT_w=[ ] 4 [2 0] 4   [EXPL_vu1_fast_pp4_vcl_adcLoop_done_lid__EXIT_POINT]
+         NOP                                                        iaddiu        VI01,VI01,0x000000ec                
+         NOP                                                        xgkick        VI01                                
+         NOP[E]                                                     NOP                                               
+         NOP                                                        NOP                                               
+; _LNOPT_w=[ normal2 ] 2 [2 0] 2   [__v_vu1_fast_pp4_vcl_19]
+         NOP                                                        b             main_loop_lid                       
+         NOP                                                        NOP                                               
+		.align 4
+vsmFast_CodeEnd:
+;	iCount=211
+; register stats:
+;  16 VU User integer
+;  20 VU User floating point
