@@ -112,6 +112,21 @@ option(PS2GL_USE_SCE_VSM
     "Bypass the .vcl pipeline; assemble vu1/sce_<X>_vcl.vsm directly"
     OFF)
 
+# Per-renderer override list: even when PS2GL_USE_SCE_VSM=OFF (the default
+# open-source pipeline), force these specific renderers to assemble from
+# Sony's reference VSMs.  Used to ship a working build while individual
+# openvcl-emitted shaders are still being debugged.
+#
+# As of 2026-05-12 the residual openvcl bug is in `general_quad`'s
+# lighting section: lesson04 / lesson05 render correctly because they
+# route to the simpler `general_pv_diff_quad` shader (single light, no
+# specular), but box.elf enables specular and routes to `general_quad`,
+# where the colors come out wrong such that the cube is invisible.
+# Default the override to include `general_quad` until that's fixed.
+set(PS2GL_USE_SCE_VSM_FOR "general_quad"
+    CACHE STRING
+    "Semicolon-separated list of renderer names to force-use Sony's reference VSM for, even when PS2GL_USE_SCE_VSM=OFF")
+
 # Check for VU1 tools availability
 # Prefer open-source tools (openvcl + masp) over proprietary ones (vcl + gasp)
 find_program(OPENVCL_FOUND openvcl)
@@ -177,7 +192,21 @@ foreach(RENDERER ${RENDERERS})
         continue()
     endif()
 
+    # Decide whether this renderer should use Sony's reference VSM:
+    # either PS2GL_USE_SCE_VSM is ON globally, OR this renderer name is
+    # in the per-renderer override list PS2GL_USE_SCE_VSM_FOR.
+    set(_use_sce_for_this OFF)
     if(PS2GL_USE_SCE_VSM)
+        set(_use_sce_for_this ON)
+    elseif(PS2GL_USE_SCE_VSM_FOR)
+        list(FIND PS2GL_USE_SCE_VSM_FOR ${RENDERER} _override_idx)
+        if(NOT _override_idx EQUAL -1)
+            set(_use_sce_for_this ON)
+            message(STATUS "Per-renderer SCE-VSM override: ${RENDERER}")
+        endif()
+    endif()
+
+    if(_use_sce_for_this)
         # Bypass the .vcl pipeline entirely; assemble the in-tree Sony
         # reference VSM directly.  scei's reference uses a different
         # naming convention (`scei_vcl.vsm`, no `sce_` prefix), so
