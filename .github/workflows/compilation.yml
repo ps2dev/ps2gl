@@ -44,10 +44,9 @@ jobs:
       run: |
         git clone https://github.com/fjtrujy/openvcl.git
         cd openvcl
-        git checkout ps2gl
-        make -j $(getconf _NPROCESSORS_ONLN) clean
-        make -j $(getconf _NPROCESSORS_ONLN)
-        make -j $(getconf _NPROCESSORS_ONLN) install
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PS2DEV" -DBUILD_TESTING=OFF
+        cmake --build build -j $(getconf _NPROCESSORS_ONLN)
+        cmake --install build
 
 
     - name: Configure with CMake
