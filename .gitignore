@@ -11,3 +11,6 @@ prebuilddone
 *.a
 *.elf
 *.orig
+
+# CMake
+build/

@@ -13,51 +13,70 @@ jobs:
     container: ps2dev/ps2sdk:latest
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Install dependencies
+
+    - name: Setup dependencies
       run: |
-        apk add build-base git
+        apk update
+        apk add cmake build-base git make bash
+        # Create /bin/bash symlink if it doesn't exist (Alpine installs to /usr/bin/bash)
+        [ -f /bin/bash ] || ln -s /usr/bin/bash /bin/bash
 
     - name: Install ps2stuff
       run: |
         git clone https://github.com/ps2dev/ps2stuff.git
-        cd ps2stuff 
-        make -j $(getconf _NPROCESSORS_ONLN) clean
-        make -j $(getconf _NPROCESSORS_ONLN) all
-        make -j $(getconf _NPROCESSORS_ONLN) install
+        cd ps2stuff
+        git checkout cmake
+        mkdir build
+        cd build
+        cmake ..
+        make -j $(getconf _NPROCESSORS_ONLN)
+        make install
 
-    - name: Compile project
+    - name: Compile masp
       run: |
-        make -j $(getconf _NPROCESSORS_ONLN) clean
-        make -j $(getconf _NPROCESSORS_ONLN) all
-        make -j $(getconf _NPROCESSORS_ONLN) install
-
-    - name: Compile GLUT
-      run: |
-        cd glut 
-        make -j $(getconf _NPROCESSORS_ONLN) clean
-        make -j $(getconf _NPROCESSORS_ONLN) all
-        make -j $(getconf _NPROCESSORS_ONLN) install
+        git clone https://github.com/fjtrujy/masp.git
+        cd masp
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PS2DEV"
+        cmake --build build -j $(getconf _NPROCESSORS_ONLN)
+        cmake --install build
     
-    - name: Compile examples
+    - name: Install openvcl
       run: |
-        cd examples
-        cd box && make clean all && cd ..
-        cd logo && make clean all && cd ..
-        cd performance && make clean all && cd ..
-        cd tricked_out && make clean all && cd ..
-        cd nehe/lesson02 && make clean all && cd ../..
-        cd nehe/lesson03 && make clean all && cd ../..
-        cd nehe/lesson04 && make clean all && cd ../..
-        cd nehe/lesson05 && make clean all && cd ../..
+        git clone https://github.com/fjtrujy/openvcl.git
+        cd openvcl
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PS2DEV" -DBUILD_TESTING=OFF
+        cmake --build build -j $(getconf _NPROCESSORS_ONLN)
+        cmake --install build
 
+
+    - name: Configure with CMake
+      run: |
+        mkdir build
+        cd build
+        cmake -DBUILD_GLUT=ON -DBUILD_EXAMPLES=ON ..
+
+    - name: Build project with CMake
+      run: |
+        cd build
+        make -j $(getconf _NPROCESSORS_ONLN)
+
+    - name: Install libraries
+      run: |
+        cd build
+        make -j $(getconf _NPROCESSORS_ONLN) install
+
+
+    - name: Get short SHA
+      id: slug
+      run: echo "sha8=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
 
     - name: Upload artifacts
+      if: ${{ success() }}
       uses: actions/upload-artifact@v4
       with:
-        name: examples
+        name: ps2gl-examples-${{ steps.slug.outputs.sha8 }}
         path: |
-          examples/**/*.elf
-          examples/**/*.gl
-          examples/**/*.rtx
-          examples/**/*.bin
+          build/examples/*.elf
+          build/examples/*.gl
+          build/examples/*.rtx
+          build/examples/*.bin

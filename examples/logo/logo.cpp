@@ -43,7 +43,7 @@ struct rtHeader {
  * prototypes
  */
 
-rtHeader* LoadRTexFile(char* fileName, unsigned int texName);
+rtHeader* LoadRTexFile(const char* fileName, unsigned int texName);
 ps2glMeshHeader* LoadMesh(const char* fileName);
 void DrawMesh(const void* header);
 
@@ -451,7 +451,7 @@ void special(int key, int x, int y)
  * mesh and textures
  */
 
-void* ReadFile(char* name, unsigned int& size, int pad)
+void* ReadFile(const char* name, unsigned int& size, int pad)
 {
     int infile   = -1;
     void* buffer = 0;
@@ -503,7 +503,7 @@ ps2glMeshHeader*
 LoadMesh(const char* fileName)
 {
     unsigned int size;
-    return (ps2glMeshHeader*)ReadFile((char*)fileName, size, 0);
+    return (ps2glMeshHeader*)ReadFile(fileName, size, 0);
 }
 
 void DrawMesh(const void* header)
@@ -536,12 +536,13 @@ void DrawMesh(const void* header)
 #define RTEX_FORMAT_RGBA8 1
 #define RTEX_FORMAT_INDEX8 2 // 256 colour palette
 
-#include "ps2s/types.h" // for uint128_t
+// 128-bit QWord used only for CLUT reordering — no ps2stuff dependency needed.
+struct pgl_qword_t { unsigned int v[4]; };
 
 void reorderClut(unsigned int* clut)
 {
-    uint128_t buffer, *entries_1, *entries_2;
-    entries_1 = (uint128_t*)clut + 2;
+    pgl_qword_t buffer, *entries_1, *entries_2;
+    entries_1 = (pgl_qword_t*)clut + 2;
     entries_2 = entries_1 + 2;
     unsigned int i;
     for (i = 0; i < 8; i++) {
@@ -562,7 +563,7 @@ void reorderClut(unsigned int* clut)
 }
 
 rtHeader*
-LoadRTexFile(char* fileName, unsigned int texName)
+LoadRTexFile(const char* fileName, unsigned int texName)
 {
     rtHeader* ramImage = NULL;
 
