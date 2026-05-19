@@ -387,20 +387,19 @@ endif()
 # ============================================================================
 # Install targets
 # ============================================================================
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${EE_LIB}
-    DESTINATION "${PS2SDK}/ports/lib"
+install(TARGETS ps2gl
+    ARCHIVE DESTINATION lib
 )
 
 install(
     DIRECTORY ${CMAKE_SOURCE_DIR}/include/GL
-    DESTINATION "${PS2SDK}/ports/include"
+    DESTINATION include
     FILES_MATCHING PATTERN "*.h"
 )
 
 install(
     DIRECTORY ${CMAKE_SOURCE_DIR}/include/ps2gl
-    DESTINATION "${PS2SDK}/ports/include"
+    DESTINATION include
     FILES_MATCHING PATTERN "*.h"
 )
 
@@ -436,7 +435,7 @@ message(STATUS "  Build GLUT: ${BUILD_GLUT}")
 message(STATUS "  Build examples: ${BUILD_EXAMPLES}")
 message(STATUS "  Build tests: ${BUILD_TESTS}")
 message(STATUS "  Output library: ${EE_LIB}")
-message(STATUS "  Install prefix: ${PS2SDK}/ports")
+message(STATUS "  Install prefix: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "  VU0 vectors: DISABLED")
 message(STATUS "  ASM optimizations: DISABLED")
 message(STATUS "  VU1 renderers: ${RENDERERS}")

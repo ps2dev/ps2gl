@@ -63,14 +63,13 @@ target_include_directories(ps2glut PUBLIC
 # ============================================================================
 # Install targets
 # ============================================================================
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${EE_LIB}
-    DESTINATION "${PS2SDK}/ports/lib"
+install(TARGETS ps2glut
+    ARCHIVE DESTINATION lib
 )
 
 install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/GL
-    DESTINATION "${PS2SDK}/ports/include"
+    DESTINATION include
     FILES_MATCHING PATTERN "*.h"
 )
 
