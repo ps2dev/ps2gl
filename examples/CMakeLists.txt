@@ -172,6 +172,7 @@ add_custom_command(TARGET tricked_out POST_BUILD
 )
 
 # NeHe tutorials
+add_ps2gl_example(nehe_lesson01 nehe/lesson01/lesson1.cpp)
 add_ps2gl_example(nehe_lesson02 nehe/lesson02/lesson2.cpp)
 add_ps2gl_example(nehe_lesson03 nehe/lesson03/lesson3.cpp)
 add_ps2gl_example(nehe_lesson04 nehe/lesson04/lesson4.cpp)
