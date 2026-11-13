@@ -64,6 +64,13 @@ tFunctionPtr IdleFunc          = NULL;
 tFunctionPtr_iii SpecialFunc   = NULL;
 
 static CEETimer* Timer0;
+// Elapsed time for glutGet(GLUT_ELAPSED_TIME). GetTimerSystemTime() is declared
+// directly instead of including <timer.h>, whose T0_MODE/... register macros
+// clash with ps2stuff's CEETimer used below.
+extern "C" unsigned long long GetTimerSystemTime(void);
+static const unsigned int kGlutBusClk = 147456000; // EE bus clock, Hz
+static unsigned long long StartTime = 0;
+
 
 static bool printTimes = false;
 
@@ -103,6 +110,7 @@ static bool printTimes = false;
  */
 void glutInit(int* argcp, char** argv)
 {
+    StartTime = GetTimerSystemTime();
     Pads::Init();
 
     // does the ps2gl library need to be initialized?
@@ -240,6 +248,10 @@ void glutSwapBuffers(void)
 
 int glutGet(GLenum type)
 {
+    if (type == GLUT_ELAPSED_TIME) {
+        if (StartTime == 0) StartTime = GetTimerSystemTime();
+        return (int)((GetTimerSystemTime() - StartTime) / (kGlutBusClk / 1000));
+    }
     mNotImplemented();
     return 0;
 }
